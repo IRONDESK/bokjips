@@ -21,6 +21,8 @@ input,
 textarea {
   font-family: -apple-system, Pretendard, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  border: none;
+  outline: none;
   border-radius: 0px;
 }
 

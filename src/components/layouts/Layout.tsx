@@ -1,5 +1,6 @@
 import React from "react";
-import { Header, Footer } from "./";
+import Footer from "./partials/Footer";
+import Header from "./partials/Header";
 import { Title } from "./partials/Title";
 
 export const Layout = ({ children }: { children: JSX.Element }) => {
