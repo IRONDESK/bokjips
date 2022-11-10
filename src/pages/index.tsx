@@ -1,5 +1,33 @@
 import Head from "next/head";
+import styled from "@emotion/styled";
+import CorpCard from "../components/Main/CorpCard";
 
 export default function Home() {
-  return <div>main</div>;
+  return (
+    <Main>
+      <CardList>
+        <CorpCard />
+        <CorpCard />
+        <CorpCard />
+        <CorpCard />
+        <CorpCard />
+      </CardList>
+    </Main>
+  );
 }
+
+const Main = styled.main`
+  padding: 24px;
+`;
+
+const CardList = styled.section`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 690px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
