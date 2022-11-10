@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { SHADOW } from "../constants/style";
 
 function SearchBar() {
   return (
@@ -26,12 +27,14 @@ function SearchBar() {
 
 const Container = styled.ul`
   display: flex;
+  justify-content: center;
   gap: 12px;
 `;
 
 const Wrap = styled.li<{ icon: string }>`
   position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 16px 8px;
   width: ${(props) =>
@@ -41,7 +44,7 @@ const Wrap = styled.li<{ icon: string }>`
       ? "108px"
       : "60px"};
   background-color: #fff;
-  box-shadow: 0 0 24px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: ${SHADOW.basic};
   border-radius: 28px;
   transition: all 0.3s;
   &:has(input:focus),
@@ -97,6 +100,10 @@ const Wrap = styled.li<{ icon: string }>`
     input::placeholder {
       opacity: 1;
     }
+  }
+  &:has(input:focus),
+  &:has(select:focus) {
+    filter: invert(1);
   }
 `;
 
