@@ -97,6 +97,7 @@ const Wrap = styled.li<{ icon: string }>`
     }
   }
   &:hover {
+    box-shadow: ${SHADOW.hover};
     input::placeholder {
       opacity: 1;
     }
@@ -104,6 +105,20 @@ const Wrap = styled.li<{ icon: string }>`
   &:has(input:focus),
   &:has(select:focus) {
     filter: invert(1);
+  }
+  @media (max-width: 580px) {
+    &:last-of-type {
+      width: 60px;
+    }
+    &:has(input:focus) + li,
+    &:has(select:focus) + li {
+      width: 0;
+      margin: 0 -12px;
+      opacity: 0;
+    }
+    p {
+      display: none;
+    }
   }
 `;
 

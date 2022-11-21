@@ -12,21 +12,15 @@ function Header() {
   const path = router.pathname.split("/").slice(1);
 
   return (
-    <Container>
+    <Container corp={path[0] === "corp"}>
       <Wrap>
-        <Logo>
-          <Link href="/">
+        <Link href="/">
+          <Logo>
             <strong>복지</strong>편살
-          </Link>
-        </Logo>
+          </Logo>
+        </Link>
       </Wrap>
-      <Wrap>
-        {path[0] === "user" ? (
-          <div className="none-searchbar"></div>
-        ) : (
-          <SearchBar />
-        )}
-      </Wrap>
+      <Wrap>{path[0] === "user" ? null : <SearchBar />}</Wrap>
       <Wrap>
         <User onClick={() => setShowUser(!showUser)}></User>
         {showUser && (
@@ -44,13 +38,19 @@ function Header() {
   );
 }
 
-const Container = styled.header`
+const Container = styled.header<{ corp: boolean }>`
   display: flex;
+  height: 101.5px;
   padding: 24px 32px;
   justify-content: space-between;
   align-items: center;
+  ${(props) => props.corp && `background-color:${COLOR.main};`}
+  ${(props) => props.corp && `& h1 strong {color: #fff};`}
+  ${(props) => props.corp && `& h1 {color: #fff};`}
+  ${(props) => props.corp && `button {filter: invert(1)};`}
   @media (max-width: 840px) {
     display: block;
+    height: auto;
     div:first-of-type {
       margin: 4px 0 16px;
       width: 100%;
@@ -64,9 +64,6 @@ const Container = styled.header`
   }
   @media (max-width: 580px) {
     padding: 24px 8px;
-    div:nth-of-type(2) {
-      transform: scale(0.8);
-    }
   }
 `;
 const Wrap = styled.div`
@@ -75,11 +72,9 @@ const Wrap = styled.div`
   &:last-of-type {
     text-align: right;
   }
-  .none-searchbar {
-    height: 53.5px;
-  }
 `;
 const Logo = styled.h1`
+  display: inline-block;
   font-family: "GangwonEdu";
   font-size: 2rem;
   strong {
