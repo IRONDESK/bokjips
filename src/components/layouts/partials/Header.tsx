@@ -1,19 +1,23 @@
 import React, { useState } from "react";
+import styled from "@emotion/styled";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import styled from "@emotion/styled";
+import { useAtom } from "jotai";
+import { selectedModal } from "../../../atoms/atoms";
 
 import { COLOR, SHADOW } from "../../../constants/style";
-import SearchBar from "../../SearchBar";
+import SearchBar from "../../Navbar/SearchBar";
+import FilterBar from "../../Navbar/FilterList";
 
 function Header() {
   const [showUser, setShowUser] = useState(false);
+  const [showFilter] = useAtom(selectedModal);
   const router = useRouter();
   const path = router.pathname.split("/").slice(1);
 
   return (
     <Container corp={path[0] === "corp"}>
-      <Wrap>
+      <Wrap id="header-logo">
         <Link href="/">
           <Logo>
             <strong>복지</strong>편살
@@ -21,7 +25,7 @@ function Header() {
         </Link>
       </Wrap>
       <Wrap>{path[0] === "user" ? null : <SearchBar />}</Wrap>
-      <Wrap>
+      <Wrap id="header-user">
         <User onClick={() => setShowUser(!showUser)}></User>
         {showUser && (
           <UserBox>
@@ -47,16 +51,16 @@ const Container = styled.header<{ corp: boolean }>`
   ${(props) => props.corp && `background-color:${COLOR.main};`}
   ${(props) => props.corp && `& h1 strong {color: #fff};`}
   ${(props) => props.corp && `& h1 {color: #fff};`}
-  ${(props) => props.corp && `button {filter: invert(1)};`}
+  ${(props) => props.corp && `& > button {filter: invert(1)};`}
   @media (max-width: 840px) {
     display: block;
     height: auto;
-    div:first-of-type {
+    #header-logo {
       margin: 4px 0 16px;
       width: 100%;
       text-align: center;
     }
-    div:last-of-type {
+    #header-user {
       position: absolute;
       top: 24px;
       right: 32px;

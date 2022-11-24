@@ -1,27 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { SHADOW } from "../constants/style";
+import { SHADOW } from "../../constants/style";
+import { useAtom } from "jotai";
+import {
+  keyFilter,
+  selectedFilter,
+  selectedModal,
+  wageFilter,
+} from "../../atoms/atoms";
+import SearchList from "./SearchList";
+import FilterList from "./FilterList";
 
 function SearchBar() {
+  const [showFilter, setShowFilter] = useAtom(selectedModal);
+  const [nowKeyFilter, setNowKeyFilter] = useAtom(keyFilter);
+  const [nowWageFilter] = useAtom(wageFilter);
+  const [nowFilter] = useAtom(selectedFilter);
   return (
-    <Container>
-      <Wrap icon="search">
-        <input type="text" placeholder="회사명" />
-      </Wrap>
-      <Wrap icon="rocket">
-        <select>
-          <option>전체산업</option>
-          <option>IT/테크</option>
-          <option>유통</option>
-          <option>서비스</option>
-          <option>제조업</option>
-          <option>금융</option>
-        </select>
-      </Wrap>
-      <Wrap icon="filtered">
-        <p>0개</p>
-      </Wrap>
-    </Container>
+    <>
+      <Container>
+        <Wrap icon="search">
+          <input
+            type="text"
+            placeholder="회사명"
+            value={nowKeyFilter.keyword}
+            onChange={(e) =>
+              setNowKeyFilter({
+                ...nowKeyFilter,
+                keyword: e.target.value,
+              })
+            }
+          />
+        </Wrap>
+        <Wrap icon="rocket">
+          <select
+            value={nowKeyFilter.industry}
+            onChange={(e) =>
+              setNowKeyFilter({
+                ...nowKeyFilter,
+                industry: e.target.value,
+              })
+            }
+          >
+            <option value="">전체산업</option>
+            <option>IT/테크</option>
+            <option>유통</option>
+            <option>서비스</option>
+            <option>제조업</option>
+            <option>금융</option>
+          </select>
+        </Wrap>
+        <Wrap
+          style={{ filter: showFilter ? "invert(1)" : "none" }}
+          icon="filtered"
+          onClick={() => setShowFilter(!showFilter)}
+        >
+          <p>{nowFilter.length + (nowWageFilter > 0 ? 1 : 0)}개</p>
+        </Wrap>
+      </Container>
+      <SearchList />
+      <FilterList />
+    </>
   );
 }
 
@@ -32,6 +71,7 @@ const Container = styled.ul`
 `;
 
 const Wrap = styled.li<{ icon: string }>`
+  ${(props) => props.icon === "filtered" && "cursor: pointer;"}
   position: relative;
   display: flex;
   justify-content: center;
