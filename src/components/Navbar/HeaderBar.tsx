@@ -8,10 +8,9 @@ import {
   selectedModal,
   wageFilter,
 } from "../../atoms/atoms";
-import SearchList from "./SearchList";
 import FilterList from "./FilterList";
 
-function SearchBar() {
+function HeaderBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
   const [nowKeyFilter, setNowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
@@ -19,7 +18,7 @@ function SearchBar() {
   return (
     <>
       <Container>
-        <Wrap icon="search">
+        <Wrap id="header-keyword" icon="search">
           <input
             type="text"
             placeholder="회사명"
@@ -32,8 +31,9 @@ function SearchBar() {
             }
           />
         </Wrap>
-        <Wrap icon="rocket">
+        <Wrap htmlFor="header-industry" icon="rocket">
           <select
+            id="header-industry"
             value={nowKeyFilter.industry}
             onChange={(e) =>
               setNowKeyFilter({
@@ -51,6 +51,7 @@ function SearchBar() {
           </select>
         </Wrap>
         <Wrap
+          id="header-filter"
           style={{ filter: showFilter ? "invert(1)" : "none" }}
           icon="filtered"
           onClick={() => setShowFilter(!showFilter)}
@@ -58,19 +59,21 @@ function SearchBar() {
           <p>{nowFilter.length + (nowWageFilter > 0 ? 1 : 0)}개</p>
         </Wrap>
       </Container>
-      <SearchList />
       <FilterList />
     </>
   );
 }
 
-const Container = styled.ul`
+const Container = styled.section`
   display: flex;
   justify-content: center;
   gap: 12px;
+  @media (max-width: 580px) {
+    flex-wrap: wrap;
+  }
 `;
 
-const Wrap = styled.li<{ icon: string }>`
+const Wrap = styled.label<{ icon: string }>`
   ${(props) => props.icon === "filtered" && "cursor: pointer;"}
   position: relative;
   display: flex;
@@ -83,6 +86,7 @@ const Wrap = styled.li<{ icon: string }>`
       : props.icon == "filtered"
       ? "108px"
       : "60px"};
+  height: 55px;
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   border-radius: 28px;
@@ -117,7 +121,7 @@ const Wrap = styled.li<{ icon: string }>`
   input,
   select,
   p {
-    width: calc(100%-40px);
+    width: calc(100% - 40px);
     margin: 0 0 0 40px;
     padding: 0 12px 0 0;
     background: none;
@@ -147,19 +151,25 @@ const Wrap = styled.li<{ icon: string }>`
     filter: invert(1);
   }
   @media (max-width: 580px) {
-    &:last-of-type {
-      width: 60px;
+    &[id="header-keyword"] {
+      &,
+      &:has(input:focus),
+      &:has(input:focus:not(:placeholder-shown)),
+      &:has(input:not(:placeholder-shown)) {
+        margin: 0 40px;
+        width: 100%;
+        input {
+          width: 100%;
+          &::placeholder {
+            opacity: 1;
+          }
+        }
+      }
     }
-    &:has(input:focus) + li,
-    &:has(select:focus) + li {
-      width: 0;
-      margin: 0 -12px;
-      opacity: 0;
-    }
-    p {
-      display: none;
+    &[for="header-industry"] {
+      width: 152px;
     }
   }
 `;
 
-export default SearchBar;
+export default HeaderBar;

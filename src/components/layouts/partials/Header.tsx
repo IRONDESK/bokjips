@@ -6,8 +6,7 @@ import { useAtom } from "jotai";
 import { selectedModal } from "../../../atoms/atoms";
 
 import { COLOR, SHADOW } from "../../../constants/style";
-import SearchBar from "../../Navbar/SearchBar";
-import FilterBar from "../../Navbar/FilterList";
+import HeaderBar from "../../Navbar/HeaderBar";
 
 function Header() {
   const [showUser, setShowUser] = useState(false);
@@ -24,7 +23,9 @@ function Header() {
           </Logo>
         </Link>
       </Wrap>
-      <Wrap>{path[0] === "user" ? null : <SearchBar />}</Wrap>
+      <Wrap>
+        {path[0] === "user" || path[0] === "corp" ? null : <HeaderBar />}
+      </Wrap>
       <Wrap id="header-user">
         <User onClick={() => setShowUser(!showUser)}></User>
         {showUser && (
@@ -51,7 +52,6 @@ const Container = styled.header<{ corp: boolean }>`
   ${(props) => props.corp && `background-color:${COLOR.main};`}
   ${(props) => props.corp && `& h1 strong {color: #fff};`}
   ${(props) => props.corp && `& h1 {color: #fff};`}
-  ${(props) => props.corp && `& > button {filter: invert(1)};`}
   @media (max-width: 840px) {
     display: block;
     height: auto;

@@ -35,26 +35,34 @@ function FilterBar() {
   };
 
   return (
-    <Container showFilter={showFilter}>
-      <Wage wageValue={nowWageFilter}>
-        <label htmlFor="header-basic-wage">초봉</label>
-        <input
-          type="number"
-          id="header-basic-wage"
-          min={0}
-          step={100}
-          value={+nowWageFilter}
-          onChange={setWageFiltered}
-        />
-      </Wage>
-      <div id="header-buttons" onClick={addFiltered}>
-        {welfareList.map((el, idx) => (
-          <Button key={idx} array={nowFilter} value={el.value}>
-            {el.name}
+    <>
+      <Container showFilter={showFilter}>
+        <div className="filter-list-top">
+          <Wage wageValue={nowWageFilter}>
+            <label htmlFor="header-basic-wage">초봉</label>
+            <input
+              type="number"
+              id="header-basic-wage"
+              min={0}
+              step={100}
+              value={+nowWageFilter}
+              onChange={setWageFiltered}
+            />
+          </Wage>
+          <Button array={nowFilter} onClick={addFiltered} value="instock">
+            상장사
           </Button>
-        ))}
-      </div>
-    </Container>
+        </div>
+        <Buttons showFilter={showFilter} onClick={addFiltered}>
+          {welfareList.map((el, idx) => (
+            <Button key={idx} array={nowFilter} value={el.value}>
+              {el.name}
+            </Button>
+          ))}
+        </Buttons>
+      </Container>
+      {showFilter && <BackDrop onClick={() => setShowFilter(false)} />}
+    </>
   );
 }
 
@@ -71,21 +79,29 @@ const Container = styled.section<{ showFilter: boolean }>`
   margin: 12px 0 0;
   padding: ${(props) => (props.showFilter ? "12px 16px" : "0")};
   left: 50%;
-  width: ${(props) => (props.showFilter ? "100%" : "50%")};
-  ${(props) => (props.showFilter ? "" : "height: 1%")};
+  width: ${(props) => (props.showFilter ? "100%" : "0%")};
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   border-radius: 28px;
-  z-index: 2;
+  z-index: 3;
   opacity: ${(props) => (props.showFilter ? 1 : 0)};
   transition: all 0.3s;
   transform: translateX(-50%);
   overflow: hidden;
-  #header-buttons {
+  .filter-list-top {
     display: grid;
-    height: ${(props) => (props.showFilter ? "100%" : "10px")};
+    margin: 0 0 8px;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    transition: all 0.3s;
+  }
+  button,
+  .filter-list-top > div {
+    padding: ${(props) => (props.showFilter ? "12px" : "0 12px")};
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    transform: scale(${(props) => (props.showFilter ? "1" : "0.5")});
     transition: all 0.3s;
   }
 `;
@@ -94,8 +110,8 @@ const Wage = styled.div<{ wageValue: number }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 8px;
   padding: 12px 16px;
+  grid-column: 1 / 3;
   ${itemStyle}
   background-color: ${(props) => (props.wageValue > 0 ? COLOR.main : "none")};
   color: ${(props) => (props.wageValue > 0 ? "#fff" : "none")};
@@ -120,6 +136,13 @@ const Wage = styled.div<{ wageValue: number }>`
   }
 `;
 
+const Buttons = styled.div<{ showFilter: boolean }>`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  transition: all 0.3s;
+`;
+
 const Button = styled.button<{ array: string[]; value: string }>`
   min-width: 80px;
   ${itemStyle};
@@ -130,7 +153,6 @@ const Button = styled.button<{ array: string[]; value: string }>`
     props.array.some((arr) => arr == props.value) ? "#fff" : "none"};
   font-weight: ${(props) =>
     props.array.some((arr) => arr == props.value) ? "500" : "none"};
-  white-space: nowrap;
 
   &::before {
     content: "✓";
@@ -138,6 +160,17 @@ const Button = styled.button<{ array: string[]; value: string }>`
     display: ${(props) =>
       props.array.some((arr) => arr == props.value) ? "inline-block" : "none"};
   }
+`;
+
+const BackDrop = styled.div`
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.05);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  user-select: none;
+  z-index: 2;
 `;
 
 export default FilterBar;
