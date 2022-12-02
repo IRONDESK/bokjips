@@ -2,12 +2,20 @@ import React from "react";
 import styled from "@emotion/styled";
 import { COLOR, SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { IUserLoginDataTypes } from "../../types/UserData";
+import { MemberLogin } from "../../api/MemberApi";
 
 function Login() {
+  const { register, handleSubmit } = useForm<IUserLoginDataTypes>();
+  const onSubmitHandler: SubmitHandler<IUserLoginDataTypes> = (data) => {
+    MemberLogin(data).then((res) => console.log);
+  };
+
   return (
     <Container>
       <Title title="로그인" />
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmitHandler)}>
         <Message>
           복잡한 복지 정보,
           <br />
@@ -15,11 +23,22 @@ function Login() {
         </Message>
         <Label>
           <p>이메일</p>
-          <input type="email" placeholder=" " autoFocus={true} required />
+          <input
+            type="email"
+            placeholder=" "
+            autoFocus={true}
+            {...register("memberId")}
+            required
+          />
         </Label>
         <Label>
           <p>비밀번호</p>
-          <input type="password" placeholder=" " required />
+          <input
+            type="password"
+            placeholder=" "
+            {...register("password")}
+            required
+          />
         </Label>
         <Button type="submit">로그인</Button>
       </Form>
