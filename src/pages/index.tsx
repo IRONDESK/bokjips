@@ -17,13 +17,14 @@ export default function Home() {
 }
 
 const Main = styled.main`
-  padding: 24px;
+  padding: 12px 24px 20px;
 `;
 
 const CardList = styled.section`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  grid-column: 1/3;
   @media (max-width: 960px) {
     grid-template-columns: repeat(2, 1fr);
   }

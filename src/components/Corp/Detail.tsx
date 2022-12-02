@@ -104,7 +104,7 @@ function Detail({ data }: { data: any }) {
 }
 
 const Container = styled.section`
-  padding: 0 12px;
+  padding: 0 12px 52px;
 `;
 const Article = styled.article``;
 const Title = styled.h3`
