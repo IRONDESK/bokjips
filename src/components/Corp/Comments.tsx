@@ -67,7 +67,7 @@ const Container = styled.section`
   }
   .comment-list {
     margin: 20px 0 8px;
-    padding: 0 12px;
+    padding: 0 8px;
     @media (max-width: 580px) {
       padding: 0;
     }

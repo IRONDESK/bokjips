@@ -6,6 +6,7 @@ interface keyFilterType {
 }
 
 export const selectedModal = atom<boolean>(false);
+export const verticalSplited = atom<boolean>(false);
 export const keyFilter = atom<keyFilterType>({
   keyword: "",
   industry: "",
