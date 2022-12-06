@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
@@ -9,16 +9,35 @@ import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
 import { useAtom } from "jotai";
 import { verticalSplited } from "../../atoms/atoms";
+import { CompanyById } from "../../api/CompanyApi";
+import { ICompanyDataTypes } from "../../types/CompanyData";
+import Link from "next/link";
 
 function CorpId() {
   const router = useRouter();
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
 
-  const query = router.query.id;
+  const [companyData, setCompanyData] = useState<ICompanyDataTypes>({
+    id: 0,
+    name: "",
+    classification: "",
+    wage: 0,
+    isInclusiveWage: "N",
+    isPublicStock: "",
+    numberOfEmployees: "",
+    recruitmentSite: "",
+    site: "",
+    welfares: [],
+  });
+  useEffect(() => {
+    CompanyById(router.query.id as string).then((res) =>
+      setCompanyData(res?.data)
+    );
+  }, [router]);
 
   return (
     <>
-      <Title title="회사명" />
+      <Title title={companyData?.name} />
       <Head>
         <link
           rel="stylesheet"
@@ -30,17 +49,25 @@ function CorpId() {
           <Banner>
             <div className="corp-identified">
               <img src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
-              <h2>회사명</h2>
-              <i>상장사</i>
-              <i>IT/테크</i>
+              <h2>{companyData?.name}</h2>
+              <i>{companyData?.isPublicStock === "Y" ? "상장" : "비상장"}</i>
+              <i>{companyData?.classification}</i>
             </div>
             <div className="corp-buttons">
               <Button icon="heart">0</Button>
-              <Button icon="site">사이트</Button>
-              <Button icon="recruit">채용정보</Button>
+              <Link href={companyData?.site}>
+                <Button icon="site">사이트</Button>
+              </Link>
+              <Link href={companyData?.recruitmentSite}>
+                <Button icon="recruit">채용정보</Button>
+              </Link>
             </div>
           </Banner>
-          <Detail data={[]} />
+          <Detail
+            wage={companyData?.wage}
+            isInclusiveWage={companyData?.isInclusiveWage}
+            welfares={companyData?.welfares}
+          />
         </SideOne>
         <SideTwo isSplited={isSplited}>
           <Vertical

@@ -1,8 +1,15 @@
 import React from "react";
 import styled from "@emotion/styled";
 import DetailCard from "./DetailCard";
+import { IWelfareDataTypes } from "../../types/CompanyData";
 
-function Detail({ data }: { data: any }) {
+interface DetailPropsType {
+  wage: number;
+  isInclusiveWage: "Y" | "N";
+  welfares: IWelfareDataTypes[];
+}
+
+function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
   return (
     <Container>
       <Article>
@@ -10,93 +17,75 @@ function Detail({ data }: { data: any }) {
         <DetailList>
           <DetailCard
             icon="payments"
-            title="초봉 5,000만원"
-            description="개발 직군 한정"
+            title={`초봉 ${wage.toLocaleString()}만원`}
+            content="개발 직군 한정"
           />
-          <DetailCard icon="schedule" title="포괄임금제" />
-          <DetailCard icon="history_toggle_off" title="비포괄임금제" />
+          {isInclusiveWage === "Y" ? (
+            <DetailCard icon="schedule" title="포괄임금제" />
+          ) : (
+            <DetailCard icon="history_toggle_off" title="비포괄임금제" />
+          )}
         </DetailList>
       </Article>
       <Article>
         <Title>근무 조건</Title>
         <DetailList>
-          <DetailCard icon="forest" title="결재없는 휴가" />
-          <DetailCard
-            icon="monitoring"
-            title="스톡옵션 지급"
-            description="1년 이상 근속자"
-          />
-          <DetailCard
-            icon="location_away"
-            title="일부재택근무"
-            description="주 3일 재택근무"
-          />
-          <DetailCard
-            icon="work_history"
-            title="PC 자동오프제"
-            description="야근시 상급자 결재"
-          />
-          <DetailCard
-            icon="local_taxi"
-            title="야근 택시비 지원"
-            description="22시 이후 퇴근 한정"
-          />
+          {welfares
+            .filter((el) => el.type === "근무 조건")
+            .map((value: IWelfareDataTypes, idx: number) => (
+              <DetailCard
+                key={idx}
+                icon={value.icon}
+                title={value.title}
+                content={value.content}
+              />
+            ))}
         </DetailList>
       </Article>
       <Article>
         <Title>근무 지원</Title>
         <DetailList>
-          <DetailCard
-            icon="menu_book"
-            title="도서비 지원"
-            description="월 최대 10만원"
-          />
-          <DetailCard
-            icon="important_devices"
-            title="최신 장비 지급"
-            description="Mac, Windows 택1"
-          />
-          <DetailCard icon="chair_alt" title="자율좌석제" />
-          <DetailCard
-            icon="phone_in_talk"
-            title="통신비 지원"
-            description="영업 직군 한정"
-          />
+          {" "}
+          {welfares
+            .filter((el) => el.type === "근무 지원")
+            .map((value: IWelfareDataTypes, idx: number) => (
+              <DetailCard
+                key={idx}
+                icon={value.icon}
+                title={value.title}
+                content={value.content}
+              />
+            ))}
         </DetailList>
       </Article>
       <Article>
         <Title>근무 외 지원</Title>
         <DetailList>
-          <DetailCard
-            icon="redeem"
-            title="복지포인트 지급"
-            description="연 100만원"
-          />
-          <DetailCard
-            icon="monitor_heart"
-            title="무료 건강검진"
-            description="연 1회 실시"
-            additional="본인, 배우자, 양가부모"
-          />
-          <DetailCard
-            icon="diversity_2"
-            title="경조사 지원"
-            description="경조비, 화환"
-          />
-          <DetailCard
-            icon="pregnant_woman"
-            title="출산 지원"
-            description="휴가 및 축하금"
-          />
+          {welfares
+            .filter((el) => el.type === "근무 외 지원")
+            .map((value: IWelfareDataTypes, idx: number) => (
+              <DetailCard
+                key={idx}
+                icon={value.icon}
+                title={value.title}
+                content={value.content}
+              />
+            ))}
         </DetailList>
       </Article>
       <Article>
         <Title>사내 환경</Title>
         <DetailList>
-          <DetailCard icon="restaurant" title="사내 식당" />
-          <DetailCard icon="local_cafe" title="사내 카페" />
-          <DetailCard icon="child_care" title="사내 어린이집" />
-          <DetailCard icon="fitness_center" title="사내 헬스장" />
+          {welfares
+            .filter((el) => el.type === "사내 환경")
+            .map((value: IWelfareDataTypes, idx: number) => (
+              <DetailCard
+                key={idx}
+                icon={value.icon}
+                title={value.title}
+                content={value.content}
+              />
+            ))}
         </DetailList>
       </Article>
     </Container>

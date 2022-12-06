@@ -1,16 +1,36 @@
-import Head from "next/head";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+
 import CorpCard from "../components/Main/CorpCard";
+import { AllCompany } from "../api/CompanyApi";
+import { ICompanyDataTypes } from "../types/CompanyData";
+import Link from "next/link";
 
 export default function Home() {
+  const [companyData, setCompanyData] = useState([]);
+  useEffect(() => {
+    AllCompany().then((res) => setCompanyData(res?.data));
+  }, []);
+
   return (
     <Main>
       <CardList>
-        <CorpCard />
-        <CorpCard />
-        <CorpCard />
-        <CorpCard />
-        <CorpCard />
+        {companyData?.map((value: ICompanyDataTypes, index) => (
+          <Link key={index} href={`/corp/${value.id}`}>
+            <CorpCard
+              id={value.id}
+              name={value.name}
+              classification={value.classification}
+              wage={value.wage}
+              isInclusiveWage={value.isInclusiveWage}
+              isPublicStock={value.isPublicStock}
+              numberOfEmployees={value.numberOfEmployees}
+              recruitmentSite={value.recruitmentSite}
+              site={value.site}
+              welfares={value.welfares.slice(0, 7)}
+            />
+          </Link>
+        ))}
       </CardList>
     </Main>
   );
@@ -22,6 +42,7 @@ const Main = styled.main`
 
 const CardList = styled.section`
   display: grid;
+  padding: 0 0 32px;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   grid-column: 1/3;

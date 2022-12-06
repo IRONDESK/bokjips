@@ -1,38 +1,43 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { SHADOW } from "../../constants/style";
+import { ICompanyDataTypes } from "../../types/CompanyData";
 
-function CorpCard() {
-  const walfare = [
-    "포괄임금",
-    "사내식당",
-    "석식비제공",
-    "최신형장비",
-    "자유로운연차",
-    "재택근무",
-    "스톡옵션",
-  ];
+function CorpCard({
+  id,
+  name,
+  classification,
+  wage,
+  isInclusiveWage,
+  isPublicStock,
+  numberOfEmployees,
+  recruitmentSite,
+  site,
+  welfares,
+}: ICompanyDataTypes) {
   return (
     <Container>
       <Title>
         <Logo src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
         <Name>
-          <strong>회사명</strong>
-          <p>상장 | IT/테크</p>
+          <strong>{name}</strong>
+          <p>
+            {isPublicStock === "Y" ? "상장" : "비상장"} | {classification}
+          </p>
         </Name>
       </Title>
       <WelfareList>
-        {walfare.map((value, idx) => (
-          <span key={idx}>{value}</span>
+        {welfares?.map((value, idx) => (
+          <span key={idx}>{value.title}</span>
         ))}
-        <p>...더보기</p>
+        <p className="list-text-more">...더보기</p>
       </WelfareList>
       <Option>
         <div>
-          <Tag icon="money">초봉 5,000만</Tag>
-          <Tag icon="groups">3,000명</Tag>
+          <Tag icon="money">초봉 {wage.toLocaleString()}만</Tag>
+          <Tag icon="groups">{numberOfEmployees.toLocaleString()}명</Tag>
         </div>
-        <Tag icon="heart">300</Tag>
+        <Tag icon="heart">-</Tag>
       </Option>
     </Container>
   );
@@ -84,6 +89,10 @@ const WelfareList = styled.div`
     background-color: #eee;
     font-size: 0.9rem;
     border-radius: 4px;
+  }
+  .list-text-more {
+    margin: 0 0 0 4px;
+    font-size: 0.8rem;
   }
 `;
 

@@ -4,17 +4,12 @@ import React, { useState } from "react";
 interface DetailCardPropsType {
   icon: string;
   title: string;
-  description?: string;
-  additional?: string;
+  content?: string;
 }
 
-function DetailCard({
-  icon,
-  title,
-  description,
-  additional,
-}: DetailCardPropsType) {
+function DetailCard({ icon, title, content }: DetailCardPropsType) {
   const [additionalCheck, setAdditionalCheck] = useState(false);
+  const additional = content?.indexOf("??") !== -1 && content?.split("??")[1];
   const MouseOverLeaveEvent = () => {
     setAdditionalCheck(!additionalCheck);
   };
@@ -25,7 +20,7 @@ function DetailCard({
       <Text>
         <strong>{title}</strong>
         <span>
-          {description}
+          {content?.indexOf("??") !== -1 ? content?.split("??")[0] : content}
           {additional && (
             <i
               onMouseOver={MouseOverLeaveEvent}
@@ -43,7 +38,7 @@ function DetailCard({
   );
 }
 
-const Container = styled.li`
+const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
