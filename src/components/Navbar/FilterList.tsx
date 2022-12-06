@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
+import Flicking from "@egjs/react-flicking";
+import "@egjs/react-flicking/dist/flicking.css";
 import { useAtom } from "jotai";
+
 import { selectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
 import { COLOR, SHADOW } from "../../constants/style";
 
@@ -49,16 +52,26 @@ function FilterBar() {
               onChange={setWageFiltered}
             />
           </Wage>
-          <Button array={nowFilter} onClick={addFiltered} value="instock">
+          <Button
+            isSelected={nowFilter.some((arr) => arr === "instock")}
+            onClick={addFiltered}
+            value="instock"
+          >
             상장사
           </Button>
         </div>
         <Buttons showFilter={showFilter} onClick={addFiltered}>
-          {welfareList.map((el, idx) => (
-            <Button key={idx} array={nowFilter} value={el.value}>
-              {el.name}
-            </Button>
-          ))}
+          <Flicking align="prev" bound={true} inputType={["touch", "mouse"]}>
+            {welfareList.map((el, idx) => (
+              <Button
+                key={idx}
+                value={el.value}
+                isSelected={nowFilter.some((arr) => arr === el.value)}
+              >
+                {el.name}
+              </Button>
+            ))}
+          </Flicking>
         </Buttons>
       </Container>
       {showFilter && <BackDrop onClick={() => setShowFilter(false)} />}
@@ -67,11 +80,11 @@ function FilterBar() {
 }
 
 const itemStyle = `
-background-color: #fff;
-box-shadow: ${SHADOW.basic};
-border-radius: 28px;
-font-size: 0.85rem;
-overflow: hidden;
+  background-color: #fff;
+  box-shadow: ${SHADOW.basic};
+  border-radius: 28px;
+  font-size: 0.85rem;
+  overflow: hidden;
 `;
 
 const Container = styled.section<{ showFilter: boolean }>`
@@ -137,28 +150,27 @@ const Wage = styled.div<{ wageValue: number }>`
 `;
 
 const Buttons = styled.div<{ showFilter: boolean }>`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
   transition: all 0.3s;
+  .flicking-viewport {
+    overflow: visible;
+  }
+  .flicking-camera {
+    gap: 8px;
+  }
 `;
 
-const Button = styled.button<{ array: string[]; value: string }>`
+const Button = styled.button<{ isSelected: boolean }>`
   min-width: 80px;
   ${itemStyle};
   padding: 12px;
-  background-color: ${(props) =>
-    props.array.some((arr) => arr == props.value) ? COLOR.main : "none"};
-  color: ${(props) =>
-    props.array.some((arr) => arr == props.value) ? "#fff" : "none"};
-  font-weight: ${(props) =>
-    props.array.some((arr) => arr == props.value) ? "500" : "none"};
+  background-color: ${(props) => (props.isSelected ? COLOR.main : "none")};
+  color: ${(props) => (props.isSelected ? "#fff" : "none")};
+  font-weight: ${(props) => (props.isSelected ? "500" : "none")};
 
   &::before {
     content: "✓";
     margin: 0 4px 0 0;
-    display: ${(props) =>
-      props.array.some((arr) => arr == props.value) ? "inline-block" : "none"};
+    display: ${(props) => (props.isSelected ? "inline-block" : "none")};
   }
 `;
 
