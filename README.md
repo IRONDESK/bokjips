@@ -1,35 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <h1>🍀 복지편살[진행중]</h1>
+  <p>복잡한 복지 정보 편하게 살펴보자</p>
+  <p>기업의 복지정보만 모아서 보여주는 서비스</p>
 
-## Getting Started
+<img width="510" alt="스크린샷 2022-12-02 오전 10 52 01" src="https://user-images.githubusercontent.com/87234410/205196696-1f122ce0-1a9e-4325-a55d-741110d93262.png">
 
-First, run the development server:
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## 프로젝트 소개
+ * 이 프로젝트는 <a href="https://github.com/IRONDESK/bokjips-old">🔗이전 프로젝트</a>를 TypeScript로 바꾸면서 새롭게 리디자인되었습니다.
+ 
+ 
+## 🌼 목표와 기능 <a id="chapter-1"></a>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1.1 목표
+- 기업의 복지 정보만을 모아서 볼 수 있는 서비스
+- 원하는 복지 옵션을 선택해서 찾아 볼 수 있는 서비스
+- 기업과 관련한 정보를 공유하는 댓글 커뮤니티
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### 1.2 기능
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- 기업의 복지 정보를 찾아볼 수 있다.
+- 기업의 복지 정보를 등록할 수 있다. (관리자 계정만)
+- 등록된 복지 정보의 오류 리포트를 보낼 수 있다.
+- 복지 정보 페이지에서 기업에 관한 댓글을 등록, 삭제할 수 있다.
+- 기업의 채용 페이지에 접근할 수 있다.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<br><br>
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## 🌵 개발 환경 및 배포 URL <a id="chapter-2"></a>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 2.1 개발 환경
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- 프론트엔드 : React & Next.js, TypeScript, @emotion, Jotai
+- 백엔드 : Spring, MySQL
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### 2.2 배포 URL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# bokjips
+<a href="https://bokjips.vercel.app/">🔗 &nbsp; https://bokjips.vercel.app/</a>
+* 프론트엔드 영역만 일부 배포된 페이지입니다.
+
+<br><br>
