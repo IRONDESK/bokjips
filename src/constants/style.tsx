@@ -3,6 +3,7 @@ export const COLOR = {
   mainLight: "#b8ebec",
   report: "#ff3d00",
   check: "#4dce2d",
+  lightgray: "#e9e9e9",
 };
 
 export const SHADOW = {

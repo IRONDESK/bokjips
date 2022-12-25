@@ -96,7 +96,7 @@ function Join() {
 }
 
 const Container = styled.main`
-  padding: 24px;
+  padding: 24px 24px 52px;
 `;
 
 const Form = styled.form`

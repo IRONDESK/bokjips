@@ -50,6 +50,7 @@ const Container = styled.section`
     background-color: #fff;
     border-radius: 20px;
     box-shadow: ${SHADOW.basic};
+    transition: all 0.3s;
     input {
       flex: 1;
       margin: 0 0 0 8px;
@@ -63,6 +64,10 @@ const Container = styled.section`
         background-color: #000;
         color: #fff;
       }
+    }
+    &:hover,
+    &:has(input:focus) {
+      box-shadow: ${SHADOW.hover};
     }
   }
   .comment-list {
@@ -85,6 +90,7 @@ const CommentItem = styled.li<{ isMyComment: boolean }>`
     background-color: ${(props) =>
       props.isMyComment ? COLOR.mainLight : "#dfdfdf"};
     border-radius: 20px;
+    font-size: 0.9rem;
     line-height: 1.15rem;
     order: ${(props) => (props.isMyComment ? 2 : 1)};
   }
@@ -92,7 +98,7 @@ const CommentItem = styled.li<{ isMyComment: boolean }>`
     flex: 1;
     display: inline-block;
     opacity: 0.6;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     order: ${(props) => (props.isMyComment ? 1 : 2)};
   }
