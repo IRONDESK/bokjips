@@ -15,7 +15,7 @@ function Footer() {
         변경되었을 수 있습니다.
         <br />
         <br />
-        김유신 Back-end | 손수철 Front-end + Design
+        최성원 Back-end | 손수철 Front-end + Design
       </p>
     </Container>
   );
