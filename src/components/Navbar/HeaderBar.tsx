@@ -9,6 +9,7 @@ import {
   wageFilter,
 } from "../../atoms/atoms";
 import FilterList from "./FilterList";
+import { JOB_TYPES } from "../../constants/job";
 
 function HeaderBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
@@ -43,11 +44,11 @@ function HeaderBar() {
             }
           >
             <option value="">전체산업</option>
-            <option>IT/테크</option>
-            <option>유통</option>
-            <option>서비스</option>
-            <option>제조업</option>
-            <option>금융</option>
+            {JOB_TYPES.map((el) => (
+              <option key={el.value} value={el.value}>
+                {el.name}
+              </option>
+            ))}
           </select>
         </Wrap>
         <Wrap

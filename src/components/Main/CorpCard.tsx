@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { SHADOW } from "../../constants/style";
 import { ICompanyDataTypes } from "../../types/CompanyData";
+import { JOB_TYPES_LITERAL } from "../../constants/job";
 
 function CorpCard({
   id,
@@ -22,7 +23,8 @@ function CorpCard({
         <Name>
           <strong>{name}</strong>
           <p>
-            {isPublicStock === "Y" ? "상장" : "비상장"} | {classification}
+            {isPublicStock ? "상장" : "비상장"} |{" "}
+            {JOB_TYPES_LITERAL[classification]}
           </p>
         </Name>
       </Title>
