@@ -4,7 +4,7 @@ export interface ICompanyDataTypes {
   classification: string;
   wage: number;
   isInclusiveWage: "Y" | "N";
-  isPublicStock: string;
+  isPublicStock: boolean;
   numberOfEmployees: string;
   recruitmentSite: string;
   site: string;
@@ -12,7 +12,6 @@ export interface ICompanyDataTypes {
 }
 
 export interface IWelfareDataTypes {
-  id: number;
   type: string;
   title: string;
   content: string;
