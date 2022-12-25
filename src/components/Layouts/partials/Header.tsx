@@ -23,9 +23,7 @@ function Header() {
           </Logo>
         </Link>
       </Wrap>
-      <Wrap>
-        {path[0] === "user" || path[0] === "corp" ? null : <HeaderBar />}
-      </Wrap>
+      <Wrap>{path[0] === "" ? <HeaderBar /> : null}</Wrap>
       <Wrap id="header-user">
         <User onClick={() => setShowUser(!showUser)}></User>
         {showUser && (
