@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
 
-const URL = "http://192.168.154.142:8080/company";
+const URL = "/data/corp.json";
 
 function AllCompany() {
-  return axios.get(`${URL}/index`);
+  return axios.get(`${URL}`);
 }
 
 function CompanyById(id: string) {
