@@ -7,9 +7,9 @@ interface DetailCardPropsType {
   content?: string;
 }
 
-function DetailCard({ icon, title, content }: DetailCardPropsType) {
+function DetailCard({ icon, title, content = "" }: DetailCardPropsType) {
   const [additionalCheck, setAdditionalCheck] = useState(false);
-  const additional = content?.indexOf("??") !== -1 && content?.split("??")[1];
+  const [contentFisrt, contentAdditional] = content.split("??");
   const MouseOverLeaveEvent = () => {
     setAdditionalCheck(!additionalCheck);
   };
@@ -19,20 +19,24 @@ function DetailCard({ icon, title, content }: DetailCardPropsType) {
       <Icon className="material-symbols-outlined">{icon}</Icon>
       <Text>
         <strong>{title}</strong>
-        <span>
-          {content?.indexOf("??") !== -1 ? content?.split("??")[0] : content}
-          {additional && (
+        <p>
+          {contentFisrt}
+          {contentAdditional && (
             <i
               onMouseOver={MouseOverLeaveEvent}
               onMouseLeave={MouseOverLeaveEvent}
             ></i>
           )}
-          {additional && (
-            <p className={`additional-${additionalCheck ? "show" : "hide"}`}>
-              {additional}
-            </p>
+          {contentAdditional && (
+            <span
+              className={`additional-content ${
+                additionalCheck ? "show" : "hide"
+              }`}
+            >
+              {contentAdditional}
+            </span>
           )}
-        </span>
+        </p>
       </Text>
     </Container>
   );
@@ -52,14 +56,13 @@ const Icon = styled.i`
   font-size: 42px;
 `;
 const Text = styled.div`
-  position: relative;
   width: 100%;
   line-height: 1.25rem;
   strong {
     display: block;
     font-weight: 500;
   }
-  span {
+  p {
     color: #555;
     font-size: 0.9rem;
     i {
@@ -73,25 +76,27 @@ const Text = styled.div`
       background-position: center;
       vertical-align: middle;
     }
-    p {
-      position: absolute;
-      display: inline-block;
-      padding: 2px;
-      min-width: 115%;
-      background-color: #fff;
-      border: 1px solid #dddddd;
-      transition: all 0.3s;
-      font-size: 0.85rem;
-      text-align: center;
-    }
   }
-  .additional-hide {
+  .additional-content {
+    position: absolute;
+    display: inline-block;
+    margin: 0 0 0 2px;
+    padding: 2px 6px;
+    background-color: #3a3a3a;
+    border: 1px solid #1d1d1d;
+    transition: all 0.3s;
+    color: #fff;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .hide {
     opacity: 0;
-    transform: scale(0.8);
+    transform: translateX(-8px) scale(0.8);
+    z-index: -1;
   }
-  .additional-show {
+  .show {
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(0) scale(1);
   }
 `;
 
