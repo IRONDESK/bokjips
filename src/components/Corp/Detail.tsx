@@ -17,7 +17,7 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
         <DetailList>
           <DetailCard
             icon="payments"
-            title={`초봉 ${wage.toLocaleString()}만원`}
+            title={`초봉 ${wage?.toLocaleString() || 0}만원`}
             content="개발 직군 한정"
           />
           {isInclusiveWage === "Y" ? (
@@ -31,7 +31,7 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
         <Title>근무 조건</Title>
         <DetailList>
           {welfares
-            .filter((el) => el.type === "근무 조건")
+            ?.filter((el) => el.type === "근무 조건")
             .map((value: IWelfareDataTypes, idx: number) => (
               <DetailCard
                 key={idx}
@@ -47,7 +47,7 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
         <DetailList>
           {" "}
           {welfares
-            .filter((el) => el.type === "근무 지원")
+            ?.filter((el) => el.type === "근무 지원")
             .map((value: IWelfareDataTypes, idx: number) => (
               <DetailCard
                 key={idx}
@@ -62,7 +62,7 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
         <Title>근무 외 지원</Title>
         <DetailList>
           {welfares
-            .filter((el) => el.type === "근무 외 지원")
+            ?.filter((el) => el.type === "근무 외 지원")
             .map((value: IWelfareDataTypes, idx: number) => (
               <DetailCard
                 key={idx}
@@ -77,7 +77,7 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
         <Title>사내 환경</Title>
         <DetailList>
           {welfares
-            .filter((el) => el.type === "사내 환경")
+            ?.filter((el) => el.type === "사내 환경")
             .map((value: IWelfareDataTypes, idx: number) => (
               <DetailCard
                 key={idx}

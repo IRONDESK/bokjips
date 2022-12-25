@@ -1,39 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import { GetServerSideProps } from "next";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
 
 import { SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
 import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
+
 import { useAtom } from "jotai";
 import { verticalSplited } from "../../atoms/atoms";
-import { CompanyById } from "../../api/CompanyApi";
+// import { CompanyById } from "../../api/CompanyApi";
 import { ICompanyDataTypes } from "../../types/CompanyData";
-import Link from "next/link";
 
-function CorpId() {
-  const router = useRouter();
+import corp from "../../../public/data/corp.json";
+import { JOB_TYPES, JOB_TYPES_LITERAL } from "../../constants/job";
+
+interface ICorpPropsType {
+  corpId?: string;
+  corpData: ICompanyDataTypes;
+}
+
+function CorpId({ corpId, corpData: companyData }: ICorpPropsType) {
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
-
-  const [companyData, setCompanyData] = useState<ICompanyDataTypes>({
-    id: 0,
-    name: "",
-    classification: "",
-    wage: 0,
-    isInclusiveWage: "N",
-    isPublicStock: "",
-    numberOfEmployees: "",
-    recruitmentSite: "",
-    site: "",
-    welfares: [],
-  });
-  useEffect(() => {
-    CompanyById(router.query.id as string).then((res) =>
-      setCompanyData(res?.data)
-    );
-  }, [router]);
 
   return (
     <>
@@ -50,15 +40,15 @@ function CorpId() {
             <div className="corp-identified">
               <img src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
               <h2>{companyData?.name}</h2>
-              <i>{companyData?.isPublicStock === "Y" ? "상장" : "비상장"}</i>
-              <i>{companyData?.classification}</i>
+              <i>{companyData?.isPublicStock ? "상장" : "비상장"}</i>
+              <i>{JOB_TYPES_LITERAL[companyData?.classification]}</i>
             </div>
             <div className="corp-buttons">
               <Button icon="heart">0</Button>
-              <Link href={companyData?.site}>
+              <Link href={companyData?.site || ""}>
                 <Button icon="site">사이트</Button>
               </Link>
-              <Link href={companyData?.recruitmentSite}>
+              <Link href={companyData?.recruitmentSite || ""}>
                 <Button icon="recruit">채용정보</Button>
               </Link>
             </div>
@@ -85,6 +75,7 @@ function CorpId() {
 const Container = styled.main<{ isSplited: boolean }>`
   padding: 0 24px;
   display: ${(props) => (props.isSplited ? "flex" : "block")};
+  justify-content: space-between;
   @media (max-width: 1125px) {
     display: block;
   }
@@ -92,7 +83,9 @@ const Container = styled.main<{ isSplited: boolean }>`
     padding: 0 8px 20px;
   }
 `;
-const SideOne = styled.section``;
+const SideOne = styled.section`
+  flex: 1;
+`;
 const SideTwo = styled.section<{ isSplited: boolean }>`
   ${(props) =>
     !props.isSplited &&
@@ -108,6 +101,7 @@ const SideTwo = styled.section<{ isSplited: boolean }>`
   top: 0;
   margin: 0 -24px 0 0;
   padding: 40px 0 0;
+  width: 320px;
   height: 100vh;
   background-color: #ffffff;
   overflow-y: scroll;
@@ -222,5 +216,16 @@ const Vertical = styled.button`
     opacity: 0;
   }
 `;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
+  const corpData = corp.filter((el) => el.id == Number(id))[0] || {};
+  return {
+    props: {
+      corpId: id,
+      corpData,
+    },
+  };
+};
 
 export default CorpId;

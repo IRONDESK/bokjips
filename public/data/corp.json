@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "name": "우아한형제들",
+    "classification": "ittech",
+    "wage": 5000,
+    "isInclusiveWage": "N",
+    "isPublicStock": false,
+    "numberOfEmployees": 1580,
+    "recruitmentSite": "https://career.woowahan.com",
+    "site": "https://www.woowahan.com",
+    "welfares": [
+      {
+        "type": "근무 조건",
+        "icon": "home",
+        "title": "일부 재택근무",
+        "content": "주 4회, 월 10만원 지원"
+      },
+      {
+        "type": "근무 조건",
+        "icon": "price_check",
+        "title": "사이닝보너스 지급",
+        "content": "기본 연봉의 20%??2년 근속 조건"
+      },
+      {
+        "type": "근무 조건",
+        "icon": "forest",
+        "title": "결재없는 휴가",
+        "content": "학부모 특별휴가 포함"
+      },
+
+      {
+        "type": "근무 지원",
+        "icon": "local_taxi",
+        "title": "야근 택시비",
+        "content": ""
+      },
+      {
+        "type": "근무 지원",
+        "icon": "menu_book",
+        "title": "도서비 지원",
+        "content": "무제한"
+      },
+      {
+        "type": "근무 지원",
+        "icon": "important_devices",
+        "title": "최신 장비 지급",
+        "content": "Mac, Windows 택1"
+      },
+
+      {
+        "type": "근무 외 지원",
+        "icon": "redeem",
+        "title": "복지포인트 지급",
+        "content": "연 200만원"
+      },
+
+      { "type": "사내 환경", "icon": "restaurant", "title": "사내 식당" },
+      { "type": "사내 환경", "icon": "local_cafe", "title": "사내 카페" },
+      { "type": "사내 환경", "icon": "child_care", "title": "사내 어린이집" },
+      { "type": "사내 환경", "icon": "hotel", "title": "사내 수면실" },
+      { "type": "사내 환경", "icon": "shower", "title": "사내 샤워실" }
+    ]
+  }
+]
