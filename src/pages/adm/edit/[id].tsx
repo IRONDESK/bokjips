@@ -1,76 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
 import styled from "@emotion/styled";
-import { useForm, useFieldArray } from "react-hook-form";
+import Head from "next/head";
+import { GetServerSideProps } from "next";
+import useSWR from "swr";
+import { useForm } from "react-hook-form";
 
+import { fetcher, URL } from "../../../api/CompanyApi";
 import Banner from "../../../components/Admin/Banner";
-import WelfareCard from "../../../components/Admin/WelfareCard";
+import WelfareList from "../../../components/Admin/WelfareList";
 
-import corp from "../../../../public/data/corp.json";
 import { ICompanyDataTypes } from "../../../types/CompanyData";
+import { WELFARE_TYPES } from "../../../constants/job";
 import { COLOR } from "../../../constants/style";
 import { Title } from "../../../components/Layouts/partials/Title";
-import Head from "next/head";
 
 interface ICorpEditPropsType {
-  corpId?: number;
-  corpData: any;
+  corpId: string;
 }
 
-function Edit({ corpId, corpData: companyData }: ICorpEditPropsType) {
-  const { register, handleSubmit, control, watch, setValue } = useForm({
-    defaultValues: companyData,
+function Edit({ corpId }: ICorpEditPropsType) {
+  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
+    revalidateOnFocus: false,
   });
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "welfares",
-    }
-  );
+  const WELFARE_TYPES_ARR = [
+    "workingConditions",
+    "workSupport",
+    "offDutySupport",
+    "officeEnvironment",
+  ];
+  const { register, handleSubmit, control, watch, reset } =
+    useForm<ICompanyDataTypes>({
+      defaultValues: companyData,
+    });
+
+  useEffect(() => {
+    // RHF은 최초 렌더링시에만 초기값을 설정하므로
+    // 값을 받아온 이후에 다시 렌더링하도록 reset props를 사용
+    reset(companyData);
+  }, [companyData]);
 
   const onSubmit = (data: ICompanyDataTypes) => {
     console.log(data);
   };
 
-  return (
-    <Container>
-      <Title title={`회사 수정 - ${companyData?.name}`} />
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-        />
-      </Head>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Banner companyData={companyData} register={register} />
-        <WelfareList>
-          {fields.map((field, index) => (
-            <WelfareCard
-              key={field.id}
-              index={index}
-              watch={watch}
-              remove={remove}
-              register={register}
-            />
+  if (companyData) {
+    return (
+      <Container>
+        <Title title={`회사 수정 - ${companyData?.name || ""}`} />
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
+          />
+        </Head>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Banner companyData={companyData} watch={watch} register={register} />
+          {WELFARE_TYPES_ARR.map((item, idx) => (
+            <>
+              <h3>{WELFARE_TYPES[item]}</h3>
+              <WelfareList
+                key={idx}
+                register={register}
+                control={control}
+                watch={watch}
+                typeName={item}
+              />
+            </>
           ))}
-        </WelfareList>
-        <Button
-          type="button"
-          onClick={() =>
-            append({
-              type: "",
-              title: "",
-              content: "",
-              icon: "",
-            })
-          }
-        >
-          추가
-        </Button>
-        <Button type="submit">저장</Button>
-      </Form>
-    </Container>
-  );
+          <Button type="submit">저장</Button>
+        </Form>
+      </Container>
+    );
+  } else {
+    return "Loading..";
+  }
 }
 
 const Container = styled.main`
@@ -82,34 +85,33 @@ const Container = styled.main`
     padding: 0 8px 20px;
   }
 `;
-const Form = styled.form``;
-
-const WelfareList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  li {
-    padding: 12px 16px;
-    background-color: #fff;
-    border-radius: 16px;
+const Form = styled.form`
+  h3 {
+    margin: 20px 0 8px;
+    font-size: 1.35rem;
+    font-weight: 600;
   }
 `;
 
 const Button = styled.button`
-  padding: 12px 20px;
+  width: 100%;
+  margin: 24px 0;
+  padding: 16px 20px;
   background-color: ${COLOR.main};
   border-radius: 12px;
   color: #fff;
   font-size: 1.1rem;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const corpData = corp.filter((el) => el.id == Number(id))[0] || {};
+
   return {
     props: {
       corpId: id,
-      corpData,
     },
   };
 };

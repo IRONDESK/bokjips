@@ -1,63 +1,121 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { FieldValues, UseFormRegister } from "react-hook-form";
-import { JOB_TYPES } from "../../constants/job";
+import { FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
+import { COMPANY_TYPES } from "../../constants/job";
 import { ICompanyDataTypes } from "../../types/CompanyData";
+import { SHADOW } from "../../constants/style";
 
 interface BannerPropsType {
   companyData?: ICompanyDataTypes;
+  watch: UseFormWatch<ICompanyDataTypes>;
   register: UseFormRegister<ICompanyDataTypes>;
 }
 
-function Banner({ companyData, register }: BannerPropsType) {
+function IMG_Modal({
+  children,
+  ImgModal,
+}: {
+  children: any;
+  ImgModal: boolean;
+}) {
+  return <Modal ImgModal={ImgModal}>{children}</Modal>;
+}
+const Modal = styled.div<{ ImgModal: boolean }>`
+  position: absolute;
+  top: 44px;
+  left: 44px;
+  width: ${(props) => (props.ImgModal ? "360px" : "0")};
+  height: ${(props) => (props.ImgModal ? "100px" : "0")};
+  background-color: #fff;
+  z-index: 1;
+  border-radius: 20px;
+  box-shadow: ${SHADOW.basic};
+  transition: all 0.3s;
+  overflow: hidden;
+  input {
+    width: 100%;
+    box-shadow: ${SHADOW.basic};
+  }
+  p {
+    margin: 16px 0 0;
+    opacity: 0.8;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+`;
+
+function Banner({ companyData, watch, register }: BannerPropsType) {
+  const [ImgModal, setImgModal] = useState(false);
   return (
     <Container>
       <div className="form-banner-top">
-        <img src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
+        <LogoInsert>
+          <IMG_Modal ImgModal={ImgModal}>
+            <input type="text" placeholder="URL" {...register("logo")} />
+            <p>로고 이미지의 URL을 입력해주세요.</p>
+          </IMG_Modal>
+          <img onClick={() => setImgModal(!ImgModal)} src={watch("logo")} />
+        </LogoInsert>
         <input
           type="text"
           placeholder="회사명"
           autoFocus={true}
+          required
           {...register("name")}
         />
         <select {...register("classification")}>
           <option value="">전체산업</option>
-          {JOB_TYPES.map((el) => (
-            <option
-              key={el.value}
-              value={el.value}
-              selected={companyData?.classification === el.name}
-            >
+          {COMPANY_TYPES.map((el) => (
+            <option key={el.value} value={el.value}>
               {el.name}
             </option>
           ))}
         </select>
-        <label>
-          <span>상장여부</span>
-          <input
-            type="checkbox"
-            defaultChecked={companyData?.isPublicStock}
-            placeholder=" "
-            {...register("isPublicStock")}
-          />
-        </label>
-        <select {...register("isInclusiveWage")}>
-          <option value="Y">포괄임금</option>
-          <option value="N">비포괄임금</option>
-          <option value="NULL">알 수 없음</option>
-        </select>
+        <div className="form-banner-top-mobile">
+          <label>
+            <span>상장여부</span>
+            <input
+              type="checkbox"
+              defaultChecked={companyData?.isPublicStock}
+              placeholder=" "
+              {...register("isPublicStock")}
+            />
+          </label>
+          <label>
+            <span>현직인증</span>
+            <input
+              type="checkbox"
+              defaultChecked={companyData?.isCertified}
+              placeholder=" "
+              {...register("isCertified")}
+            />
+          </label>
+          <select {...register("isInclusiveWage")}>
+            <option value="Y">포괄임금</option>
+            <option value="N">비포괄임금</option>
+            <option value="NULL">알 수 없음</option>
+          </select>
+        </div>
       </div>
       <div className="form-banner-bottom">
         <Label>
-          <p>초봉</p>
+          <p>직원수(명)</p>
+          <input
+            type="number"
+            placeholder=" "
+            {...register("numberOfEmployee")}
+          />
+        </Label>
+        <Label>
+          <p>초봉(만원)</p>
           <input type="number" placeholder=" " {...register("wage")} />
         </Label>
         <Label>
           <p>웹사이트</p>
-          <input type="text" placeholder=" " {...register("site")} />
+          <input type="text" placeholder=" " required {...register("site")} />
         </Label>
         <Label>
-          <p>채용정보</p>
+          <p>채용사이트</p>
           <input type="text" placeholder=" " {...register("recruitmentSite")} />
         </Label>
       </div>
@@ -78,11 +136,6 @@ const Container = styled.section`
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    img {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-    }
     input[type="text"] {
       flex: 1;
       height: 48px;
@@ -98,14 +151,46 @@ const Container = styled.section`
       font-size: 1rem;
     }
   }
-  .form-banner-bottom {
+  .form-banner-top-mobile {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .form-banner-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
     gap: 24px;
+  }
+  @media (max-width: 860px) {
+    .form-banner-top {
+      flex-wrap: wrap;
+    }
+  }
+  @media (max-width: 690px) {
+    padding: 0 20px;
+    .form-banner-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+`;
+
+const LogoInsert = styled.div`
+  position: relative;
+  img {
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
   }
 `;
 
 const Label = styled.label`
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
@@ -113,12 +198,12 @@ const Label = styled.label`
   margin: 0 0 12px;
   transition: all 0.3s;
   p {
-    flex: 0.85;
+    flex: 0.9;
     color: #858585;
     transition: all 0.3s;
   }
   input {
-    flex: 3;
+    flex: 2.5;
     height: auto;
     padding: 0 0 4px;
     background-color: transparent;

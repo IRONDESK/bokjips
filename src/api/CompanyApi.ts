@@ -1,14 +1,15 @@
 import axios from "axios";
-import useSWR from "swr";
+import { ICompanyDataTypes, ICompanyWelfaresTypes } from "../types/CompanyData";
 
-const URL = "/data/corp.json";
+export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+export const URL =
+  "https://port-0-bokjips-api-fao2flc0olupf.gksl2.cloudtype.app";
 
-function AllCompany() {
-  return axios.get(`${URL}`);
+function CreateCompanyData(data: ICompanyDataTypes) {
+  return axios.post(`${URL}/admin/info`, data);
+}
+function CreateWelfaresData(companyId: string, data: ICompanyWelfaresTypes) {
+  return axios.post(`${URL}/admin/info/welfare/${companyId}`, data);
 }
 
-function CompanyById(id: string) {
-  return axios.get(`${URL}/detail?id=${id}`);
-}
-
-export { AllCompany, CompanyById };
+export { CreateCompanyData, CreateWelfaresData };

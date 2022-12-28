@@ -1,44 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-import { useForm, useFieldArray } from "react-hook-form";
-
-import Banner from "../../components/Admin/Banner";
-import WelfareCard from "../../components/Admin/WelfareCard";
-import { ICompanyDataTypes } from "../../types/CompanyData";
-import { COLOR } from "../../constants/style";
-import { Title } from "../../components/Layouts/partials/Title";
 import Head from "next/head";
+import { useForm } from "react-hook-form";
+
+import { COLOR } from "../../constants/style";
+import Banner from "../../components/Admin/Banner";
+import { Title } from "../../components/Layouts/partials/Title";
+
+import { ICompanyDataTypes } from "../../types/CompanyData";
+import { CreateCompanyData } from "../../api/CompanyApi";
 
 function Create() {
-  const { register, handleSubmit, control, watch, setValue } =
-    useForm<ICompanyDataTypes>({
-      defaultValues: {
-        name: "",
-        classification: "",
-        isPublicStock: false,
-        isInclusiveWage: "Y",
-        wage: undefined,
-        site: "",
-        recruitmentSite: "",
-        welfares: [
-          {
-            type: "",
-            title: "",
-            content: "",
-            icon: "",
-          },
-        ],
-      },
-    });
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "welfares",
-    }
-  );
+  const { register, handleSubmit, watch } = useForm<ICompanyDataTypes>({
+    defaultValues: {
+      name: "",
+      classification: "",
+      isPublicStock: false,
+      isInclusiveWage: "Y",
+      wage: undefined,
+      site: "",
+      recruitmentSite: "",
+    },
+  });
 
   const onSubmit = (data: ICompanyDataTypes) => {
-    console.log(data);
+    CreateCompanyData(data).then((res) => res.data);
   };
 
   return (
@@ -51,31 +37,7 @@ function Create() {
         />
       </Head>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Banner register={register} />
-        <WelfareList>
-          {fields.map((field, index) => (
-            <WelfareCard
-              key={field.id}
-              index={index}
-              watch={watch}
-              remove={remove}
-              register={register}
-            />
-          ))}
-        </WelfareList>
-        <Button
-          type="button"
-          onClick={() =>
-            append({
-              type: "",
-              title: "",
-              content: "",
-              icon: "",
-            })
-          }
-        >
-          추가
-        </Button>
+        <Banner watch={watch} register={register} />
         <Button type="submit">저장</Button>
       </Form>
     </Container>
@@ -91,24 +53,25 @@ const Container = styled.main`
     padding: 0 8px 20px;
   }
 `;
-const Form = styled.form``;
-
-const WelfareList = styled.ul`
-  display: flex;
-  gap: 12px;
-  li {
-    padding: 12px 16px;
-    background-color: #fff;
-    border-radius: 16px;
+const Form = styled.form`
+  h3 {
+    margin: 20px 0 8px;
+    font-size: 1.35rem;
+    font-weight: 600;
   }
 `;
 
 const Button = styled.button`
-  padding: 12px 20px;
+  width: 100%;
+  margin: 24px 0;
+  padding: 16px 20px;
   background-color: ${COLOR.main};
   border-radius: 12px;
   color: #fff;
   font-size: 1.1rem;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 export default Create;
