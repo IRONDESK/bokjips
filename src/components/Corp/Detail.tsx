@@ -6,10 +6,20 @@ import { IWelfareDataTypes } from "../../types/CompanyData";
 interface DetailPropsType {
   wage: number;
   isInclusiveWage: "Y" | "N";
-  welfares: IWelfareDataTypes[];
+  workingConditions: IWelfareDataTypes[];
+  workSupport: IWelfareDataTypes[];
+  offDutySupport: IWelfareDataTypes[];
+  officeEnvironment: IWelfareDataTypes[];
 }
 
-function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
+function Detail({
+  wage,
+  isInclusiveWage,
+  workingConditions,
+  workSupport,
+  offDutySupport,
+  officeEnvironment,
+}: DetailPropsType) {
   return (
     <Container>
       <Article>
@@ -30,62 +40,53 @@ function Detail({ wage, isInclusiveWage, welfares }: DetailPropsType) {
       <Article>
         <Title>근무 조건</Title>
         <DetailList>
-          {welfares
-            ?.filter((el) => el.type === "근무 조건")
-            .map((value: IWelfareDataTypes, idx: number) => (
-              <DetailCard
-                key={idx}
-                icon={value.icon}
-                title={value.title}
-                content={value.content}
-              />
-            ))}
+          {workingConditions?.map((value: IWelfareDataTypes, idx: number) => (
+            <DetailCard
+              key={idx}
+              icon={value.icon}
+              title={value.title}
+              content={value.content}
+            />
+          ))}
         </DetailList>
       </Article>
       <Article>
         <Title>근무 지원</Title>
         <DetailList>
-          {" "}
-          {welfares
-            ?.filter((el) => el.type === "근무 지원")
-            .map((value: IWelfareDataTypes, idx: number) => (
-              <DetailCard
-                key={idx}
-                icon={value.icon}
-                title={value.title}
-                content={value.content}
-              />
-            ))}
+          {workSupport?.map((value: IWelfareDataTypes, idx: number) => (
+            <DetailCard
+              key={idx}
+              icon={value.icon}
+              title={value.title}
+              content={value.content}
+            />
+          ))}
         </DetailList>
       </Article>
       <Article>
         <Title>근무 외 지원</Title>
         <DetailList>
-          {welfares
-            ?.filter((el) => el.type === "근무 외 지원")
-            .map((value: IWelfareDataTypes, idx: number) => (
-              <DetailCard
-                key={idx}
-                icon={value.icon}
-                title={value.title}
-                content={value.content}
-              />
-            ))}
+          {offDutySupport?.map((value: IWelfareDataTypes, idx: number) => (
+            <DetailCard
+              key={idx}
+              icon={value.icon}
+              title={value.title}
+              content={value.content}
+            />
+          ))}
         </DetailList>
       </Article>
       <Article>
         <Title>사내 환경</Title>
         <DetailList>
-          {welfares
-            ?.filter((el) => el.type === "사내 환경")
-            .map((value: IWelfareDataTypes, idx: number) => (
-              <DetailCard
-                key={idx}
-                icon={value.icon}
-                title={value.title}
-                content={value.content}
-              />
-            ))}
+          {officeEnvironment?.map((value: IWelfareDataTypes, idx: number) => (
+            <DetailCard
+              key={idx}
+              icon={value.icon}
+              title={value.title}
+              content={value.content}
+            />
+          ))}
         </DetailList>
       </Article>
     </Container>
@@ -109,23 +110,12 @@ const DetailList = styled.ul`
   @media (max-width: 840px) {
     margin: 0 -32px;
     padding: 0 12px 8px 32px;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
   }
   @media (max-width: 580px) {
     margin: 0 -20px;
     padding: 0 12px 8px 20px;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    height: 8px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #cfcfcf;
-    border-radius: 20px;
+    flex-direction: column;
+    gap: 12px;
   }
 `;
 

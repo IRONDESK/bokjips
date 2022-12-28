@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import useSWR from "swr";
 import { GetServerSideProps } from "next";
 import styled from "@emotion/styled";
 
@@ -11,23 +12,23 @@ import Comments from "../../components/Corp/Comments";
 
 import { useAtom } from "jotai";
 import { verticalSplited } from "../../atoms/atoms";
-// import { CompanyById } from "../../api/CompanyApi";
-import { ICompanyDataTypes } from "../../types/CompanyData";
 
-import corp from "../../../public/data/corp.json";
-import { JOB_TYPES, JOB_TYPES_LITERAL } from "../../constants/job";
+import { ICompanyDataTypes } from "../../types/CompanyData";
+import { COMPANY_TYPES_LITERAL } from "../../constants/job";
+import { fetcher, URL } from "../../api/CompanyApi";
 
 interface ICorpPropsType {
   corpId?: string;
   corpData: ICompanyDataTypes;
 }
 
-function CorpId({ corpId, corpData: companyData }: ICorpPropsType) {
+function CorpId({ corpId }: ICorpPropsType) {
+  const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
 
   return (
     <>
-      <Title title={companyData?.name} />
+      <Title title={data?.name} />
       <Head>
         <link
           rel="stylesheet"
@@ -39,24 +40,27 @@ function CorpId({ corpId, corpData: companyData }: ICorpPropsType) {
           <Banner>
             <div className="corp-identified">
               <img src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
-              <h2>{companyData?.name}</h2>
-              <i>{companyData?.isPublicStock ? "상장" : "비상장"}</i>
-              <i>{JOB_TYPES_LITERAL[companyData?.classification]}</i>
+              <h2>{data?.name}</h2>
+              <i>{data?.isPublicStock ? "상장" : "비상장"}</i>
+              <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>
             </div>
             <div className="corp-buttons">
               <Button icon="heart">0</Button>
-              <Link href={companyData?.site || ""}>
+              <Link href={data?.site || ""}>
                 <Button icon="site">사이트</Button>
               </Link>
-              <Link href={companyData?.recruitmentSite || ""}>
+              <Link href={data?.recruitmentSite || ""}>
                 <Button icon="recruit">채용정보</Button>
               </Link>
             </div>
           </Banner>
           <Detail
-            wage={companyData?.wage}
-            isInclusiveWage={companyData?.isInclusiveWage}
-            welfares={companyData?.welfares}
+            wage={data?.wage}
+            isInclusiveWage={data?.isInclusiveWage}
+            workingConditions={data?.workingConditions}
+            workSupport={data?.workSupport}
+            offDutySupport={data?.offDutySupport}
+            officeEnvironment={data?.officeEnvironment}
           />
         </SideOne>
         <SideTwo isSplited={isSplited}>
@@ -136,7 +140,8 @@ const Banner = styled.div`
     img {
       width: 42px;
       height: 42px;
-      border-radius: 18px;
+      border-radius: 12px;
+      object-fit: cover;
     }
   }
   @media (max-width: 840px) {
@@ -150,6 +155,12 @@ const Banner = styled.div`
       width: 100%;
       padding: 0 12px;
       gap: 12px;
+      a {
+        flex: 1;
+        button {
+          width: 100%;
+        }
+      }
     }
   }
   @media (max-width: 580px) {
@@ -192,7 +203,6 @@ const Button = styled.button<{ icon: string }>`
     box-shadow: ${SHADOW.hover};
   }
   @media (max-width: 840px) {
-    flex: 1;
     margin: 0;
   }
 `;
@@ -219,11 +229,9 @@ const Vertical = styled.button`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const corpData = corp.filter((el) => el.id == Number(id))[0] || {};
   return {
     props: {
       corpId: id,
-      corpData,
     },
   };
 };

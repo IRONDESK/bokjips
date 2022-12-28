@@ -7,9 +7,9 @@ interface DetailCardPropsType {
   content?: string;
 }
 
-function DetailCard({ icon, title, content = "" }: DetailCardPropsType) {
+function DetailCard({ icon, title, content }: DetailCardPropsType) {
   const [additionalCheck, setAdditionalCheck] = useState(false);
-  const [contentFisrt, contentAdditional] = content.split("??");
+  const [contentFisrt, contentAdditional] = (content || "").split("??");
   const MouseOverLeaveEvent = () => {
     setAdditionalCheck(!additionalCheck);
   };

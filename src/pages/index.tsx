@@ -1,33 +1,40 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-
-import CorpCard from "../components/Main/CorpCard";
-import { AllCompany } from "../api/CompanyApi";
-import { ICompanyDataTypes } from "../types/CompanyData";
+import useSWR from "swr";
 import Link from "next/link";
 
+import CorpCard from "../components/Main/CorpCard";
+import { fetcher, URL } from "../api/CompanyApi";
+import { ICompanyDataTypes } from "../types/CompanyData";
+
 export default function Home() {
-  const [companyData, setCompanyData] = useState([]);
-  useEffect(() => {
-    AllCompany().then((res) => setCompanyData(res?.data));
-  }, []);
+  const { data, error } = useSWR(URL, fetcher, { revalidateOnFocus: false });
 
   return (
     <Main>
       <CardList>
-        {companyData?.map((value: ICompanyDataTypes, index) => (
-          <Link key={index} href={`/corp/${value.id}`}>
+        {data?.map((value: ICompanyDataTypes, idx: number) => (
+          <Link key={idx} href={`/corp/${value?.companyId}`}>
             <CorpCard
-              id={value.id}
-              name={value.name}
-              classification={value.classification}
-              wage={value.wage}
-              isInclusiveWage={value.isInclusiveWage}
-              isPublicStock={value.isPublicStock}
-              numberOfEmployees={value.numberOfEmployees}
-              recruitmentSite={value.recruitmentSite}
-              site={value.site}
-              welfares={value.welfares.slice(0, 7)}
+              companyId={value?.companyId}
+              name={value?.name}
+              classification={value?.classification}
+              wage={value?.wage}
+              isInclusiveWage={value?.isInclusiveWage}
+              isPublicStock={value?.isPublicStock}
+              numberOfEmployee={value?.numberOfEmployee}
+              recruitmentSite={value?.recruitmentSite}
+              site={value?.site}
+              welfares={
+                [
+                  ...(value?.workingConditions || []).slice(0, 3),
+                  ...(value?.offDutySupport || []).slice(0, 2),
+                  ...(value?.officeEnvironment || []).slice(0, 2),
+                ] || []
+              }
+              logo={value?.logo}
+              isCertified={value.isCertified}
+              favorite={value?.favorite}
             />
           </Link>
         ))}

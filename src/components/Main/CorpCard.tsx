@@ -1,21 +1,25 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { SHADOW } from "../../constants/style";
-import { ICompanyDataTypes } from "../../types/CompanyData";
-import { JOB_TYPES_LITERAL } from "../../constants/job";
+import { ICompanyDataTypes, IWelfareDataTypes } from "../../types/CompanyData";
+import { COMPANY_TYPES_LITERAL } from "../../constants/job";
+
+interface CorpCardPropsType extends ICompanyDataTypes {
+  welfares: IWelfareDataTypes[];
+}
 
 function CorpCard({
-  id,
+  companyId,
   name,
   classification,
   wage,
   isInclusiveWage,
   isPublicStock,
-  numberOfEmployees,
+  numberOfEmployee,
   recruitmentSite,
   site,
   welfares,
-}: ICompanyDataTypes) {
+}: CorpCardPropsType) {
   return (
     <Container>
       <Title>
@@ -24,20 +28,20 @@ function CorpCard({
           <strong>{name}</strong>
           <p>
             {isPublicStock ? "상장" : "비상장"} |{" "}
-            {JOB_TYPES_LITERAL[classification]}
+            {COMPANY_TYPES_LITERAL[classification]}
           </p>
         </Name>
       </Title>
       <WelfareList>
         {welfares?.map((value, idx) => (
-          <span key={idx}>{value.title}</span>
+          <span key={idx}>{value?.title}</span>
         ))}
         <p className="list-text-more">...더보기</p>
       </WelfareList>
       <Option>
         <div>
-          <Tag icon="money">초봉 {wage.toLocaleString()}만</Tag>
-          <Tag icon="groups">{numberOfEmployees.toLocaleString()}명</Tag>
+          <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>
+          <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
         </div>
         <Tag icon="heart">-</Tag>
       </Option>
