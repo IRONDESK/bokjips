@@ -9,7 +9,7 @@ import {
   wageFilter,
 } from "../../atoms/atoms";
 import FilterList from "./FilterList";
-import { JOB_TYPES } from "../../constants/job";
+import { COMPANY_TYPES } from "../../constants/job";
 
 function HeaderBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
@@ -37,14 +37,13 @@ function HeaderBar() {
             id="header-industry"
             value={nowKeyFilter.industry}
             onChange={(e) =>
-              setNowKeyFilter({
-                ...nowKeyFilter,
-                industry: e.target.value,
+              setNowKeyFilter((prev) => {
+                return { ...prev, industry: e.target.value };
               })
             }
           >
             <option value="">전체산업</option>
-            {JOB_TYPES.map((el) => (
+            {COMPANY_TYPES.map((el) => (
               <option key={el.value} value={el.value}>
                 {el.name}
               </option>
@@ -80,7 +79,7 @@ const Wrap = styled.label<{ icon: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 8px;
+  padding: 0 8px;
   width: ${(props) =>
     props.icon == "rocket"
       ? "152px"
@@ -119,6 +118,10 @@ const Wrap = styled.label<{ icon: string }>`
     background-position: center;
   }
 
+  select,
+  p {
+    text-align: center;
+  }
   input,
   select,
   p {
@@ -127,11 +130,15 @@ const Wrap = styled.label<{ icon: string }>`
     padding: 0 12px 0 0;
     background: none;
     font-size: 1.1rem;
+    line-height: 55px;
     z-index: 1;
     border: none;
     outline: none;
     overflow: hidden;
     text-overflow: ellipsis;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     &::placeholder {
       opacity: 0;
       transition: all 0.3s;

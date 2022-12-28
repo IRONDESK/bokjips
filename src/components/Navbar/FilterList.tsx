@@ -150,6 +150,7 @@ const Wage = styled.div<{ wageValue: number }>`
 `;
 
 const Buttons = styled.div<{ showFilter: boolean }>`
+  padding: 0 28px 0 0;
   transition: all 0.3s;
   .flicking-viewport {
     overflow: visible;
