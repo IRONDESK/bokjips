@@ -3,6 +3,10 @@ import React from "react";
 import { COLOR, SHADOW } from "../../constants/style";
 
 function Comments() {
+  const handleSubmitComment = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <Container>
       <h3>실시간 댓글</h3>
@@ -13,9 +17,7 @@ function Comments() {
           minLength={10}
           maxLength={200}
         />
-        <button type="submit" onClick={(e) => e.preventDefault()}>
-          완료
-        </button>
+        <button type="submit" onClick={handleSubmitComment}></button>
       </form>
       <ul className="comment-list">
         <CommentItem isMyComment={true}>
@@ -46,7 +48,7 @@ const Container = styled.section`
     display: flex;
     align-items: center;
     margin: 24px 0 0;
-    padding: 8px 12px;
+    padding: 0 12px;
     background-color: #fff;
     border-radius: 20px;
     box-shadow: ${SHADOW.basic};
@@ -54,15 +56,22 @@ const Container = styled.section`
     input {
       flex: 1;
       margin: 0 0 0 8px;
+      padding: 16px 0;
       font-size: 1rem;
     }
     button {
-      padding: 8px 16px;
-      border-radius: 14px;
-      font-size: 1rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+      background-color: ${COLOR.lightgray};
       &:hover {
         background-color: #000;
         color: #fff;
+      }
+      &::after {
+        content: "check";
+        font-family: "Material Symbols Outlined";
+        font-size: 1.35rem;
+        font-weight: bold;
       }
     }
     &:hover,
