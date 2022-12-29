@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-import { SHADOW } from "../../constants/style";
 import { useAtom } from "jotai";
+
+import { SHADOW } from "../../constants/style";
 import {
   keyFilter,
   selectedFilter,
@@ -25,9 +26,8 @@ function HeaderBar() {
             placeholder="회사명"
             value={nowKeyFilter.keyword}
             onChange={(e) =>
-              setNowKeyFilter({
-                ...nowKeyFilter,
-                keyword: e.target.value,
+              setNowKeyFilter((prev) => {
+                return { ...prev, keyword: e.target.value };
               })
             }
           />
@@ -139,6 +139,7 @@ const Wrap = styled.label<{ icon: string }>`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    color: #000;
     &::placeholder {
       opacity: 0;
       transition: all 0.3s;
