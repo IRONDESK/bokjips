@@ -5,15 +5,8 @@ import "@egjs/react-flicking/dist/flicking.css";
 import { useAtom } from "jotai";
 
 import { selectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
+import { WELFARES_FILTER_LIST } from "../../constants/welfares";
 import { COLOR, SHADOW } from "../../constants/style";
-
-const welfareList = [
-  { value: "wage", name: "비포괄임금" },
-  { value: "restaurant", name: "사내식당" },
-  { value: "housework", name: "재택근무" },
-  { value: "device", name: "최신형장비" },
-  { value: "stockoption", name: "스톡옵션" },
-];
 
 function FilterBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
@@ -26,9 +19,9 @@ function FilterBar() {
     let target = (e.target as HTMLButtonElement).value;
     if (target) {
       if (!nowFilter.some((arr) => arr == target)) {
-        setNowFilter([...nowFilter, target]);
+        setNowFilter((prev) => [...prev, target]);
       } else {
-        setNowFilter(nowFilter.filter((value) => value !== target));
+        setNowFilter((prev) => prev.filter((value) => value !== target));
       }
     }
   };
@@ -59,10 +52,17 @@ function FilterBar() {
           >
             상장사
           </Button>
+          <Button
+            isSelected={nowFilter.some((arr) => arr === "inclusiveWage")}
+            onClick={addFiltered}
+            value="inclusiveWage"
+          >
+            비포괄
+          </Button>
         </div>
         <Buttons showFilter={showFilter} onClick={addFiltered}>
           <Flicking align="prev" bound={true} inputType={["touch", "mouse"]}>
-            {welfareList.map((el, idx) => (
+            {WELFARES_FILTER_LIST.map((el, idx) => (
               <Button
                 key={idx}
                 value={el.value}
@@ -104,7 +104,7 @@ const Container = styled.section<{ showFilter: boolean }>`
   .filter-list-top {
     display: grid;
     margin: 0 0 8px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     transition: all 0.3s;
   }
@@ -136,8 +136,9 @@ const Wage = styled.div<{ wageValue: number }>`
     max-width: 50%;
     padding: 0 4px;
     background: transparent;
-    text-align: right;
     color: ${(props) => (props.wageValue > 0 ? "#fff" : "none")};
+    font-size: 0.85rem;
+    text-align: right;
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       display: none;
