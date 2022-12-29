@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
+
 import { COMPANY_TYPES } from "../../constants/job";
 import { ICompanyDataTypes } from "../../types/CompanyData";
-import { SHADOW } from "../../constants/style";
+
+import ImgModal from "./ImgModal";
 
 interface BannerPropsType {
   companyData?: ICompanyDataTypes;
@@ -11,50 +13,23 @@ interface BannerPropsType {
   register: UseFormRegister<ICompanyDataTypes>;
 }
 
-function IMG_Modal({
-  children,
-  ImgModal,
-}: {
-  children: any;
-  ImgModal: boolean;
-}) {
-  return <Modal ImgModal={ImgModal}>{children}</Modal>;
-}
-const Modal = styled.div<{ ImgModal: boolean }>`
-  position: absolute;
-  top: 44px;
-  left: 44px;
-  width: ${(props) => (props.ImgModal ? "360px" : "0")};
-  height: ${(props) => (props.ImgModal ? "100px" : "0")};
-  background-color: #fff;
-  z-index: 1;
-  border-radius: 20px;
-  box-shadow: ${SHADOW.basic};
-  transition: all 0.3s;
-  overflow: hidden;
-  input {
-    width: 100%;
-    box-shadow: ${SHADOW.basic};
-  }
-  p {
-    margin: 16px 0 0;
-    opacity: 0.8;
-    font-size: 0.95rem;
-    text-align: center;
-  }
-`;
-
 function Banner({ companyData, watch, register }: BannerPropsType) {
-  const [ImgModal, setImgModal] = useState(false);
+  const [isShowImgModal, setIsShowImgModal] = useState(false);
   return (
     <Container>
       <div className="form-banner-top">
         <LogoInsert>
-          <IMG_Modal ImgModal={ImgModal}>
+          <ImgModal
+            isShowImgModal={isShowImgModal}
+            setIsShowImgModal={setIsShowImgModal}
+          >
             <input type="text" placeholder="URL" {...register("logo")} />
             <p>로고 이미지의 URL을 입력해주세요.</p>
-          </IMG_Modal>
-          <img onClick={() => setImgModal(!ImgModal)} src={watch("logo")} />
+          </ImgModal>
+          <img
+            onClick={() => setIsShowImgModal((prev) => !prev)}
+            src={watch("logo") || "/icons/add_image.svg"}
+          />
         </LogoInsert>
         <input
           type="text"
@@ -103,12 +78,20 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
           <input
             type="number"
             placeholder=" "
-            {...register("numberOfEmployee")}
+            {...register("numberOfEmployee", {
+              valueAsNumber: true,
+            })}
           />
         </Label>
         <Label>
           <p>초봉(만원)</p>
-          <input type="number" placeholder=" " {...register("wage")} />
+          <input
+            type="number"
+            placeholder=" "
+            {...register("wage", {
+              valueAsNumber: true,
+            })}
+          />
         </Label>
         <Label>
           <p>웹사이트</p>
@@ -186,6 +169,9 @@ const LogoInsert = styled.div`
     height: 48px;
     border-radius: 12px;
     object-fit: cover;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;
 
