@@ -1,11 +1,17 @@
-export interface IUserDataTypes {
+export interface IUserDataTypes extends IUserSignUpDataTypes {
+  roles: string;
+  roleList: string[];
+}
+
+export interface IUserSignUpDataTypes {
   username: string;
   password: string;
-  nickname: string;
+  email: string;
+  dateOfBirth: string;
   job: string;
 }
 
 export interface IUserLoginDataTypes {
-  memberId: string;
+  username: string;
   password: string;
 }

@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { COLOR, SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
 import { useForm } from "react-hook-form";
-import { IUserDataTypes } from "../../types/UserData";
+import { IUserSignUpDataTypes } from "../../types/UserData";
+import { JOB_TYPES } from "../../constants/job";
+import { MemberSignUp } from "../../api/MemberApi";
 
 function Join() {
+  const [isVisiblePwd, setIsVisiblePwd] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     watch,
-    setFocus,
     formState: { errors },
-  } = useForm<IUserDataTypes>({ mode: "onChange" });
-  const selectedJob = watch("job");
-  useEffect(() => {
-    setFocus("username");
-  }, []);
+  } = useForm<IUserSignUpDataTypes>({ mode: "onChange" });
 
-  const onSubmit = (data: IUserDataTypes) => {
-    console.log(data);
+  const selectedJob = watch("job");
+  const passwordValue = watch("password");
+
+  const onSubmit = (data: IUserSignUpDataTypes) => {
+    MemberSignUp(data).then((res) => console.log(res));
   };
+
   return (
     <Container>
       <Title title="회원가입" />
@@ -31,9 +33,9 @@ function Join() {
           기업정보를 편하게 살펴보세요.
         </Message>
         <Label>
-          <p>이메일</p>
+          <p>아이디</p>
           <input
-            type="email"
+            type="text"
             placeholder=" "
             autoFocus={true}
             {...register("username")}
@@ -42,13 +44,21 @@ function Join() {
         </Label>
         <Label>
           <p>비밀번호</p>
-          <div>{errors?.password?.message}</div>
+          <span className="password-error-msg">
+            {errors?.password?.message}
+          </span>
+          <VisibilityPwd
+            isVisiblePwd={isVisiblePwd}
+            isValue={!!passwordValue}
+            onClick={() => setIsVisiblePwd((prev) => !prev)}
+          ></VisibilityPwd>
           <input
-            type="password"
+            type={isVisiblePwd ? "text" : "password"}
             placeholder=" "
+            minLength={10}
             {...register("password", {
               pattern: {
-                value: /(?=.*[!@#$%])[!@#$%]/,
+                value: /(?=.*[!@#$%~])[!@#$%~]/,
                 message: "특수문자 포함 필수",
               },
               minLength: { value: 10, message: "10자 이상 필수" },
@@ -58,35 +68,22 @@ function Join() {
           />
         </Label>
         <Label>
-          <p>닉네임</p>
-          <input
-            type="text"
-            placeholder=" "
-            {...register("nickname")}
-            required
-          />
+          <p>이메일</p>
+          <input type="email" placeholder=" " {...register("email")} required />
+        </Label>
+        <Label>
+          <p>생년월일</p>
+          <input type="date" {...register("dateOfBirth")} required />
         </Label>
         <Label job={selectedJob}>
           <p>직업</p>
           <select {...register("job")} required>
             <option value="">--- 직업 선택 ---</option>
-            <option value="develop">개발</option>
-            <option value="business">경영·전략</option>
-            <option value="media">마케팅·미디어</option>
-            <option value="design">디자인</option>
-            <option value="sales">영업</option>
-            <option value="service">고객서비스</option>
-            <option value="hr">HR</option>
-            <option value="engineer">엔지니어링</option>
-            <option value="finance">금융</option>
-            <option value="logistics">물류</option>
-            <option value="manufacture">제조·생산</option>
-            <option value="edu">교육</option>
-            <option value="medical">의료·제약</option>
-            <option value="food">식·음료</option>
-            <option value="law">법률</option>
-            <option value="construction">건설</option>
-            <option value="public">공공·복지</option>
+            {JOB_TYPES.map((el) => (
+              <option key={el.value} value={el.value}>
+                {el.name}
+              </option>
+            ))}
           </select>
         </Label>
         <Button type="submit">로그인</Button>
@@ -138,8 +135,10 @@ const Label = styled.label<{ job?: string }>`
     outline: none;
     appearance: none;
   }
-  div {
-    display: none;
+  .password-error-msg {
+    position: absolute;
+    transition: opacity 0.3s;
+    opacity: 0;
   }
   &:has(input:focus),
   &:has(input:not(:placeholder-shown)),
@@ -161,19 +160,32 @@ const Label = styled.label<{ job?: string }>`
   &:has(input:focus),
   &:has(select:focus) {
     box-shadow: ${SHADOW.hover};
-    div {
+    .password-error-msg {
       display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 24px;
+      top: 24px;
+      right: 24px;
       text-align: right;
       color: ${COLOR.report};
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       opacity: 0.6;
     }
   }
 `;
+
+const VisibilityPwd = styled.i<{ isVisiblePwd: boolean; isValue: boolean }>`
+  position: absolute;
+  opacity: ${(props) => (props.isValue ? "1" : "0")};
+  right: 28px;
+  bottom: 20px;
+  width: 2rem;
+  height: 2rem;
+  background-image: ${(props) =>
+    `url(/icons/eye_visibility${props.isVisiblePwd ? "_off" : ""}.svg)`};
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: opacity 0.3s;
+`;
+
 const Button = styled.button`
   padding: 24px 0;
   width: 100%;

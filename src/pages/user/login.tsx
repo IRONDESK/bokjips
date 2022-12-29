@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
+
 import { COLOR, SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
-import { SubmitHandler, useForm } from "react-hook-form";
+
 import { IUserLoginDataTypes } from "../../types/UserData";
 import { MemberLogin } from "../../api/MemberApi";
 
 function Login() {
+  const router = useRouter();
   const { register, handleSubmit } = useForm<IUserLoginDataTypes>();
+  const [errorMsg, setErrorMsg] = useState("");
+
   const onSubmitHandler: SubmitHandler<IUserLoginDataTypes> = (data) => {
-    MemberLogin(data).then((res) => console.log);
+    MemberLogin(data)
+      .then((res) => {
+        setCookie("accessToken", res.headers.authorization?.split(" ")[1]);
+        router.push("/");
+      })
+      .catch((res) => {
+        if (res.response.data.error === "Unauthorized") {
+          setErrorMsg("가입하지 않았거나 잘못된 정보를 입력했습니다.");
+        }
+      });
   };
 
   return (
@@ -22,12 +38,12 @@ function Login() {
           편하게 살펴보세요.
         </Message>
         <Label>
-          <p>이메일</p>
+          <p>아이디</p>
           <input
-            type="email"
+            type="text"
             placeholder=" "
             autoFocus={true}
-            {...register("memberId")}
+            {...register("username")}
             required
           />
         </Label>
@@ -40,6 +56,7 @@ function Login() {
             required
           />
         </Label>
+        {errorMsg && <p className="login-error-msg">{errorMsg}</p>}
         <Button type="submit">로그인</Button>
       </Form>
     </Container>
@@ -53,6 +70,11 @@ const Container = styled.main`
 const Form = styled.form`
   margin: 0 auto;
   max-width: 460px;
+  .login-error-msg {
+    margin: 0 0 8px;
+    color: ${COLOR.report};
+    font-size: 1rem;
+  }
 `;
 const Message = styled.p`
   margin: 0 0 16px;

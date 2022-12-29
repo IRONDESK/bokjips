@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
+import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
-import { selectedModal } from "../../../atoms/atoms";
 
 import { COLOR, SHADOW } from "../../../constants/style";
 import HeaderBar from "../../Navbar/HeaderBar";
 
 function Header() {
-  const [showUser, setShowUser] = useState(false);
-  const [showFilter] = useAtom(selectedModal);
   const router = useRouter();
   const path = router.pathname.split("/").slice(1);
+
+  const cookie = getCookie("accessToken");
+  const [showUser, setShowUser] = useState(false);
+
+  const handleLogout = () => {
+    deleteCookie("accessToken");
+    router.reload();
+  };
 
   return (
     <Container corp={path[0] === "corp"}>
@@ -26,16 +31,24 @@ function Header() {
       <Wrap>{path[0] === "" ? <HeaderBar /> : null}</Wrap>
       <Wrap id="header-user">
         <User onClick={() => setShowUser(!showUser)}></User>
-        {showUser && (
-          <UserBox>
-            <li>
-              <Link href="/user/login">로그인</Link>
-            </li>
-            <li>
-              <Link href="/user/join">회원가입</Link>
-            </li>
-          </UserBox>
-        )}
+        {showUser &&
+          (cookie ? (
+            <UserBox>
+              <li>
+                <Link href="/user/info">내정보</Link>
+              </li>
+              <li onClick={handleLogout}>로그아웃</li>
+            </UserBox>
+          ) : (
+            <UserBox>
+              <li>
+                <Link href="/user/login">로그인</Link>
+              </li>
+              <li>
+                <Link href="/user/join">회원가입</Link>
+              </li>
+            </UserBox>
+          ))}
       </Wrap>
     </Container>
   );
@@ -96,7 +109,7 @@ const UserBox = styled.ul`
   display: flex;
   justify-content: center;
   padding: 12px 16px;
-  width: 144px;
+  min-width: 148px;
   top: 50%;
   right: 36px;
   gap: 12px;
@@ -105,6 +118,9 @@ const UserBox = styled.ul`
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   font-size: 0.95rem;
+  li {
+    cursor: pointer;
+  }
 `;
 
 export default Header;
