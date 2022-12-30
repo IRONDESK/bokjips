@@ -46,9 +46,9 @@ function FilterBar() {
             />
           </Wage>
           <Button
-            isSelected={nowFilter.some((arr) => arr === "instock")}
+            isSelected={nowFilter.some((arr) => arr === "inPublicStock")}
             onClick={addFiltered}
-            value="instock"
+            value="inPublicStock"
           >
             상장사
           </Button>
