@@ -5,7 +5,7 @@ import { IWelfareDataTypes } from "../../types/CompanyData";
 
 interface DetailPropsType {
   wage: number;
-  isInclusiveWage: "Y" | "N";
+  isInclusiveWage: "Y" | "N" | "NULL";
   workingConditions: IWelfareDataTypes[];
   workSupport: IWelfareDataTypes[];
   offDutySupport: IWelfareDataTypes[];
@@ -23,17 +23,20 @@ function Detail({
   return (
     <Container>
       <Article>
-        <Title>기본 정보</Title>
+        {(wage > 0 || isInclusiveWage !== "NULL") && <Title>기본 정보</Title>}
         <DetailList>
-          <DetailCard
-            icon="payments"
-            title={`초봉 ${wage?.toLocaleString() || 0}만원`}
-            content="개발 직군 한정"
-          />
-          {isInclusiveWage === "Y" ? (
-            <DetailCard icon="schedule" title="포괄임금제" />
-          ) : (
-            <DetailCard icon="history_toggle_off" title="비포괄임금제" />
+          {wage > 0 && (
+            <DetailCard
+              icon="payments"
+              title={`초봉 ${wage?.toLocaleString() || 0}만원`}
+              content="개발 직군 한정"
+            />
+          )}
+          {isInclusiveWage !== "NULL" && (
+            <DetailCard
+              icon={isInclusiveWage === "Y" ? "schedule" : "history_toggle_off"}
+              title={isInclusiveWage === "Y" ? "포괄임금지" : "비포괄임금제"}
+            />
           )}
         </DetailList>
       </Article>

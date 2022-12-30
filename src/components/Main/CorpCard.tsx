@@ -9,21 +9,18 @@ interface CorpCardPropsType extends ICompanyDataTypes {
 }
 
 function CorpCard({
-  companyId,
   name,
   classification,
+  logo,
   wage,
-  isInclusiveWage,
   isPublicStock,
   numberOfEmployee,
-  recruitmentSite,
-  site,
   welfares,
 }: CorpCardPropsType) {
   return (
     <Container>
       <Title>
-        <Logo src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
+        <Logo src={logo} />
         <Name>
           <strong>{name}</strong>
           <p>

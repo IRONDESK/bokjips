@@ -1,25 +1,24 @@
 import styled from "@emotion/styled";
 import React, { useRef } from "react";
 import { useFieldArray } from "react-hook-form";
-import { WELFARE_TYPES } from "../../constants/job";
 import { COLOR } from "../../constants/style";
 
 interface WelfareCardPropsType {
   register: any;
   control: any;
   watch: any;
-  typeName: string;
+  corpId: string;
 }
 
 function WelfareList({
   register,
   control,
   watch,
-  typeName,
+  corpId,
 }: WelfareCardPropsType) {
   const { fields, append, prepend, remove } = useFieldArray({
     control,
-    name: typeName,
+    name: "value",
   });
 
   return (
@@ -29,27 +28,33 @@ function WelfareList({
           <label>
             <input
               type="text"
-              {...register(`${typeName}.${index}.type`)}
+              {...register(`value.${index}.companyId`)}
               disabled={true}
             />
           </label>
+          <select {...register(`value.${index}.type`)}>
+            <option value="근무 조건">근무 조건</option>
+            <option value="근무 지원">근무 지원</option>
+            <option value="근무 외 지원">근무 외 지원</option>
+            <option value="사내 환경">사내 환경</option>
+          </select>
 
           <IconWrap className="material-symbols-outlined">
-            {watch(`${typeName}.${index}.icon`)}
+            {watch(`value.${index}.icon`)}
           </IconWrap>
           <input
             type="text"
-            {...register(`${typeName}.${index}.icon`)}
+            {...register(`value.${index}.icon`)}
             placeholder="아이콘"
           />
           <input
             type="text"
-            {...register(`${typeName}.${index}.title`)}
+            {...register(`value.${index}.title`)}
             placeholder="제목"
           />
           <input
             type="text"
-            {...register(`${typeName}.${index}.content`)}
+            {...register(`value.${index}.content`)}
             placeholder="내용"
           />
           <div>
@@ -68,10 +73,11 @@ function WelfareList({
         type="button"
         onClick={() =>
           append({
-            type: WELFARE_TYPES[typeName],
+            type: "",
             title: "",
             content: "",
             icon: "",
+            companyId: corpId,
           })
         }
       >

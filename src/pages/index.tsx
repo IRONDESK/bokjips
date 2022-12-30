@@ -18,13 +18,12 @@ export default function Home() {
             <CorpCard
               companyId={value?.companyId}
               name={value?.name}
+              logo={value?.logo}
               classification={value?.classification}
               wage={value?.wage}
               isInclusiveWage={value?.isInclusiveWage}
               isPublicStock={value?.isPublicStock}
               numberOfEmployee={value?.numberOfEmployee}
-              recruitmentSite={value?.recruitmentSite}
-              site={value?.site}
               welfares={
                 [
                   ...(value?.workingConditions || []).slice(0, 3),
@@ -32,7 +31,6 @@ export default function Home() {
                   ...(value?.officeEnvironment || []).slice(0, 2),
                 ] || []
               }
-              logo={value?.logo}
               isCertified={value.isCertified}
               favorite={value?.favorite}
             />

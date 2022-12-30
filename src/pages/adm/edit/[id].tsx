@@ -1,46 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
+import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
-import { fetcher, URL } from "../../../api/CompanyApi";
+import { EditCompanyData, fetcher, URL } from "../../../api/CompanyApi";
 import Banner from "../../../components/Admin/Banner";
-import WelfareList from "../../../components/Admin/WelfareList";
 
 import { ICompanyDataTypes } from "../../../types/CompanyData";
-import { WELFARE_TYPES } from "../../../constants/job";
 import { COLOR } from "../../../constants/style";
 import { Title } from "../../../components/Layouts/partials/Title";
+import Loading from "../../../components/Layouts/Loading";
 
 interface ICorpEditPropsType {
   corpId: string;
 }
 
 function Edit({ corpId }: ICorpEditPropsType) {
+  const router = useRouter();
   const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
     revalidateOnFocus: false,
   });
-  const WELFARE_TYPES_ARR = [
-    "workingConditions",
-    "workSupport",
-    "offDutySupport",
-    "officeEnvironment",
-  ];
-  const { register, handleSubmit, control, watch, reset } =
-    useForm<ICompanyDataTypes>({
-      defaultValues: companyData,
-    });
+
+  const { register, handleSubmit, watch, reset } = useForm<ICompanyDataTypes>();
 
   useEffect(() => {
     // RHF은 최초 렌더링시에만 초기값을 설정하므로
     // 값을 받아온 이후에 다시 렌더링하도록 reset props를 사용
-    reset(companyData);
+    reset({
+      companyId: companyData?.companyId,
+      name: companyData?.name,
+      classification: companyData?.classification,
+      wage: companyData?.wage,
+      isInclusiveWage: companyData?.isInclusiveWage,
+      isPublicStock: companyData?.isPublicStock,
+      numberOfEmployee: companyData?.numberOfEmployee,
+      logo: companyData?.logo,
+      isCertified: companyData?.isCertified,
+      site: companyData?.site,
+      recruitmentSite: companyData?.recruitmentSite,
+    });
   }, [companyData]);
+  const cookie = getCookie("accessToken") as string;
 
   const onSubmit = (data: ICompanyDataTypes) => {
-    console.log(data);
+    EditCompanyData(data, cookie).then((res) => {
+      if (res.status === 200) {
+        alert("수정이 완료되었습니다.");
+        router.push(`/corp/${corpId}`);
+      }
+    });
   };
 
   if (companyData) {
@@ -55,24 +67,12 @@ function Edit({ corpId }: ICorpEditPropsType) {
         </Head>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Banner companyData={companyData} watch={watch} register={register} />
-          {WELFARE_TYPES_ARR.map((item, idx) => (
-            <>
-              <h3>{WELFARE_TYPES[item]}</h3>
-              <WelfareList
-                key={idx}
-                register={register}
-                control={control}
-                watch={watch}
-                typeName={item}
-              />
-            </>
-          ))}
           <Button type="submit">저장</Button>
         </Form>
       </Container>
     );
   } else {
-    return "Loading..";
+    return <Loading />;
   }
 }
 

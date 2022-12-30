@@ -39,7 +39,7 @@ function CorpId({ corpId }: ICorpPropsType) {
         <SideOne>
           <Banner>
             <div className="corp-identified">
-              <img src="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside" />
+              <img src={data?.logo} />
               <h2>{data?.name}</h2>
               <i>{data?.isPublicStock ? "상장" : "비상장"}</i>
               <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>

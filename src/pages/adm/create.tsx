@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
 
 import { COLOR } from "../../constants/style";
@@ -11,20 +13,22 @@ import { ICompanyDataTypes } from "../../types/CompanyData";
 import { CreateCompanyData } from "../../api/CompanyApi";
 
 function Create() {
-  const { register, handleSubmit, watch } = useForm<ICompanyDataTypes>({
-    defaultValues: {
-      name: "",
-      classification: "",
-      isPublicStock: false,
-      isInclusiveWage: "Y",
-      wage: undefined,
-      site: "",
-      recruitmentSite: "",
-    },
-  });
+  const router = useRouter();
+  const { register, handleSubmit, watch } = useForm<ICompanyDataTypes>();
+  const cookie = getCookie("accessToken") as string;
 
   const onSubmit = (data: ICompanyDataTypes) => {
-    CreateCompanyData(data).then((res) => res.data);
+    CreateCompanyData(data, cookie)
+      .then((res) => {
+        console.log(res.data);
+        alert(
+          `회사 정보가 등록되었습니다.\n상세 복지 정보 입력 페이지로 이동합니다.`
+        );
+        router.push(`/adm/welfare?id=${res.data.companyId}&type=create`);
+      })
+      .catch((res) => {
+        console.log("err", res.data);
+      });
   };
 
   return (
