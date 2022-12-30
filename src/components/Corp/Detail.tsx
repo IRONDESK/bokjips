@@ -22,24 +22,28 @@ function Detail({
 }: DetailPropsType) {
   return (
     <Container>
-      <Article>
-        {(wage > 0 || isInclusiveWage !== "NULL") && <Title>기본 정보</Title>}
-        <DetailList>
-          {wage > 0 && (
-            <DetailCard
-              icon="payments"
-              title={`초봉 ${wage?.toLocaleString() || 0}만원`}
-              content="개발 직군 한정"
-            />
-          )}
-          {isInclusiveWage !== "NULL" && (
-            <DetailCard
-              icon={isInclusiveWage === "Y" ? "schedule" : "history_toggle_off"}
-              title={isInclusiveWage === "Y" ? "포괄임금지" : "비포괄임금제"}
-            />
-          )}
-        </DetailList>
-      </Article>
+      {(wage > 0 || isInclusiveWage !== "NULL") && (
+        <Article>
+          <Title>기본 정보</Title>
+          <DetailList>
+            {wage > 0 && (
+              <DetailCard
+                icon="payments"
+                title={`초봉 ${wage?.toLocaleString() || 0}만원`}
+                content="개발 직군 한정"
+              />
+            )}
+            {isInclusiveWage !== "NULL" && (
+              <DetailCard
+                icon={
+                  isInclusiveWage === "Y" ? "schedule" : "history_toggle_off"
+                }
+                title={isInclusiveWage === "Y" ? "포괄임금지" : "비포괄임금제"}
+              />
+            )}
+          </DetailList>
+        </Article>
+      )}
       <Article>
         <Title>근무 조건</Title>
         <DetailList>
@@ -99,9 +103,17 @@ function Detail({
 const Container = styled.section`
   padding: 0 12px 52px;
 `;
-const Article = styled.article``;
+const Article = styled.article`
+  h3 {
+    margin: 20px 0 0;
+  }
+  &:first-of-type {
+    h3 {
+      margin: 0;
+    }
+  }
+`;
 const Title = styled.h3`
-  margin: 20px 0 0;
   padding: 12px 12px 8px;
   font-size: 1.3rem;
   font-weight: 600;
