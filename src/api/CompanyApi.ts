@@ -7,12 +7,14 @@ export const URL =
 
 function CreateCompanyData(data: ICompanyDataTypes, token: string) {
   return axios.post(`${URL}/admin/info`, data, {
-    headers: { Authorization: `Bearer ${token}` },
+    // headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: token },
   });
 }
 function EditCompanyData(data: ICompanyDataTypes, token: string) {
   return axios.put(`${URL}/admin/info`, data, {
-    headers: { Authorization: `Bearer ${token}` },
+    // headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: token },
   });
 }
 function CreateWelfaresData(
@@ -23,11 +25,13 @@ function CreateWelfaresData(
 ) {
   if (type === "create") {
     return axios.post(`${URL}/admin/info/welfare/${companyId}`, data, {
-      headers: { Authorization: `Bearer ${token}` },
+      // headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: token },
     });
   } else {
     return axios.put(`${URL}/admin/info/welfare/${companyId}`, data, {
-      headers: { Authorization: `Bearer ${token}` },
+      // headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: token },
     });
   }
 }
