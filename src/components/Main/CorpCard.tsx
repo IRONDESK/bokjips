@@ -37,7 +37,7 @@ function CorpCard({
       </WelfareList>
       <Option>
         <div>
-          <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>
+          {wage && <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>}
           <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
         </div>
         <Tag icon="heart">-</Tag>
@@ -90,7 +90,8 @@ const WelfareList = styled.div`
   span {
     padding: 4px 6px;
     background-color: #eee;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    letter-spacing: -0.3px;
     border-radius: 4px;
   }
   .list-text-more {

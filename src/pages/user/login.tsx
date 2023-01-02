@@ -3,27 +3,33 @@ import styled from "@emotion/styled";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAtom } from "jotai";
 
 import { COLOR, SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
 
 import { IUserLoginDataTypes } from "../../types/UserData";
 import { MemberLogin } from "../../api/MemberApi";
+import { activeAlert } from "../../atoms/atoms";
 
 function Login() {
   const router = useRouter();
   const { register, handleSubmit } = useForm<IUserLoginDataTypes>();
   const [errorMsg, setErrorMsg] = useState("");
+  const [, setAlertMessage] = useAtom(activeAlert);
 
   const onSubmitHandler: SubmitHandler<IUserLoginDataTypes> = (data) => {
     MemberLogin(data)
       .then((res) => {
-        setCookie("accessToken", res.headers.authorization?.split(" ")[1]);
+        setCookie("accessToken", res.headers.authorization);
         router.push("/");
+        setAlertMessage("LOGIN");
       })
       .catch((res) => {
-        if (res.response.data.error === "Unauthorized") {
+        if (res?.response?.data?.error === "Unauthorized") {
           setErrorMsg("가입하지 않았거나 잘못된 정보를 입력했습니다.");
+        } else {
+          setAlertMessage("SERVER");
         }
       });
   };
