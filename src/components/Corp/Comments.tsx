@@ -1,37 +1,99 @@
+import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
-import React from "react";
-import { COLOR, SHADOW } from "../../constants/style";
+import useSWR, { useSWRConfig } from "swr";
+import { getCookie } from "cookies-next";
+import { useAtom } from "jotai";
 
-function Comments() {
+import { COLOR, SHADOW } from "../../constants/style";
+import { CreateCommentData, fetcher, URL } from "../../api/CommentApi";
+import { ICommentDataTypes } from "../../types/CommentData";
+import { activeAlert } from "../../atoms/atoms";
+
+interface ICommentPropsType {
+  corpId: string;
+}
+
+function Comments({ corpId }: ICommentPropsType) {
+  const [commentInput, setCommentInput] = useState("");
+  const [, setAlertMessage] = useAtom(activeAlert);
+  const { data, error } = useSWR<ICommentDataTypes[]>(
+    `${URL}/comment/${corpId}`,
+    fetcher
+  );
+  const { mutate } = useSWRConfig();
+  const cookie = getCookie("accessToken") as string;
+
   const handleSubmitComment = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    CreateCommentData(corpId, { title: "", content: commentInput }, cookie)
+      .then((res) => {
+        mutate(`${URL}/comment/${corpId}`);
+        setCommentInput("");
+      })
+      .catch((res) => {
+        if (res?.response?.status === 401) {
+          setAlertMessage("NOT_LOGIN");
+        } else if (res?.response?.status === 500) {
+          setAlertMessage("SERVER");
+        }
+      });
+  };
+
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
+  }, []);
+
+  const dateConvert = (target: Date | undefined) => {
+    return new Intl.DateTimeFormat("ko-KR", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(target || 0);
   };
 
   return (
     <Container>
-      <h3>실시간 댓글</h3>
+      <h3>댓글</h3>
       <form>
         <input
           type="text"
-          placeholder="내용을 입력하세요."
-          minLength={10}
+          placeholder={
+            cookie
+              ? "최대 200자 입력할 수 있습니다."
+              : "로그인 후 작성해주세요."
+          }
+          minLength={8}
           maxLength={200}
+          value={commentInput}
+          onChange={onChange}
+          disabled={cookie ? false : true}
+          style={{ cursor: cookie ? "auto" : "not-allowed" }}
         />
         <button type="submit" onClick={handleSubmitComment}></button>
       </form>
       <ul className="comment-list">
-        <CommentItem isMyComment={true}>
-          <p className="comment-content">
-            Lorem ipsum dolor sit amet consectetur, unde?
-          </p>
-          <p className="comment-written">이름 22.11.20 20:11</p>
-        </CommentItem>
-        <CommentItem isMyComment={false}>
-          <p className="comment-content">
-            Lorem ipsum dolor sit amet consectetur, unde?
-          </p>
-          <p className="comment-written">이름 22.11.20 20:11</p>
-        </CommentItem>
+        {data && data?.length > 0 ? (
+          data?.map((item) => (
+            <CommentItem key={item.commentId} isMyComment={false}>
+              {/* 내 댓글 여부는 추후 구현 시 처리 */}
+              <p className="comment-content">
+                <span className="comment-createby">
+                  {item.createBy === "admin" ? "관리자" : item.createBy}
+                </span>
+                {item.content}
+                <span className="comment-time">
+                  {dateConvert(item.timestamp)}
+                </span>
+              </p>
+              <p className="comment-button"></p>
+            </CommentItem>
+          ))
+        ) : (
+          <EmptyComment>
+            댓글이 없습니다
+            <br />
+            <strong>이 회사의 첫 번째 댓글 주인공이 되어주세요</strong>
+          </EmptyComment>
+        )}
       </ul>
     </Container>
   );
@@ -92,24 +154,58 @@ const CommentItem = styled.li<{ isMyComment: boolean }>`
   display: flex;
   gap: 8px;
   align-items: center;
-  margin: 0 0 16px;
+  margin: 36px 0 16px;
+  .comment-createby {
+    position: absolute;
+    padding: 0 12px;
+    width: 100%;
+    top: -20px;
+    right: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: ${(props) => (props.isMyComment ? "right" : "none")};
+    opacity: 0.75;
+  }
   .comment-content {
+    position: relative;
     display: inline-block;
     padding: 12px 16px;
     background-color: ${(props) =>
       props.isMyComment ? COLOR.mainLight : "#dfdfdf"};
     border-radius: 20px;
     font-size: 0.9rem;
+    text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     line-height: 1.15rem;
     order: ${(props) => (props.isMyComment ? 2 : 1)};
   }
-  .comment-written {
+  .comment-time {
+    display: block;
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    letter-spacing: -0.3px;
+    opacity: 0.45;
+  }
+  .comment-button {
     flex: 1;
     display: inline-block;
     opacity: 0.6;
     font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     order: ${(props) => (props.isMyComment ? 1 : 2)};
+  }
+`;
+
+const EmptyComment = styled.div`
+  margin: 32px 0 24px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.55rem;
+  strong {
+    display: inline-block;
+    margin: 8px 0 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    word-break: keep-all;
   }
 `;
 

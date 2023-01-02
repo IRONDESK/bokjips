@@ -13,12 +13,13 @@ function ServiceAlert() {
     JOIN: ["main", "회원가입이 완료 되었습니다."],
     COMMENT_DEL: ["report", "댓글이 삭제되었습니다."],
     SERVER: ["report", "서버 오류가 발생했습니다. 잠시후 다시 시도해주세요."],
+    NOT_LOGIN: ["report", "로그인 후 이용 가능한 서비스입니다."],
   };
 
   if (alertMessage !== "") {
     setTimeout(() => {
       setAlertMessage("");
-    }, 2500);
+    }, 2000);
   }
 
   return (
@@ -29,6 +30,8 @@ function ServiceAlert() {
 }
 
 const Container = styled.div<{ type: string }>`
+  position: sticky;
+  top: 0;
   padding: 20px 32px;
   background-color: ${(props) =>
     props.type === "main" ? COLOR.main : COLOR.report};
