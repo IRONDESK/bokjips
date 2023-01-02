@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
-import Head from "next/head";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import { getCookie } from "cookies-next";

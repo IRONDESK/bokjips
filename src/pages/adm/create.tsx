@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";

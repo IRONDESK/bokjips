@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
-import Head from "next/head";
 import useSWR from "swr";
 import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";

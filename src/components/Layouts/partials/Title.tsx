@@ -22,10 +22,6 @@ export const Title = ({ title }: { title: string }) => {
       />
       <meta property="og:description" content="" />
       <meta property="og:image" content="./images/ogimage.jpg" />
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-      />
     </Head>
   );
 };
