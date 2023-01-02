@@ -13,3 +13,6 @@ export const keyFilter = atom<keyFilterType>({
 });
 export const wageFilter = atom<number>(0);
 export const selectedFilter = atom<string[]>([]);
+
+// 전체 알림창
+export const activeAlert = atom<string>("");
