@@ -1,13 +1,17 @@
-import styled from "@emotion/styled";
 import React from "react";
+import styled from "@emotion/styled";
 
-function NoData() {
+interface NoDataPropsType {
+  code?: string;
+}
+
+function NoData({ code }: NoDataPropsType) {
   return (
     <Container>
       <i></i>
       <div>
-        <strong>찾으시는 회사가 없습니다</strong>
-        <p>더 많은 회사 정보를 준비하겠습니다</p>
+        <strong>발견된 회사가 없습니다</strong>
+        <p>더 많은 정보를 준비하겠습니다 {code && `Server Error: ${code}`}</p>
       </div>
     </Container>
   );
@@ -15,7 +19,7 @@ function NoData() {
 
 const Container = styled.div`
   display: flex;
-  margin: 36px 8px;
+  margin: 60px 8px;
   justify-content: center;
   gap: 12px;
   word-break: keep-all;
@@ -31,12 +35,12 @@ const Container = styled.div`
   strong {
     display: block;
     margin: 0 0 12px;
-    font-size: 2.25rem;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 2.4rem;
   }
   p {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     line-height: 1.55rem;
   }
 `;

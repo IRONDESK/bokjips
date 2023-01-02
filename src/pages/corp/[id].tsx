@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Head from "next/head";
+import React from "react";
+import styled from "@emotion/styled";
 import Link from "next/link";
 import useSWR from "swr";
 import { GetServerSideProps } from "next";
-import styled from "@emotion/styled";
 
 import { SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
 import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
+import NoData from "../../components/Layouts/NoData";
 
 import { useAtom } from "jotai";
 import { verticalSplited } from "../../atoms/atoms";
@@ -26,48 +26,52 @@ function CorpId({ corpId }: ICorpPropsType) {
   const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
 
-  return (
-    <>
-      <Title title={data?.name} />
-      <Container isSplited={isSplited}>
-        <SideOne>
-          <Banner>
-            <div className="corp-identified">
-              <img src={data?.logo} />
-              <h2>{data?.name}</h2>
-              <i>{data?.isPublicStock ? "상장" : "비상장"}</i>
-              <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>
-            </div>
-            <div className="corp-buttons">
-              <Button icon="heart">0</Button>
-              <Link href={data?.site || ""}>
-                <Button icon="site">사이트</Button>
-              </Link>
-              <Link href={data?.recruitmentSite || ""}>
-                <Button icon="recruit">채용정보</Button>
-              </Link>
-            </div>
-          </Banner>
-          <Detail
-            wage={data?.wage}
-            isInclusiveWage={data?.isInclusiveWage}
-            workingConditions={data?.workingConditions}
-            workSupport={data?.workSupport}
-            offDutySupport={data?.offDutySupport}
-            officeEnvironment={data?.officeEnvironment}
-          />
-        </SideOne>
-        <SideTwo isSplited={isSplited}>
-          <Vertical
-            type="button"
-            id="vertical-active"
-            onClick={() => setIsSplited(!isSplited)}
-          ></Vertical>
-          <Comments corpId={corpId as string} />
-        </SideTwo>
-      </Container>
-    </>
-  );
+  if (!!(data && !error)) {
+    return (
+      <>
+        <Title title={data?.name} />
+        <Container isSplited={isSplited}>
+          <SideOne>
+            <Banner>
+              <div className="corp-identified">
+                <img src={data?.logo} />
+                <h2>{data?.name}</h2>
+                <i>{data?.isPublicStock ? "상장" : "비상장"}</i>
+                <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>
+              </div>
+              <div className="corp-buttons">
+                <Button icon="heart">0</Button>
+                <Link href={data?.site || ""}>
+                  <Button icon="site">사이트</Button>
+                </Link>
+                <Link href={data?.recruitmentSite || ""}>
+                  <Button icon="recruit">채용정보</Button>
+                </Link>
+              </div>
+            </Banner>
+            <Detail
+              wage={data?.wage}
+              isInclusiveWage={data?.isInclusiveWage}
+              workingConditions={data?.workingConditions}
+              workSupport={data?.workSupport}
+              offDutySupport={data?.offDutySupport}
+              officeEnvironment={data?.officeEnvironment}
+            />
+          </SideOne>
+          <SideTwo isSplited={isSplited}>
+            <Vertical
+              type="button"
+              id="vertical-active"
+              onClick={() => setIsSplited(!isSplited)}
+            ></Vertical>
+            <Comments corpId={corpId as string} />
+          </SideTwo>
+        </Container>
+      </>
+    );
+  } else if (!!(!data && error)) {
+    return <NoData code={error?.response?.status} />;
+  }
 }
 
 const Container = styled.main<{ isSplited: boolean }>`
