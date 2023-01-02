@@ -29,12 +29,6 @@ function CorpId({ corpId }: ICorpPropsType) {
   return (
     <>
       <Title title={data?.name} />
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-        />
-      </Head>
       <Container isSplited={isSplited}>
         <SideOne>
           <Banner>
@@ -69,7 +63,7 @@ function CorpId({ corpId }: ICorpPropsType) {
             id="vertical-active"
             onClick={() => setIsSplited(!isSplited)}
           ></Vertical>
-          <Comments />
+          <Comments corpId={corpId as string} />
         </SideTwo>
       </Container>
     </>

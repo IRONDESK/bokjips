@@ -8,7 +8,7 @@ export const Title = ({ title }: { title: string }) => {
       <title>
         {router.pathname === "/"
           ? "복지편살 ─ 복잡한 복지 정보, 편하게 살펴보자"
-          : `${title && `${title} | `}복지편살`}
+          : `${title ? `${title} | ` : ""}복지편살`}
       </title>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +22,10 @@ export const Title = ({ title }: { title: string }) => {
       />
       <meta property="og:description" content="" />
       <meta property="og:image" content="./images/ogimage.jpg" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
+      />
     </Head>
   );
 };

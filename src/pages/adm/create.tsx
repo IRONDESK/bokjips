@@ -34,12 +34,6 @@ function Create() {
   return (
     <Container>
       <Title title="새 회사 작성" />
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-        />
-      </Head>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Banner watch={watch} register={register} />
         <Button type="submit">저장</Button>

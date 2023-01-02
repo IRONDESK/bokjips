@@ -53,12 +53,6 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
   return (
     <Container>
       <Title title={`복지 정보 작성`} />
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-        />
-      </Head>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <CorpName>
           {corpId} {type}

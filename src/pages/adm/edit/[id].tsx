@@ -59,12 +59,6 @@ function Edit({ corpId }: ICorpEditPropsType) {
     return (
       <Container>
         <Title title={`회사 수정 - ${companyData?.name || ""}`} />
-        <Head>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,200"
-          />
-        </Head>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Banner companyData={companyData} watch={watch} register={register} />
           <Button type="submit">저장</Button>
