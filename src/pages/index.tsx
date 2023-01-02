@@ -58,9 +58,10 @@ export default function Home() {
                 numberOfEmployee={value?.numberOfEmployee}
                 welfares={
                   [
-                    ...(value?.workingConditions || []).slice(0, 3),
-                    ...(value?.offDutySupport || []).slice(0, 2),
+                    ...(value?.workingConditions || []).slice(0, 2),
                     ...(value?.officeEnvironment || []).slice(0, 2),
+                    ...(value?.workingConditions || []).slice(3, 5),
+                    ...(value?.offDutySupport || []).slice(0, 3),
                   ] || []
                 }
                 isCertified={value.isCertified}

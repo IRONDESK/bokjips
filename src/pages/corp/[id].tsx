@@ -134,6 +134,9 @@ const Banner = styled.div`
     h2 {
       font-weight: 600;
       font-size: 1.5rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     img {
       width: 42px;
@@ -141,12 +144,21 @@ const Banner = styled.div`
       border-radius: 12px;
       object-fit: cover;
     }
+    i {
+      white-space: nowrap;
+    }
   }
   @media (max-width: 840px) {
     flex-direction: column;
     .corp-identified {
       width: 100%;
       padding: 20px 12px;
+      h2 {
+        font-size: 1.35rem;
+      }
+      i {
+        font-size: 0.9rem;
+      }
     }
     .corp-buttons {
       display: flex;
