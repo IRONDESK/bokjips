@@ -5,7 +5,12 @@ import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
 
 import { COLOR, SHADOW } from "../../constants/style";
-import { CreateCommentData, fetcher, URL } from "../../api/CommentApi";
+import {
+  CreateCommentData,
+  DeleteCommentData,
+  fetcher,
+  URL,
+} from "../../api/CommentApi";
 import { ICommentDataTypes } from "../../types/CommentData";
 import { activeAlert } from "../../atoms/atoms";
 
@@ -14,20 +19,22 @@ interface ICommentPropsType {
 }
 
 function Comments({ corpId }: ICommentPropsType) {
+  const { mutate } = useSWRConfig();
+
   const [commentInput, setCommentInput] = useState("");
   const [, setAlertMessage] = useAtom(activeAlert);
+  const cookie = getCookie("accessToken") as string;
+
   const { data, error } = useSWR<ICommentDataTypes[]>(
-    `${URL}/comment/${corpId}`,
+    [`${URL}/comment/${corpId}`, cookie],
     fetcher
   );
-  const { mutate } = useSWRConfig();
-  const cookie = getCookie("accessToken") as string;
 
   const handleSubmitComment = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    CreateCommentData(corpId, { title: "", content: commentInput }, cookie)
+    CreateCommentData(corpId, commentInput, cookie)
       .then((res) => {
-        mutate(`${URL}/comment/${corpId}`);
+        mutate([`${URL}/comment/${corpId}`, cookie]);
         setCommentInput("");
       })
       .catch((res) => {
@@ -37,6 +44,24 @@ function Comments({ corpId }: ICommentPropsType) {
           setAlertMessage("SERVER");
         }
       });
+  };
+
+  const onDelete = (commentId: string) => {
+    const deleteConfirm = confirm("선택한 댓글을 삭제하시겠습니까?");
+    if (deleteConfirm) {
+      DeleteCommentData(commentId, cookie)
+        .then((res) => {
+          mutate([`${URL}/comment/${corpId}`, cookie]);
+          setAlertMessage("COMMENT_DEL");
+        })
+        .catch((res) => {
+          if (res?.response?.status === 500) {
+            setAlertMessage("SERVER");
+          } else if (res?.response?.status === 401) {
+            setAlertMessage("NOT_LOGIN");
+          }
+        });
+    }
   };
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,18 +98,30 @@ function Comments({ corpId }: ICommentPropsType) {
       <ul className="comment-list">
         {data && data?.length > 0 ? (
           data?.map((item) => (
-            <CommentItem key={item.commentId} isMyComment={false}>
-              {/* 내 댓글 여부는 추후 구현 시 처리 */}
+            <CommentItem
+              key={item.commentId}
+              isMyComment={item.isMyComment && true}
+            >
               <p className="comment-content">
                 <span className="comment-createby">
-                  {item.createBy === "admin" ? "관리자" : item.createBy}
+                  {!!item.isMyComment
+                    ? "내 댓글"
+                    : item.createBy === "admin"
+                    ? "관리자"
+                    : item.createBy}
                 </span>
-                {item.content}
+                <span className="comment-body">{item.content}</span>
                 <span className="comment-time">
                   {dateConvert(item.timestamp)}
                 </span>
               </p>
-              <p className="comment-button"></p>
+              <p className="comment-button">
+                {item.isMyComment && (
+                  <button onClick={() => onDelete(item.commentId as string)}>
+                    ✕
+                  </button>
+                )}
+              </p>
             </CommentItem>
           ))
         ) : (
@@ -150,9 +187,9 @@ const Container = styled.section`
   }
 `;
 
-const CommentItem = styled.li<{ isMyComment: boolean }>`
+const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
   margin: 36px 0 16px;
   .comment-createby {
@@ -168,15 +205,19 @@ const CommentItem = styled.li<{ isMyComment: boolean }>`
   }
   .comment-content {
     position: relative;
-    display: inline-block;
     padding: 12px 16px;
+    max-width: 560px;
     background-color: ${(props) =>
       props.isMyComment ? COLOR.mainLight : "#dfdfdf"};
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.9rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     line-height: 1.15rem;
     order: ${(props) => (props.isMyComment ? 2 : 1)};
+  }
+  .comment-body {
+    word-wrap: break-word;
+    white-space: normal;
   }
   .comment-time {
     display: block;
@@ -192,6 +233,9 @@ const CommentItem = styled.li<{ isMyComment: boolean }>`
     font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     order: ${(props) => (props.isMyComment ? 1 : 2)};
+    button {
+      padding: 4px;
+    }
   }
 `;
 
