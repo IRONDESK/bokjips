@@ -6,7 +6,8 @@ import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { EditCompanyData, fetcher, URL } from "../../../api/CompanyApi";
+import { EditCompanyData, URL } from "../../../api/CompanyApi";
+import { fetcher } from "../../../api/MyInfoApi";
 import Banner from "../../../components/Admin/Banner";
 
 import { ICompanyDataTypes } from "../../../types/CompanyData";
@@ -20,9 +21,18 @@ interface ICorpEditPropsType {
 
 function Edit({ corpId }: ICorpEditPropsType) {
   const router = useRouter();
+  const cookie = getCookie("accessToken") as string;
+
   const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
     revalidateOnFocus: false,
   });
+  const { data: roleData, error: roleError } = useSWR(
+    [`${URL}/userRole`, cookie],
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const { register, handleSubmit, watch, reset } = useForm<ICompanyDataTypes>();
 
@@ -43,7 +53,6 @@ function Edit({ corpId }: ICorpEditPropsType) {
       recruitmentSite: companyData?.recruitmentSite,
     });
   }, [companyData]);
-  const cookie = getCookie("accessToken") as string;
 
   const onSubmit = (data: ICompanyDataTypes) => {
     EditCompanyData(data, cookie).then((res) => {
@@ -54,7 +63,7 @@ function Edit({ corpId }: ICorpEditPropsType) {
     });
   };
 
-  if (companyData) {
+  if (companyData && roleData?.roles === "ROLE_ADMIN") {
     return (
       <Container>
         <Title title={`회사 수정 - ${companyData?.name || ""}`} />
@@ -64,6 +73,8 @@ function Edit({ corpId }: ICorpEditPropsType) {
         </Form>
       </Container>
     );
+  } else if (roleData?.roles !== "ROLE_ADMIN") {
+    return <div>권한 없음</div>;
   } else {
     return <Loading />;
   }

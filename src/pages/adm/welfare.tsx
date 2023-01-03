@@ -9,7 +9,8 @@ import { IWelfareDataTypes } from "../../types/CompanyData";
 import WelfareList from "../../components/Admin/WelfareList";
 import { Title } from "../../components/Layouts/partials/Title";
 import { COLOR } from "../../constants/style";
-import { CreateWelfaresData, fetcher, URL } from "../../api/CompanyApi";
+import { CreateWelfaresData, URL } from "../../api/CompanyApi";
+import { fetcher } from "../../api/MyInfoApi";
 import { GetServerSideProps } from "next";
 
 interface IWelfarePagePropsType {
@@ -18,9 +19,17 @@ interface IWelfarePagePropsType {
 }
 
 function Welfare({ corpId, type }: IWelfarePagePropsType) {
+  const cookie = getCookie("accessToken") as string;
   const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
     revalidateOnFocus: false,
   });
+  const { data: roleData, error: roleError } = useSWR(
+    [`${URL}/userRole`, cookie],
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const { register, handleSubmit, control, watch, reset } = useForm<{
     value: IWelfareDataTypes[];
@@ -41,7 +50,6 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
         : { value: [{ companyId: corpId }] }
     );
   }, [companyData]);
-  const cookie = getCookie("accessToken") as string;
 
   const onSubmit = (data: { value: IWelfareDataTypes[] }) => {
     CreateWelfaresData(corpId, data.value, cookie, type).then((res) =>
@@ -49,25 +57,29 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
     );
   };
 
-  return (
-    <Container>
-      <Title title={`복지 정보 작성`} />
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <CorpName>
-          {corpId} {type}
-        </CorpName>
+  if (roleData?.roles === "ROLE_ADMIN") {
+    return (
+      <Container>
+        <Title title={`복지 정보 작성`} />
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <CorpName>
+            {corpId} {type}
+          </CorpName>
 
-        <WelfareList
-          register={register}
-          control={control}
-          watch={watch}
-          corpId={corpId}
-        />
+          <WelfareList
+            register={register}
+            control={control}
+            watch={watch}
+            corpId={corpId}
+          />
 
-        <Button type="submit">저장</Button>
-      </Form>
-    </Container>
-  );
+          <Button type="submit">저장</Button>
+        </Form>
+      </Container>
+    );
+  } else {
+    return <div>권한 없음</div>;
+  }
 }
 
 const Container = styled.main`

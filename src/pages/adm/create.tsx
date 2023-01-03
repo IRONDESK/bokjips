@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 import { COLOR } from "../../constants/style";
 import Banner from "../../components/Admin/Banner";
@@ -10,11 +11,20 @@ import { Title } from "../../components/Layouts/partials/Title";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
 import { CreateCompanyData } from "../../api/CompanyApi";
+import { fetcher } from "../../api/MyInfoApi";
 
 function Create() {
   const router = useRouter();
   const { register, handleSubmit, watch } = useForm<ICompanyDataTypes>();
   const cookie = getCookie("accessToken") as string;
+
+  const { data: roleData, error: roleError } = useSWR(
+    [`${URL}/userRole`, cookie],
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const onSubmit = (data: ICompanyDataTypes) => {
     CreateCompanyData(data, cookie)
@@ -30,15 +40,19 @@ function Create() {
       });
   };
 
-  return (
-    <Container>
-      <Title title="새 회사 작성" />
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Banner watch={watch} register={register} />
-        <Button type="submit">저장</Button>
-      </Form>
-    </Container>
-  );
+  if (roleData?.roles === "ROLE_ADMIN") {
+    return (
+      <Container>
+        <Title title="새 회사 작성" />
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Banner watch={watch} register={register} />
+          <Button type="submit">저장</Button>
+        </Form>
+      </Container>
+    );
+  } else {
+    return <div>권한 없음</div>;
+  }
 }
 
 const Container = styled.main`
