@@ -35,5 +35,20 @@ function CreateWelfaresData(
     });
   }
 }
+function HandlerCompanyFavorite(companyId: string, token: string) {
+  return axios.post(
+    `${URL}/favorite/${companyId}`,
+    {},
+    {
+      // headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: token },
+    }
+  );
+}
 
-export { CreateCompanyData, EditCompanyData, CreateWelfaresData };
+export {
+  CreateCompanyData,
+  EditCompanyData,
+  CreateWelfaresData,
+  HandlerCompanyFavorite,
+};

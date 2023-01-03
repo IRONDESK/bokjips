@@ -16,6 +16,7 @@ function CorpCard({
   isPublicStock,
   numberOfEmployee,
   welfares,
+  favorite,
 }: CorpCardPropsType) {
   return (
     <Container>
@@ -40,7 +41,7 @@ function CorpCard({
           {wage && <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>}
           <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
         </div>
-        <Tag icon="heart">-</Tag>
+        <Tag icon="heart">{favorite?.toLocaleString() || 0}</Tag>
       </Option>
     </Container>
   );

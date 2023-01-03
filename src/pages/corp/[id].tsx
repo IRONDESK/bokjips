@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { GetServerSideProps } from "next";
+import { getCookie } from "cookies-next";
+import { useAtom } from "jotai";
+
+import { activeAlert, verticalSplited } from "../../atoms/atoms";
 
 import { SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
@@ -10,12 +14,9 @@ import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
 import NoData from "../../components/Layouts/NoData";
 
-import { useAtom } from "jotai";
-import { verticalSplited } from "../../atoms/atoms";
-
 import { ICompanyDataTypes } from "../../types/CompanyData";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
-import { fetcher, URL } from "../../api/CompanyApi";
+import { fetcher, HandlerCompanyFavorite, URL } from "../../api/CompanyApi";
 
 interface ICorpPropsType {
   corpId?: string;
@@ -23,8 +24,27 @@ interface ICorpPropsType {
 }
 
 function CorpId({ corpId }: ICorpPropsType) {
-  const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
+  const { mutate } = useSWRConfig();
+  const [, setAlertMessage] = useAtom(activeAlert);
+
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
+  const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
+
+  const handlerFavorite = () => {
+    HandlerCompanyFavorite(corpId as string, getCookie("accessToken") as string)
+      .then((res) => {
+        mutate(`${URL}/${corpId}`);
+        if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
+        if (res.data.message === "취소") setAlertMessage("UNFAVORITE");
+      })
+      .catch((res) => {
+        if (res?.response?.status === 401) {
+          setAlertMessage("NOT_LOGIN");
+        } else if (res?.response?.status === 500) {
+          setAlertMessage("SERVER");
+        }
+      });
+  };
 
   if (!!(data && !error)) {
     return (
@@ -40,7 +60,9 @@ function CorpId({ corpId }: ICorpPropsType) {
                 <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>
               </div>
               <div className="corp-buttons">
-                <Button icon="heart">0</Button>
+                <Button icon="heart" onClick={handlerFavorite}>
+                  {data?.favorite?.toLocaleString() || 0}
+                </Button>
                 <Link href={data?.site || ""}>
                   <Button icon="site">사이트</Button>
                 </Link>
