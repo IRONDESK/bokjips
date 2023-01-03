@@ -20,6 +20,7 @@ function Header() {
 
   const handleLogout = () => {
     deleteCookie("accessToken");
+    setShowUser(false);
     setAlertMessage("LOGOUT");
     router.reload();
   };
@@ -41,17 +42,17 @@ function Header() {
           {showUser &&
             (cookie ? (
               <UserBox>
-                <li>
+                <li onClick={() => setShowUser(false)}>
                   <Link href="/user/info">내정보</Link>
                 </li>
                 <li onClick={handleLogout}>로그아웃</li>
               </UserBox>
             ) : (
               <UserBox>
-                <li>
+                <li onClick={() => setShowUser(false)}>
                   <Link href="/user/login">로그인</Link>
                 </li>
-                <li>
+                <li onClick={() => setShowUser(false)}>
                   <Link href="/user/join">회원가입</Link>
                 </li>
               </UserBox>
