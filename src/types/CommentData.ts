@@ -1,8 +1,7 @@
 export interface ICommentDataTypes {
-  commentId?: string;
-  companyId?: string;
+  id?: string;
   content: string;
   createBy?: string;
-  isMyComment?: boolean | null;
+  isMyComment?: boolean;
   timestamp?: Date;
 }

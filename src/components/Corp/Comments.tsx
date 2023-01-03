@@ -98,10 +98,7 @@ function Comments({ corpId }: ICommentPropsType) {
       <ul className="comment-list">
         {data && data?.length > 0 ? (
           data?.map((item) => (
-            <CommentItem
-              key={item.commentId}
-              isMyComment={item.isMyComment && true}
-            >
+            <CommentItem key={item.id} isMyComment={item.isMyComment && true}>
               <p className="comment-content">
                 <span className="comment-createby">
                   {!!item.isMyComment
@@ -117,9 +114,7 @@ function Comments({ corpId }: ICommentPropsType) {
               </p>
               <p className="comment-button">
                 {item.isMyComment && (
-                  <button onClick={() => onDelete(item.commentId as string)}>
-                    ✕
-                  </button>
+                  <button onClick={() => onDelete(item.id as string)}>✕</button>
                 )}
               </p>
             </CommentItem>
