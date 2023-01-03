@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { COLOR, SHADOW } from "../../constants/style";
-import { Title } from "../../components/Layouts/partials/Title";
+import { useRouter } from "next/router";
+import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
-import { IUserSignUpDataTypes } from "../../types/UserData";
+
+import { COLOR, SHADOW } from "../../constants/style";
 import { JOB_TYPES } from "../../constants/job";
+
+import { Title } from "../../components/Layouts/partials/Title";
+import { IUserSignUpDataTypes } from "../../types/UserData";
+
 import { MemberSignUp } from "../../api/MemberApi";
+import { activeAlert } from "../../atoms/atoms";
 
 function Join() {
+  const router = useRouter();
   const [isVisiblePwd, setIsVisiblePwd] = useState<boolean>(false);
+  const [, setAlertMessage] = useAtom(activeAlert);
   const {
     register,
     handleSubmit,
@@ -20,7 +28,20 @@ function Join() {
   const passwordValue = watch("password");
 
   const onSubmit = (data: IUserSignUpDataTypes) => {
-    MemberSignUp(data).then((res) => console.log(res));
+    MemberSignUp(data)
+      .then((res) => {
+        setAlertMessage("JOIN");
+        router.push("/user/login");
+      })
+      .catch((res) => {
+        if (res?.response?.data?.message === "중복된 이메일 주소입니다.") {
+          setAlertMessage("BAD_JOIN_EMAIL");
+        } else if (
+          res?.response?.data?.message === "중복된 이름이 존재합니다."
+        ) {
+          setAlertMessage("BAD_JOIN_ID");
+        }
+      });
   };
 
   return (
