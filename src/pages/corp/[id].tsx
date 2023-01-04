@@ -16,7 +16,9 @@ import NoData from "../../components/Layouts/NoData";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
-import { fetcher, HandlerCompanyFavorite, URL } from "../../api/CompanyApi";
+import { HandlerCompanyFavorite, URL } from "../../api/CompanyApi";
+import { fetcher } from "../../api/MyInfoApi";
+import EditButtons from "../../components/Corp/EditButtons";
 
 interface ICorpPropsType {
   corpId?: string;
@@ -25,13 +27,21 @@ interface ICorpPropsType {
 
 function CorpId({ corpId }: ICorpPropsType) {
   const { mutate } = useSWRConfig();
+  const cookie = getCookie("accessToken") as string;
   const [, setAlertMessage] = useAtom(activeAlert);
 
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
   const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
+  const { data: roleData, error: roleError } = useSWR(
+    [`${URL}/userRole`, cookie],
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const handlerFavorite = () => {
-    HandlerCompanyFavorite(corpId as string, getCookie("accessToken") as string)
+    HandlerCompanyFavorite(corpId as string, cookie)
       .then((res) => {
         mutate(`${URL}/${corpId}`);
         if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
@@ -79,6 +89,9 @@ function CorpId({ corpId }: ICorpPropsType) {
               offDutySupport={data?.offDutySupport}
               officeEnvironment={data?.officeEnvironment}
             />
+            {roleData?.roles === "ROLE_ADMIN" && (
+              <EditButtons companyId={corpId as string} />
+            )}
           </SideOne>
           <SideTwo isSplited={isSplited}>
             <Vertical

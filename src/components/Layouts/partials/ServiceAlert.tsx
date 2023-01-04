@@ -18,6 +18,7 @@ function ServiceAlert() {
     BAD_JOIN_EMAIL: ["report", "중복된 이메일이 존재합니다."],
     ADD_FAVORITE: ["main", "찜하기가 설정되었습니다."],
     UNFAVORITE: ["main", "찜하기가 해제되었습니다."],
+    DEL_COMPANY: ["main", "회사 정보가 삭제되었습니다."],
   };
 
   if (alertMessage !== "") {

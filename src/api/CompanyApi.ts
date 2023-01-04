@@ -17,6 +17,11 @@ function EditCompanyData(data: ICompanyDataTypes, token: string) {
     headers: { Authorization: token },
   });
 }
+function DeleteCompanyData(companyId: string, token: string) {
+  return axios.delete(`${URL}/admin/info/${companyId}`, {
+    headers: { Authorization: token },
+  });
+}
 function CreateWelfaresData(
   companyId: string,
   data: IWelfareDataTypes[],
@@ -49,6 +54,7 @@ function HandlerCompanyFavorite(companyId: string, token: string) {
 export {
   CreateCompanyData,
   EditCompanyData,
+  DeleteCompanyData,
   CreateWelfaresData,
   HandlerCompanyFavorite,
 };
