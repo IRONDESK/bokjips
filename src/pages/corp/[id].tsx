@@ -186,7 +186,7 @@ const Banner = styled.div`
       display: flex;
       width: 100%;
       padding: 0 12px;
-      gap: 12px;
+      gap: 8px;
       a {
         flex: 1;
         button {
@@ -212,13 +212,16 @@ const Banner = styled.div`
 const Button = styled.button<{ icon: string }>`
   position: relative;
   margin: 0 12px 0 0;
-  padding: 12px 18px 12px 42px;
+  padding: 12px 16px 12px 42px;
   min-width: 80px;
   background-color: #fff;
   border-radius: 28px;
-  font-size: 0.95rem;
-  transition: all 0.3s;
   box-shadow: ${SHADOW.basic};
+  font-size: 0.95rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  transition: all 0.3s;
   &::after {
     content: "";
     position: absolute;
@@ -227,7 +230,8 @@ const Button = styled.button<{ icon: string }>`
     left: 18px;
     top: 50%;
     background-image: url(${(props) => `/icons/${props.icon}.svg`});
-    background-size: 20px;
+    background-size: 18px;
+    background-repeat: no-repeat;
     background-position: center;
     transform: translateY(-50%);
   }

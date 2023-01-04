@@ -11,7 +11,8 @@ function NoData({ code }: NoDataPropsType) {
       <i></i>
       <div>
         <strong>발견된 회사가 없습니다</strong>
-        <p>더 많은 정보를 준비하겠습니다 {code && `Server Error: ${code}`}</p>
+        <p>더 많은 정보를 준비하겠습니다</p>
+        {code && <p>Server Error: ${code}</p>}
       </div>
     </Container>
   );
@@ -21,7 +22,7 @@ const Container = styled.div`
   display: flex;
   margin: 60px 8px;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   word-break: keep-all;
   opacity: 0.8;
   i {
@@ -42,6 +43,19 @@ const Container = styled.div`
   p {
     font-size: 1.2rem;
     line-height: 1.55rem;
+  }
+  @media (max-width: 690px) {
+    i {
+      width: 40px;
+      height: 40px;
+    }
+    strong {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+    }
   }
 `;
 
