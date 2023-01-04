@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
+import { GetServerSideProps } from "next";
 import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
+import { useAtom } from "jotai";
+import { useRouter } from "next/router";
 
 import { IWelfareDataTypes } from "../../types/CompanyData";
 
+import { activeAlert } from "../../atoms/atoms";
+import { COLOR } from "../../constants/style";
 import WelfareList from "../../components/Admin/WelfareList";
 import { Title } from "../../components/Layouts/partials/Title";
-import { COLOR } from "../../constants/style";
 import { CreateWelfaresData, URL } from "../../api/CompanyApi";
 import { fetcher } from "../../api/MyInfoApi";
-import { GetServerSideProps } from "next";
 
 interface IWelfarePagePropsType {
   corpId: string;
@@ -19,7 +22,9 @@ interface IWelfarePagePropsType {
 }
 
 function Welfare({ corpId, type }: IWelfarePagePropsType) {
+  const [, setAlertMessage] = useAtom(activeAlert);
   const cookie = getCookie("accessToken") as string;
+  const router = useRouter();
   const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
     revalidateOnFocus: false,
   });
@@ -52,9 +57,19 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
   }, [companyData]);
 
   const onSubmit = (data: { value: IWelfareDataTypes[] }) => {
-    CreateWelfaresData(corpId, data.value, cookie, type).then((res) =>
-      console.log(res)
-    );
+    CreateWelfaresData(corpId, data.value, cookie, type)
+      .then((res) => {
+        router.push(`/corp/${corpId}`);
+        if (type === "create") setAlertMessage("SAVE_WELFARE");
+        else if (type === "edit") setAlertMessage("EDIT_WELFARE");
+      })
+      .catch((res) => {
+        if ([401, 400, 405].includes(res?.response?.status)) {
+          setAlertMessage("NOT_LOGIN");
+        } else if (res?.response?.status === 500) {
+          setAlertMessage("SERVER");
+        }
+      });
   };
 
   if (roleData?.roles === "ROLE_ADMIN") {
@@ -63,7 +78,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
         <Title title={`복지 정보 작성`} />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CorpName>
-            {corpId} {type}
+            {companyData?.name} <span>{type.toUpperCase()}</span>
           </CorpName>
 
           <WelfareList
@@ -100,8 +115,18 @@ const Form = styled.form`
 `;
 
 const CorpName = styled.h2`
+  margin: 0 0 16px;
   font-size: 2rem;
   font-weight: 500;
+  span {
+    padding: 2px 4px;
+    background-color: #000;
+    border-radius: 4px;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
 `;
 
 const Button = styled.button`

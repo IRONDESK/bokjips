@@ -67,7 +67,7 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
           </label>
           <select {...register("isInclusiveWage")}>
             <option value="Y">포괄임금</option>
-            <option value="N">비포괄임금</option>
+            <option value="NO">비포괄임금</option>
             <option value="NULL">알 수 없음</option>
           </select>
         </div>

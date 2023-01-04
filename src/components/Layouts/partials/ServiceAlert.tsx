@@ -19,6 +19,8 @@ function ServiceAlert() {
     ADD_FAVORITE: ["main", "찜하기가 설정되었습니다."],
     UNFAVORITE: ["main", "찜하기가 해제되었습니다."],
     DEL_COMPANY: ["main", "회사 정보가 삭제되었습니다."],
+    SAVE_WELFARE: ["main", "복지 정보가 저장되었습니다."],
+    EDIT_WELFARE: ["main", "복지 정보가 수정되었습니다."],
   };
 
   if (alertMessage !== "") {

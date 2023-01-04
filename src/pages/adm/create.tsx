@@ -10,7 +10,7 @@ import Banner from "../../components/Admin/Banner";
 import { Title } from "../../components/Layouts/partials/Title";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
-import { CreateCompanyData } from "../../api/CompanyApi";
+import { CreateCompanyData, URL } from "../../api/CompanyApi";
 import { fetcher } from "../../api/MyInfoApi";
 
 function Create() {
