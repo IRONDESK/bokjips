@@ -76,8 +76,8 @@ function Info() {
         {favData && favData?.length > 0 ? (
           <FavList>
             {favData?.map((item) => (
-              <li>
-                <Link href={`/corp/${item.companyId}`} key={item.companyId}>
+              <li key={item.companyId}>
+                <Link href={`/corp/${item.companyId}`}>
                   <div className="fav-item-container">
                     <img src={item.logo} alt={item.name} />
                     <strong>{item.name}</strong>
