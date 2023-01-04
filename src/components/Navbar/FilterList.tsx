@@ -4,13 +4,21 @@ import Flicking from "@egjs/react-flicking";
 import "@egjs/react-flicking/dist/flicking.css";
 import { useAtom } from "jotai";
 
-import { selectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
+import {
+  selectedFilter,
+  primarySelectedFilter,
+  selectedModal,
+  wageFilter,
+} from "../../atoms/atoms";
 import { WELFARES_FILTER_LIST } from "../../constants/welfares";
 import { COLOR, SHADOW } from "../../constants/style";
 
 function FilterBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
   const [nowWageFilter, setNowWageFilter] = useAtom(wageFilter);
+  const [nowPrimaryFilter, setPrimaryNowFilter] = useAtom(
+    primarySelectedFilter
+  );
   const [nowFilter, setNowFilter] = useAtom(selectedFilter);
 
   const addFiltered = (
@@ -46,16 +54,24 @@ function FilterBar() {
             />
           </Wage>
           <Button
-            isSelected={nowFilter.some((arr) => arr === "inPublicStock")}
-            onClick={addFiltered}
-            value="inPublicStock"
+            isSelected={nowPrimaryFilter?.isCertified}
+            onClick={() =>
+              setPrimaryNowFilter((prev) => {
+                return { ...prev, isCertified: !prev.isCertified };
+              })
+            }
+            value="isCertified"
           >
-            상장사
+            현직인증
           </Button>
           <Button
-            isSelected={nowFilter.some((arr) => arr === "inclusiveWage")}
-            onClick={addFiltered}
-            value="inclusiveWage"
+            isSelected={nowPrimaryFilter?.inclusive}
+            onClick={() =>
+              setPrimaryNowFilter((prev) => {
+                return { ...prev, inclusive: !prev.inclusive };
+              })
+            }
+            value="inclusive"
           >
             비포괄
           </Button>
@@ -133,7 +149,7 @@ const Wage = styled.div<{ wageValue: number }>`
     flex: 1;
   }
   input {
-    max-width: 50%;
+    width: 60px;
     padding: 0 4px;
     background: transparent;
     color: ${(props) => (props.wageValue > 0 ? "#fff" : "none")};

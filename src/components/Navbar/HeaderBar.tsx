@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import { SHADOW } from "../../constants/style";
 import {
   keyFilter,
+  primarySelectedFilter,
   selectedFilter,
   selectedModal,
   wageFilter,
@@ -16,6 +17,7 @@ function HeaderBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
   const [nowKeyFilter, setNowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
+  const [nowPrimaryFilter] = useAtom(primarySelectedFilter);
   const [nowFilter] = useAtom(selectedFilter);
   return (
     <>
@@ -54,9 +56,15 @@ function HeaderBar() {
           id="header-filter"
           style={{ filter: showFilter ? "invert(1)" : "none" }}
           icon="filtered"
-          onClick={() => setShowFilter(!showFilter)}
+          onClick={() => setShowFilter((prev) => !prev)}
         >
-          <p>{nowFilter.length + (nowWageFilter > 0 ? 1 : 0)}개</p>
+          <p>
+            {nowFilter.length +
+              (nowWageFilter > 0 ? 1 : 0) +
+              (nowPrimaryFilter.inclusive ? 1 : 0) +
+              (nowPrimaryFilter.isCertified ? 1 : 0)}
+            개
+          </p>
         </Wrap>
       </Container>
       <FilterList />

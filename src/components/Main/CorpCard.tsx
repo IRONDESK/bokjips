@@ -34,7 +34,7 @@ function CorpCard({
         {welfares?.map((value, idx) => (
           <span key={idx}>{value?.title}</span>
         ))}
-        <p className="list-text-more">...더보기</p>
+        <p className="list-text-more">...</p>
       </WelfareList>
       <Option>
         <div>
@@ -51,7 +51,11 @@ function CorpCard({
 
 const Container = styled.article`
   cursor: pointer;
-  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 28px;
+  height: 100%;
   background-color: #fff;
   border-radius: 24px;
   transition: all 0.3s;
@@ -86,20 +90,24 @@ const Name = styled.div`
 `;
 
 const WelfareList = styled.div`
+  flex: 1;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   span {
     padding: 4px 6px;
     background-color: #eee;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: -0.3px;
     border-radius: 4px;
   }
   .list-text-more {
-    margin: 0 0 0 4px;
-    font-size: 0.8rem;
+    margin: 4px 0 4px 2px;
+    font-size: 0.9rem;
   }
 `;
 

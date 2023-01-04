@@ -4,6 +4,10 @@ interface keyFilterType {
   keyword: string;
   industry: string;
 }
+interface primarySelectedFilterType {
+  isCertified: boolean;
+  inclusive: boolean;
+}
 
 export const selectedModal = atom<boolean>(false);
 export const verticalSplited = atom<boolean>(false);
@@ -12,6 +16,10 @@ export const keyFilter = atom<keyFilterType>({
   industry: "",
 });
 export const wageFilter = atom<number>(0);
+export const primarySelectedFilter = atom<primarySelectedFilterType>({
+  isCertified: false,
+  inclusive: false,
+});
 export const selectedFilter = atom<string[]>([]);
 
 // 전체 알림창

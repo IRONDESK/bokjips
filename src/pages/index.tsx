@@ -4,7 +4,12 @@ import useSWR from "swr";
 import Link from "next/link";
 import { useAtom } from "jotai";
 
-import { keyFilter, selectedFilter, wageFilter } from "../atoms/atoms";
+import {
+  keyFilter,
+  selectedFilter,
+  primarySelectedFilter,
+  wageFilter,
+} from "../atoms/atoms";
 import { ICompanyDataTypes } from "../types/CompanyData";
 import { fetcher, URL } from "../api/CompanyApi";
 
@@ -14,27 +19,31 @@ import NoData from "../components/Layouts/NoData";
 export default function Home() {
   const [nowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
+  const [nowPrimaryFilter] = useAtom(primarySelectedFilter);
   const [nowFilter] = useAtom(selectedFilter);
 
   let isParams =
     !!nowKeyFilter.keyword ||
-    // !!nowKeyFilter.industry ||
-    nowWageFilter > 0;
-  // nowFilter.length > 0;
+    !!nowKeyFilter.industry ||
+    nowPrimaryFilter.inclusive ||
+    nowPrimaryFilter.isCertified ||
+    nowWageFilter > 0 ||
+    nowFilter.length > 0;
 
   function createParams() {
-    let params = [];
+    let params = [`greaterThan=${nowWageFilter}`];
     if (!!nowKeyFilter.keyword) params.push(`name=${nowKeyFilter.keyword}`);
-    // if (!!nowKeyFilter.industry) yield `industry=${ nowKeyFilter.industry}`
-    if (nowWageFilter > 0) params.push(`greaterThan=${nowWageFilter}`);
-    // if (nowFilter) yield `filter=${nowFilter}`
+    if (!!nowKeyFilter.industry)
+      params.push(`classification=${nowKeyFilter.industry}`);
+    if (nowPrimaryFilter.isCertified) params.push(`certified=true`);
+    if (nowPrimaryFilter.inclusive) params.push(`inclusive=NO`);
+    if (nowFilter.length > 0) params.push(`filter=${nowFilter.join(",")}`);
     return params;
   }
 
   const { data, error } = useSWR(
-    URL + (isParams ? `/search/${[...createParams()].join("&")}` : ""),
-    fetcher,
-    { revalidateOnFocus: false }
+    URL + (isParams ? `/search?${[...createParams()].join("&")}` : ""),
+    fetcher
   );
 
   return (
@@ -58,11 +67,11 @@ export default function Home() {
                 numberOfEmployee={value?.numberOfEmployee}
                 welfares={
                   [
-                    ...(value?.workingConditions || []).slice(0, 2),
+                    ...(value?.workingConditions || []).slice(1, 2),
                     ...(value?.officeEnvironment || []).slice(0, 2),
                     ...(value?.workingConditions || []).slice(3, 5),
-                    ...(value?.offDutySupport || []).slice(0, 3),
-                  ] || []
+                    ...(value?.offDutySupport || []).slice(0, 2),
+                  ].slice(0, 6) || []
                 }
                 isCertified={value.isCertified}
                 favorite={value?.favorite}
