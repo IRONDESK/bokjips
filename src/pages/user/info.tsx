@@ -1,14 +1,18 @@
 import React from "react";
 import styled from "@emotion/styled";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
+import { useAtom } from "jotai";
+
+import { activeAlert } from "../../atoms/atoms";
+import { fetcher, URL } from "../../api/MyInfoApi";
+import { HandlerCompanyFavorite } from "../../api/CompanyApi";
 
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
-import { fetcher, URL } from "../../api/MyInfoApi";
+import { COLOR, SHADOW } from "../../constants/style";
 import { ICompanyDataTypes } from "../../types/CompanyData";
-import { SHADOW } from "../../constants/style";
 
 interface IUserRolesType {
   username: string;
@@ -17,6 +21,8 @@ interface IUserRolesType {
 
 function Info() {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
+  const [, setAlertMessage] = useAtom(activeAlert);
   const cookie = getCookie("accessToken") as string;
 
   const USER_TYPE: { [key: string]: string } = {
@@ -36,6 +42,23 @@ function Info() {
     fetcher
   );
 
+  // 찜 해제
+  const handlerFavorite = (companyId: string) => {
+    HandlerCompanyFavorite(companyId as string, cookie)
+      .then((res) => {
+        mutate([`${URL}/favorite`, cookie]);
+        // if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
+        if (res.data.message === "취소") setAlertMessage("UNFAVORITE");
+      })
+      .catch((res) => {
+        if (res?.response?.status === 401) {
+          setAlertMessage("NOT_LOGIN");
+        } else if (res?.response?.status === 500) {
+          setAlertMessage("SERVER");
+        }
+      });
+  };
+
   if (roleData) {
     return (
       <Container>
@@ -53,13 +76,18 @@ function Info() {
         {favData && favData?.length > 0 ? (
           <FavList>
             {favData?.map((item) => (
-              <Link href={`/corp/${item.companyId}`} key={item.companyId}>
-                <li>
-                  <img src={item.logo} alt={item.name} />
-                  <strong>{item.name}</strong>
-                  <span>{COMPANY_TYPES_LITERAL[item.classification]}</span>
-                </li>
-              </Link>
+              <li>
+                <Link href={`/corp/${item.companyId}`} key={item.companyId}>
+                  <div className="fav-item-container">
+                    <img src={item.logo} alt={item.name} />
+                    <strong>{item.name}</strong>
+                    <span>{COMPANY_TYPES_LITERAL[item.classification]}</span>
+                  </div>
+                </Link>
+                <button onClick={() => handlerFavorite(item.companyId)}>
+                  <span className="a11y-hidden">찜 해제</span>
+                </button>
+              </li>
             ))}
           </FavList>
         ) : (
@@ -111,11 +139,15 @@ const FavList = styled.ul`
   display: grid;
   margin: 0 0 32px;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 12px;
   li {
+    position: relative;
+  }
+  .fav-item-container {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    margin: 0 16px 0 0;
+    padding: 12px 24px 12px 16px;
     background-color: #fff;
     border-radius: 12px;
     gap: 12px;
@@ -143,6 +175,23 @@ const FavList = styled.ul`
     }
     &:hover {
       box-shadow: ${SHADOW.hover};
+    }
+  }
+  button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    padding: 3px 2px;
+    transform: translateY(-50%);
+    background-color: ${COLOR.main};
+    border-radius: 100%;
+    color: #fff;
+    &::after {
+      content: "close";
+      font-size: 1.2rem;
+      font-family: "Material Symbols Outlined";
     }
   }
   @media (max-width: 690px) {
