@@ -114,7 +114,7 @@ function Comments({ corpId }: ICommentPropsType) {
               </p>
               <p className="comment-button">
                 {item.isMyComment && (
-                  <button onClick={() => onDelete(item.id as string)}>✕</button>
+                  <button onClick={() => onDelete(item.id as string)}></button>
                 )}
               </p>
             </CommentItem>
@@ -225,11 +225,22 @@ const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
     flex: 1;
     display: inline-block;
     opacity: 0.6;
-    font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     order: ${(props) => (props.isMyComment ? 1 : 2)};
     button {
-      padding: 4px;
+      width: 28px;
+      height: 28px;
+      border-radius: 100%;
+      &:hover {
+        background-color: ${COLOR.main};
+        color: #fff;
+      }
+      &::after {
+        content: "close";
+        font-family: "Material Symbols Outlined";
+        font-size: 1.1rem;
+        line-height: 28px;
+      }
     }
   }
 `;

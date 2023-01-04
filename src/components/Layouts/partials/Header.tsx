@@ -36,7 +36,9 @@ function Header() {
             </Logo>
           </Link>
         </Wrap>
-        <Wrap>{path[0] === "" ? <HeaderBar /> : null}</Wrap>
+        <Wrap id="searchfilter-bar">
+          {path[0] === "" ? <HeaderBar /> : null}
+        </Wrap>
         <Wrap id="header-user">
           <User onClick={() => setShowUser(!showUser)}></User>
           {showUser &&
@@ -73,6 +75,9 @@ const Container = styled.header<{ corp: boolean }>`
   ${(props) => props.corp && `background-color:${COLOR.main};`}
   ${(props) => props.corp && `& h1 strong {color: #fff};`}
   ${(props) => props.corp && `& h1 {color: #fff};`}
+  #searchfilter-bar {
+    flex: 2.2;
+  }
   @media (max-width: 840px) {
     display: block;
     height: auto;
