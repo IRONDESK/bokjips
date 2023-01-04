@@ -67,8 +67,13 @@ function Info() {
           <ul>
             <li>{USER_TYPE[roleData?.roles]}</li>
             <li>
-              <button>정보수정</button>
-              <button>탈퇴</button>
+              {roleData?.roles === "ROLE_ADMIN" && (
+                <button onClick={() => router.push("/adm/create")}>
+                  회사작성
+                </button>
+              )}
+              <button onClick={() => alert(`준비 중입니다.`)}>정보수정</button>
+              <button onClick={() => alert(`준비 중입니다.`)}>탈퇴</button>
             </li>
           </ul>
         </Banner>
@@ -129,7 +134,15 @@ const Banner = styled.div`
     li {
       font-size: 0.9rem;
       button {
+        margin: 0 0 0 8px;
+        padding: 2px 4px;
+        background-color: #fff;
+        border-radius: 4px;
         opacity: 0.65;
+        font-size: 0.9rem;
+        &:hover {
+          font-weight: 600;
+        }
       }
     }
   }
@@ -156,6 +169,7 @@ const FavList = styled.ul`
     img {
       width: 40px;
       border-radius: 100%;
+      border: 1px solid ${COLOR.lightgray};
     }
     strong {
       font-size: 1.1rem;
