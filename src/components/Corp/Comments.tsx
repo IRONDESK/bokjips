@@ -32,18 +32,22 @@ function Comments({ corpId }: ICommentPropsType) {
 
   const handleSubmitComment = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    CreateCommentData(corpId, commentInput, cookie)
-      .then((res) => {
-        mutate([`${URL}/comment/${corpId}`, cookie]);
-        setCommentInput("");
-      })
-      .catch((res) => {
-        if (res?.response?.status === 401) {
-          setAlertMessage("NOT_LOGIN");
-        } else if (res?.response?.status === 500) {
-          setAlertMessage("SERVER");
-        }
-      });
+    if (commentInput.length > 4 && commentInput.length < 201) {
+      CreateCommentData(corpId, commentInput, cookie)
+        .then((res) => {
+          mutate([`${URL}/comment/${corpId}`, cookie]);
+          setCommentInput("");
+        })
+        .catch((res) => {
+          if (res?.response?.status === 401) {
+            setAlertMessage("NOT_LOGIN");
+          } else if (res?.response?.status === 500) {
+            setAlertMessage("SERVER");
+          }
+        });
+    } else {
+      setAlertMessage("SHORT_COMMENT");
+    }
   };
 
   const onDelete = (commentId: string) => {
@@ -52,7 +56,7 @@ function Comments({ corpId }: ICommentPropsType) {
       DeleteCommentData(commentId, cookie)
         .then((res) => {
           mutate([`${URL}/comment/${corpId}`, cookie]);
-          setAlertMessage("COMMENT_DEL");
+          setAlertMessage("DEL_COMMENT");
         })
         .catch((res) => {
           if (res?.response?.status === 500) {
@@ -86,7 +90,7 @@ function Comments({ corpId }: ICommentPropsType) {
               ? "최대 200자 입력할 수 있습니다."
               : "로그인 후 작성해주세요."
           }
-          minLength={8}
+          minLength={4}
           maxLength={200}
           value={commentInput}
           onChange={onChange}
@@ -231,15 +235,14 @@ const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
       width: 28px;
       height: 28px;
       border-radius: 100%;
-      &:hover {
-        background-color: ${COLOR.main};
-        color: #fff;
-      }
       &::after {
         content: "close";
         font-family: "Material Symbols Outlined";
         font-size: 1.1rem;
         line-height: 28px;
+      }
+      &:hover {
+        color: ${COLOR.report};
       }
     }
   }
