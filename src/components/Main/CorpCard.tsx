@@ -38,7 +38,9 @@ function CorpCard({
       </WelfareList>
       <Option>
         <div>
-          {wage && <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>}
+          {wage && wage > 0 ? (
+            <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>
+          ) : null}
           <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
         </div>
         <Tag icon="heart">{favorite?.toLocaleString() || 0}</Tag>
