@@ -32,7 +32,7 @@ function Comments({ corpId }: ICommentPropsType) {
 
   const handleSubmitComment = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (commentInput.length > 4 && commentInput.length < 201) {
+    if (commentInput.length > 4 && cookie) {
       CreateCommentData(corpId, commentInput, cookie)
         .then((res) => {
           mutate([`${URL}/comment/${corpId}`, cookie]);
@@ -45,6 +45,8 @@ function Comments({ corpId }: ICommentPropsType) {
             setAlertMessage("SERVER");
           }
         });
+    } else if (!cookie) {
+      setAlertMessage("NOT_LOGIN");
     } else {
       setAlertMessage("SHORT_COMMENT");
     }
