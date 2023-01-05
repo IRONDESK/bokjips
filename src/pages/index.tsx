@@ -15,6 +15,7 @@ import { fetcher, URL } from "../api/CompanyApi";
 
 import CorpCard from "../components/Main/CorpCard";
 import NoData from "../components/Layouts/NoData";
+import Loading from "../components/Layouts/Loading";
 
 export default function Home() {
   const [nowKeyFilter] = useAtom(keyFilter);
@@ -46,44 +47,50 @@ export default function Home() {
     fetcher
   );
 
-  return (
-    <Main>
-      <p className="corp-length-count">
-        {data?.length || 0}개
-        {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
-      </p>
-      {data?.length > 0 ? (
-        <CardList>
-          {data?.map((value: ICompanyDataTypes, idx: number) => (
-            <Link key={idx} href={`/corp/${value?.companyId}`}>
-              <CorpCard
-                companyId={value?.companyId}
-                name={value?.name}
-                logo={value?.logo}
-                classification={value?.classification}
-                wage={value?.wage}
-                isInclusiveWage={value?.isInclusiveWage}
-                isPublicStock={value?.isPublicStock}
-                numberOfEmployee={value?.numberOfEmployee}
-                welfares={
-                  [
-                    ...(value?.workingConditions || []).slice(1, 2),
-                    ...(value?.officeEnvironment || []).slice(0, 2),
-                    ...(value?.workingConditions || []).slice(3, 5),
-                    ...(value?.offDutySupport || []).slice(0, 2),
-                  ].slice(0, 6) || []
-                }
-                isCertified={value.isCertified}
-                favorite={value?.favorite}
-              />
-            </Link>
-          ))}
-        </CardList>
-      ) : (
-        <NoData />
-      )}
-    </Main>
-  );
+  if (data && data.length > 0) {
+    return (
+      <Main>
+        <p className="corp-length-count">
+          {data?.length || 0}개
+          {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
+        </p>
+        {data?.length > 0 ? (
+          <CardList>
+            {data?.map((value: ICompanyDataTypes, idx: number) => (
+              <Link key={idx} href={`/corp/${value?.companyId}`}>
+                <CorpCard
+                  companyId={value?.companyId}
+                  name={value?.name}
+                  logo={value?.logo}
+                  classification={value?.classification}
+                  wage={value?.wage}
+                  isInclusiveWage={value?.isInclusiveWage}
+                  isPublicStock={value?.isPublicStock}
+                  numberOfEmployee={value?.numberOfEmployee}
+                  welfares={
+                    [
+                      ...(value?.workingConditions || []).slice(0, 3),
+                      ...(value?.officeEnvironment || []).slice(0, 3),
+                      ...(value?.workSupport || []).slice(0, 2),
+                      ...(value?.offDutySupport || []).slice(0, 5),
+                    ].slice(0, 7) || []
+                  }
+                  isCertified={value.isCertified}
+                  favorite={value?.favorite}
+                />
+              </Link>
+            ))}
+          </CardList>
+        ) : (
+          <NoData />
+        )}
+      </Main>
+    );
+  } else if (!data && !error) {
+    return <Loading />;
+  } else {
+    return <NoData code={error?.code} />;
+  }
 }
 
 const Main = styled.main`
