@@ -9,6 +9,7 @@ export interface ICompanyDataTypes extends ICompanyWelfaresTypes {
   logo?: string;
   isCertified?: boolean;
   favorite?: string;
+  isFavorite?: boolean | null;
   recruitmentSite?: string;
   site?: string;
 }

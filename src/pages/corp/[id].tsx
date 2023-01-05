@@ -8,7 +8,7 @@ import { useAtom } from "jotai";
 
 import { activeAlert, verticalSplited } from "../../atoms/atoms";
 
-import { SHADOW } from "../../constants/style";
+import { COLOR, SHADOW } from "../../constants/style";
 import { Title } from "../../components/Layouts/partials/Title";
 import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
@@ -31,7 +31,7 @@ function CorpId({ corpId }: ICorpPropsType) {
   const [, setAlertMessage] = useAtom(activeAlert);
 
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
-  const { data, error } = useSWR(`${URL}/${corpId}`, fetcher);
+  const { data, error } = useSWR([`${URL}/${corpId}`, cookie], fetcher);
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
     fetcher,
@@ -43,7 +43,7 @@ function CorpId({ corpId }: ICorpPropsType) {
   const handlerFavorite = () => {
     HandlerCompanyFavorite(corpId as string, cookie)
       .then((res) => {
-        mutate(`${URL}/${corpId}`);
+        mutate([`${URL}/${corpId}`, cookie]);
         if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
         if (res.data.message === "취소") setAlertMessage("UNFAVORITE");
       })
@@ -64,13 +64,19 @@ function CorpId({ corpId }: ICorpPropsType) {
           <SideOne>
             <Banner>
               <div className="corp-identified">
-                <img src={data?.logo} />
+                <div>
+                  <img src={data?.logo} />
+                </div>
                 <h2>{data?.name}</h2>
-                <i>{data?.isPublicStock ? "상장" : "비상장"}</i>
-                <i>{COMPANY_TYPES_LITERAL[data?.classification]}</i>
+                <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
+                <span>{COMPANY_TYPES_LITERAL[data?.classification]}</span>
               </div>
               <div className="corp-buttons">
-                <Button icon="heart" onClick={handlerFavorite}>
+                <Button
+                  icon="heart"
+                  isFavorite={!!data?.isFavorite}
+                  onClick={handlerFavorite}
+                >
                   {data?.favorite?.toLocaleString() || 0}
                 </Button>
                 <Link href={data?.site || ""}>
@@ -173,13 +179,16 @@ const Banner = styled.div`
       text-overflow: ellipsis;
       overflow: hidden;
     }
+    div {
+      position: relative;
+    }
     img {
       width: 42px;
       height: 42px;
       border-radius: 12px;
       object-fit: cover;
     }
-    i {
+    span {
       white-space: nowrap;
     }
   }
@@ -191,7 +200,7 @@ const Banner = styled.div`
       h2 {
         font-size: 1.35rem;
       }
-      i {
+      span {
         font-size: 0.9rem;
       }
     }
@@ -222,7 +231,7 @@ const Banner = styled.div`
   }
 `;
 
-const Button = styled.button<{ icon: string }>`
+const Button = styled.button<{ icon: string; isFavorite?: boolean }>`
   position: relative;
   margin: 0 12px 0 0;
   padding: 12px 16px 12px 42px;
@@ -230,7 +239,10 @@ const Button = styled.button<{ icon: string }>`
   background-color: #fff;
   border-radius: 28px;
   box-shadow: ${SHADOW.basic};
+  background-color: ${(props) => (props.isFavorite ? COLOR.main : "none")};
+  color: ${(props) => (props.isFavorite ? "#fff" : "none")};
   font-size: 0.95rem;
+  font-weight: ${(props) => (props.isFavorite ? "500" : "none")};
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -247,6 +259,7 @@ const Button = styled.button<{ icon: string }>`
     background-repeat: no-repeat;
     background-position: center;
     transform: translateY(-50%);
+    filter: invert(${(props) => (props.isFavorite ? "1" : "0")});
   }
   &:hover {
     box-shadow: ${SHADOW.hover};
