@@ -36,7 +36,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
     }
   );
 
-  const { register, handleSubmit, control, watch, reset } = useForm<{
+  const { register, handleSubmit, control, watch, reset, setValue } = useForm<{
     value: IWelfareDataTypes[];
   }>();
   useEffect(() => {
@@ -72,11 +72,18 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
       });
   };
 
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.code === "Enter") e.preventDefault();
+  };
+
   if (roleData?.roles === "ROLE_ADMIN") {
     return (
       <Container>
         <Title title={`복지 정보 작성`} />
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) => checkKeyDown(e)}
+        >
           <CorpName>
             {companyData?.name} <span>{type.toUpperCase()}</span>
           </CorpName>
@@ -85,6 +92,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
             register={register}
             control={control}
             watch={watch}
+            setValue={setValue}
             corpId={corpId}
           />
 

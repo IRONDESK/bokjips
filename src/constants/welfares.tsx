@@ -7,3 +7,27 @@ export const WELFARES_FILTER_LIST = [
   { value: "trending_up", name: "스톡옵션" },
   { value: "redeem", name: "복지포인트" },
 ];
+
+export const WELFARES_ICONS = [
+  { value: "home", name: "재택근무" },
+  { value: "timelapse", name: "자율출퇴근" },
+  { value: "forest", name: "휴가" },
+  { value: "monitor_heart", name: "건강검진" },
+  { value: "pregnant_woman", name: "출산지원" },
+  { value: "child_friendly", name: "아동육아" },
+  { value: "restaurant", name: "사내식당" },
+  { value: "local_cafe", name: "사내카페" },
+  { value: "library_books", name: "사내도서관" },
+  { value: "fitness_center", name: "헬스장" },
+  { value: "child_care", name: "어린이집" },
+  { value: "redeem", name: "복지포인트" },
+  { value: "important_devices", name: "최신 장비" },
+  { value: "trending_up", name: "스톡옵션" },
+  { value: "price_check", name: "사이닝보너스" },
+  { value: "language", name: "어학지원" },
+  { value: "menu_book", name: "도서비" },
+  { value: "local_taxi", name: "택시" },
+  { value: "connect_without_contact", name: "교육참가지원" },
+  { value: "diversity_2", name: "경조사" },
+  { value: "wallet", name: "금융지원" },
+];
