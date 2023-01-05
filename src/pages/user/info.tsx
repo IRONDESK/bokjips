@@ -77,7 +77,7 @@ function Info() {
             </li>
           </ul>
         </Banner>
-        <h2>내가 찜한 회사</h2>
+        <h2>내가 찜한 회사 ({favData?.length}개)</h2>
         {favData && favData?.length > 0 ? (
           <FavList>
             {favData?.map((item) => (
@@ -130,6 +130,7 @@ const Banner = styled.div`
   ul {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 8px 0 0;
     li {
       font-size: 0.9rem;
@@ -151,7 +152,7 @@ const Banner = styled.div`
 const FavList = styled.ul`
   display: grid;
   margin: 0 0 32px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   li {
     position: relative;
@@ -207,6 +208,9 @@ const FavList = styled.ul`
       font-size: 1.2rem;
       font-family: "Material Symbols Outlined";
     }
+  }
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, 1fr);
   }
   @media (max-width: 690px) {
     gap: 12px;
