@@ -37,12 +37,18 @@ function EditButtons({ companyId }: { companyId: string }) {
   return (
     <UL>
       <li>
-        <Link href={`/adm/edit/${companyId}`}>기본수정</Link>
+        <Link href={`/adm/edit/${companyId}`}>
+          <span>기본수정</span>
+        </Link>
       </li>
       <li>
-        <Link href={`/adm/welfare?id=${companyId}&type=edit`}>복지수정</Link>
+        <Link href={`/adm/welfare?id=${companyId}&type=edit`}>
+          <span>복지수정</span>
+        </Link>
       </li>
-      <li onClick={onDelete}>삭제</li>
+      <li>
+        <span onClick={onDelete}>삭제</span>
+      </li>
     </UL>
   );
 }
@@ -50,16 +56,18 @@ function EditButtons({ companyId }: { companyId: string }) {
 const UL = styled.ul`
   text-align: right;
   li {
-    cursor: pointer;
     display: inline-block;
     margin: 0 0 0 12px;
-    padding: 8px 12px;
     background-color: ${COLOR.main};
     border-radius: 7px;
-    color: #fff;
-    font-size: 0.95rem;
-    line-height: 1rem;
-    text-align: center;
+    span {
+      cursor: pointer;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 2rem;
+      text-align: center;
+    }
   }
 `;
 
