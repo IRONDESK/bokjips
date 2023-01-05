@@ -75,6 +75,7 @@ const Logo = styled.img`
   height: 44px;
   border: 1px solid #eee;
   border-radius: 18px;
+  object-fit: cover;
 `;
 const Name = styled.div`
   text-align: right;
@@ -93,13 +94,14 @@ const WelfareList = styled.div`
   flex: 1;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   align-items: flex-start;
   gap: 4px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   span {
-    padding: 4px 6px;
+    padding: 4px;
     background-color: #eee;
     font-size: 0.8rem;
     letter-spacing: -0.3px;
@@ -126,7 +128,7 @@ const Tag = styled.i<{ icon: string }>`
   display: flex;
   align-items: center;
   gap: 4px;
-  opacity: 0.75;
+  opacity: 0.7;
   &::before {
     content: "";
     display: inline-block;
