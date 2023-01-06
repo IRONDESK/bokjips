@@ -123,12 +123,10 @@ const DetailList = styled.ul`
   gap: 16px;
   flex-wrap: wrap;
   @media (max-width: 840px) {
-    margin: 0 -32px;
-    padding: 0 12px 8px 32px;
+    padding: 0 0 8px;
   }
   @media (max-width: 580px) {
-    margin: 0 -20px;
-    padding: 0 12px 8px 20px;
+    padding: 0 0 8px;
     flex-direction: column;
     gap: 12px;
   }

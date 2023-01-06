@@ -169,8 +169,10 @@ const FavList = styled.ul`
     box-shadow: ${SHADOW.basic};
     img {
       width: 40px;
+      height: 40px;
       border-radius: 100%;
       border: 1px solid ${COLOR.lightgray};
+      object-fit: cover;
     }
     strong {
       font-size: 1.1rem;

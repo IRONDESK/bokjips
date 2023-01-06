@@ -68,7 +68,7 @@ const Text = styled.div`
     i {
       cursor: help;
       display: inline-block;
-      margin: 0 0 0 2px;
+      padding: 2px;
       width: 16px;
       height: 16px;
       background-image: url("/icons/question.svg");
