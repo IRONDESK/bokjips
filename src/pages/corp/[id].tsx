@@ -66,6 +66,7 @@ function CorpId({ corpId }: ICorpPropsType) {
               <div className="corp-identified">
                 <div>
                   <img src={data?.logo} />
+                  {data?.isCertified === "true" && <i></i>}
                 </div>
                 <h2>{data?.name}</h2>
                 <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
@@ -181,6 +182,24 @@ const Banner = styled.div`
     }
     div {
       position: relative;
+    }
+    i {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      background-color: ${COLOR.check};
+      border-radius: 100%;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 20px;
+      text-align: center;
+      &::after {
+        content: "done";
+        font-family: "Material Symbols Outlined";
+      }
     }
     img {
       width: 42px;

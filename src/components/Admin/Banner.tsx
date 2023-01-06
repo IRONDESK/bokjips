@@ -52,7 +52,6 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
             <input
               type="checkbox"
               defaultChecked={companyData?.isPublicStock}
-              placeholder=" "
               {...register("isPublicStock")}
             />
           </label>
@@ -60,9 +59,9 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
             <span>현직인증</span>
             <input
               type="checkbox"
-              defaultChecked={companyData?.isCertified}
-              placeholder=" "
-              {...register("isCertified")}
+              {...register("isCertified", {
+                setValueAs: (v) => (v ? "true" : "false"),
+              })}
             />
           </label>
           <select {...register("isInclusiveWage")}>

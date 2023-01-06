@@ -7,7 +7,7 @@ export interface ICompanyDataTypes extends ICompanyWelfaresTypes {
   isPublicStock?: boolean;
   numberOfEmployee?: number;
   logo?: string;
-  isCertified?: boolean;
+  isCertified?: boolean | string;
   favorite?: string;
   isFavorite?: boolean | null;
   recruitmentSite?: string;

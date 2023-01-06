@@ -48,7 +48,7 @@ function Edit({ corpId }: ICorpEditPropsType) {
       isPublicStock: companyData?.isPublicStock,
       numberOfEmployee: companyData?.numberOfEmployee,
       logo: companyData?.logo,
-      isCertified: companyData?.isCertified,
+      isCertified: companyData?.isCertified === "true" ? true : false,
       site: companyData?.site,
       recruitmentSite: companyData?.recruitmentSite,
     });
