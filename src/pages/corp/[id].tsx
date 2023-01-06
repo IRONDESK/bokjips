@@ -198,18 +198,17 @@ const Banner = styled.div`
       position: absolute;
       top: -4px;
       right: -8px;
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       background-color: ${COLOR.check};
       border-radius: 100%;
       color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 20px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      line-height: 16px;
       text-align: center;
       &::after {
-        content: "done";
-        font-family: "Material Symbols Outlined";
+        content: "✓";
       }
     }
     img {

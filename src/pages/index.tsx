@@ -18,6 +18,7 @@ import CorpCard from "../components/Main/CorpCard";
 import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
+import { COLOR } from "../constants/style";
 
 export default function Home() {
   const [nowMainPage, setNowMainPage] = useAtom(mainPagination);
@@ -60,10 +61,15 @@ export default function Home() {
   if (data && data.content.length > 0) {
     return (
       <Main>
-        <p className="corp-length-count">
-          {data?.totalElements || 0}개
-          {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
-        </p>
+        <ListTop>
+          <p className="corp-length-count">
+            {data?.totalElements || 0}개
+            {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
+          </p>
+          <p className="corp-optional-legend">
+            <i></i> 현직자 확인
+          </p>
+        </ListTop>
         {data?.content.length > 0 ? (
           <CardList>
             {data?.content?.map((value: ICompanyDataTypes, idx: number) => (
@@ -111,11 +117,34 @@ export default function Home() {
 
 const Main = styled.main`
   padding: 12px 24px 20px;
+`;
+
+const ListTop = styled.div`
+  display: flex;
+  margin: -8px 8px 12px;
+  justify-content: space-between;
+  font-size: 0.85rem;
   .corp-length-count {
-    margin: -2px 8px 8px;
-    font-size: 0.9rem;
-    letter-spacing: -0.35px;
     opacity: 0.8;
+  }
+  .corp-optional-legend {
+    color: ${COLOR.check};
+    opacity: 0.6;
+    i {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background-color: ${COLOR.check};
+      border-radius: 100%;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 500;
+      line-height: 14px;
+      text-align: center;
+      &::after {
+        content: "✓";
+      }
+    }
   }
 `;
 

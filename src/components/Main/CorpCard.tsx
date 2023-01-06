@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { SHADOW } from "../../constants/style";
-import { ICompanyDataTypes, IWelfareDataTypes } from "../../types/CompanyData";
+import { COLOR, SHADOW } from "../../constants/style";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
+
+import { ICompanyDataTypes, IWelfareDataTypes } from "../../types/CompanyData";
 
 interface CorpCardPropsType extends ICompanyDataTypes {
   welfares: IWelfareDataTypes[];
@@ -16,12 +17,16 @@ function CorpCard({
   isPublicStock,
   numberOfEmployee,
   welfares,
+  isCertified,
   favorite,
 }: CorpCardPropsType) {
   return (
     <Container>
       <Title>
-        <Logo src={logo} />
+        <div>
+          <Logo src={logo} />
+          {isCertified === "true" && <i></i>}
+        </div>
         <Name>
           <strong>{name}</strong>
           <p>
@@ -41,7 +46,9 @@ function CorpCard({
           {wage && wage > 0 ? (
             <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>
           ) : null}
-          <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
+          {numberOfEmployee && numberOfEmployee > 0 ? (
+            <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
+          ) : null}
         </div>
         <Tag icon="heart">{favorite?.toLocaleString() || 0}</Tag>
       </Option>
@@ -69,12 +76,32 @@ const Title = styled.div`
   padding: 0 0 12px;
   align-items: center;
   justify-content: space-between;
+  div {
+    position: relative;
+    i {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      width: 16px;
+      height: 16px;
+      background-color: ${COLOR.check};
+      border-radius: 100%;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 500;
+      line-height: 16px;
+      text-align: center;
+      &::after {
+        content: "✓";
+      }
+    }
+  }
 `;
 const Logo = styled.img`
   width: 44px;
   height: 44px;
-  border: 1px solid #eee;
-  border-radius: 18px;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
   object-fit: cover;
 `;
 const Name = styled.div`
