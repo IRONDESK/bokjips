@@ -40,6 +40,13 @@ function CorpId({ corpId }: ICorpPropsType) {
     }
   );
 
+  const dateConvert = (target: Date | undefined) => {
+    return new Intl.DateTimeFormat("ko-KR", {
+      dateStyle: "long",
+      timeStyle: "medium",
+    }).format(target || 0);
+  };
+
   const handlerFavorite = () => {
     HandlerCompanyFavorite(corpId as string, cookie)
       .then((res) => {
@@ -96,6 +103,10 @@ function CorpId({ corpId }: ICorpPropsType) {
               offDutySupport={data?.offDutySupport}
               officeEnvironment={data?.officeEnvironment}
             />
+            <UpdateAtText>
+              이 회사의 복지 정보는 {dateConvert(data?.updateAt)}{" "}
+              수정되었습니다.
+            </UpdateAtText>
             {roleData?.roles === "ROLE_ADMIN" && (
               <EditButtons companyId={corpId as string} />
             )}
@@ -286,6 +297,13 @@ const Button = styled.button<{ icon: string; isFavorite?: boolean }>`
   @media (max-width: 840px) {
     margin: 0;
   }
+`;
+
+const UpdateAtText = styled.p`
+  margin: 8px 0;
+  font-size: 0.65rem;
+  text-align: center;
+  opacity: 0.5;
 `;
 
 const Vertical = styled.button`
