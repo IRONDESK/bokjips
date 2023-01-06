@@ -8,7 +8,13 @@ import useSWR from "swr";
 
 import { COLOR, SHADOW } from "../../../constants/style";
 import { fetcher, URL } from "../../../api/MyInfoApi";
-import { activeAlert } from "../../../atoms/atoms";
+import {
+  activeAlert,
+  keyFilter,
+  selectedFilter,
+  primarySelectedFilter,
+  wageFilter,
+} from "../../../atoms/atoms";
 
 import HeaderBar from "../../Navbar/HeaderBar";
 import ServiceAlert from "./ServiceAlert";
@@ -17,7 +23,14 @@ function Header() {
   const router = useRouter();
   const cookie = getCookie("accessToken");
   const [showUser, setShowUser] = useState(false);
+
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
+
+  const [, setKeyFilter] = useAtom(keyFilter);
+  const [, setWageFilter] = useAtom(wageFilter);
+  const [, setPrimarySelectedFilter] = useAtom(primarySelectedFilter);
+  const [, setSelectedFilter] = useAtom(selectedFilter);
+
   const { data: tokenCheck, error: tokenError } = useSWR(
     [`${URL}/favorite`, cookie],
     fetcher,
@@ -39,12 +52,19 @@ function Header() {
     router.reload();
   };
 
+  const handleResetValues = () => {
+    setKeyFilter({ keyword: "", industry: "" });
+    setWageFilter(0);
+    setPrimarySelectedFilter({ isCertified: false, inclusive: false });
+    setSelectedFilter([]);
+  };
+
   return (
     <>
       {alertMessage !== "" && <ServiceAlert />}
       <Container corp={path[0] === "corp"}>
         <Wrap id="header-logo">
-          <Link href="/">
+          <Link href="/" onClick={handleResetValues}>
             <Logo>
               <strong>복지</strong>편살
             </Logo>
