@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 import Link from "next/link";
@@ -16,8 +16,10 @@ import { fetcher, URL } from "../api/CompanyApi";
 import CorpCard from "../components/Main/CorpCard";
 import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
+import Pagination from "../components/Layouts/Pagination";
 
 export default function Home() {
+  const [nowPage, setNowPage] = useState(0);
   const [nowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
   const [nowPrimaryFilter] = useAtom(primarySelectedFilter);
@@ -43,20 +45,23 @@ export default function Home() {
   }
 
   const { data, error } = useSWR(
-    URL + (isParams ? `/search?${[...createParams()].join("&")}` : ""),
+    URL +
+      (isParams
+        ? `/search?page=${nowPage}&${[...createParams()].join("&")}`
+        : `/?page=${nowPage}`),
     fetcher
   );
 
-  if (data && data.length > 0) {
+  if (data && data.content.length > 0) {
     return (
       <Main>
         <p className="corp-length-count">
-          {data?.length || 0}개
+          {data?.totalElements || 0}개
           {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
         </p>
-        {data?.length > 0 ? (
+        {data?.content.length > 0 ? (
           <CardList>
-            {data?.map((value: ICompanyDataTypes, idx: number) => (
+            {data?.content?.map((value: ICompanyDataTypes, idx: number) => (
               <Link key={idx} href={`/corp/${value?.companyId}`}>
                 <CorpCard
                   companyId={value?.companyId}
@@ -84,6 +89,12 @@ export default function Home() {
         ) : (
           <NoData />
         )}
+        <Pagination
+          nowPage={nowPage}
+          setNowPage={setNowPage}
+          empty={data?.empty}
+          totalPages={data?.totalPages}
+        />
       </Main>
     );
   } else if (!data && !error) {
