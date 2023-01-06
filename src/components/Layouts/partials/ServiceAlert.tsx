@@ -11,6 +11,10 @@ function ServiceAlert() {
     LOGIN: ["main", "로그인되었습니다."],
     LOGOUT: ["main", "로그아웃되었습니다."],
     JOIN: ["main", "회원가입이 완료 되었습니다."],
+    LOGOUT_EXPIRED: [
+      "report",
+      "접속 시간이 오래되어 보안을 위해 로그아웃되었습니다.",
+    ],
     DEL_COMMENT: ["main", "댓글이 삭제되었습니다."],
     SHORT_COMMENT: ["report", "최소 5자 이상의 댓글을 작성해주세요."],
     SERVER: ["report", "서버 오류가 발생했습니다. 잠시후 다시 시도해주세요."],

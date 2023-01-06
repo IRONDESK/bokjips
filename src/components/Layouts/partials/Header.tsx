@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
+import useSWR from "swr";
 
 import { COLOR, SHADOW } from "../../../constants/style";
+import { fetcher, URL } from "../../../api/MyInfoApi";
+import { activeAlert } from "../../../atoms/atoms";
+
 import HeaderBar from "../../Navbar/HeaderBar";
 import ServiceAlert from "./ServiceAlert";
-import { activeAlert } from "../../../atoms/atoms";
 
 function Header() {
   const router = useRouter();
-  const path = router.pathname.split("/").slice(1);
-
   const cookie = getCookie("accessToken");
   const [showUser, setShowUser] = useState(false);
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
+  const { data: tokenCheck, error: tokenError } = useSWR(
+    [`${URL}/favorite`, cookie],
+    fetcher,
+    { revalidateOnFocus: false, refreshInterval: cookie ? 3500 : 0 }
+  );
+  const path = router.pathname.split("/").slice(1);
+
+  useEffect(() => {
+    if (cookie && tokenError?.message === "유효하지 않은 토큰입니다.") {
+      setAlertMessage("LOGOUT_EXPIRED");
+      deleteCookie("accessToken");
+    }
+  }, [tokenError]);
 
   const handleLogout = () => {
     deleteCookie("accessToken");
