@@ -30,7 +30,7 @@ function Detail({
               <DetailCard
                 icon="payments"
                 title={`초봉 ${wage?.toLocaleString() || 0}만원`}
-                content="개발 직군 한정"
+                content="개발 직군 기준??직군별 상이"
               />
             )}
             {isInclusiveWage !== "NULL" && (
@@ -38,7 +38,7 @@ function Detail({
                 icon={
                   isInclusiveWage === "Y" ? "schedule" : "history_toggle_off"
                 }
-                title={isInclusiveWage === "Y" ? "포괄임금지" : "비포괄임금제"}
+                title={isInclusiveWage === "Y" ? "포괄임금제" : "비포괄임금제"}
               />
             )}
           </DetailList>
