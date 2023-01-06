@@ -46,11 +46,12 @@ const Container = styled.footer`
     justify-content: space-between;
     button {
       margin: 0 0 0 8px;
-      width: 32px;
-      height: 32px;
+      padding: 0;
+      width: 36px;
+      height: 36px;
       border-radius: 100%;
       font-size: 1.25rem;
-      font-weight: 600;
+      text-align: center;
       &:hover {
         background-color: #000;
         color: #fff;

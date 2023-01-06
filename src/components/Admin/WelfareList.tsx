@@ -223,8 +223,9 @@ const WorkingRadios = styled.div`
 
 const Delete = styled.button`
   float: right;
-  width: 32px;
-  height: 32px;
+  padding: 0;
+  width: 36px;
+  height: 36px;
   background-color: ${COLOR.lightgray};
   border-radius: 100%;
   font-size: 1.25rem;
