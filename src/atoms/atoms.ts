@@ -24,3 +24,6 @@ export const selectedFilter = atom<string[]>([]);
 
 // 전체 알림창
 export const activeAlert = atom<string>("");
+
+// 메인 페이지네이션
+export const mainPagination = atom<number>(0);

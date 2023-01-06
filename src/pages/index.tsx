@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 import Link from "next/link";
 import { useAtom } from "jotai";
 
 import {
+  mainPagination,
   keyFilter,
   selectedFilter,
   primarySelectedFilter,
@@ -19,7 +20,7 @@ import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
 
 export default function Home() {
-  const [nowPage, setNowPage] = useState(0);
+  const [nowMainPage, setNowMainPage] = useAtom(mainPagination);
   const [nowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
   const [nowPrimaryFilter] = useAtom(primarySelectedFilter);
@@ -32,6 +33,10 @@ export default function Home() {
     nowPrimaryFilter.isCertified ||
     nowWageFilter > 0 ||
     nowFilter.length > 0;
+
+  useEffect(() => {
+    setNowMainPage(0);
+  }, [isParams]);
 
   function createParams() {
     let params = [`greaterThan=${nowWageFilter}`];
@@ -47,8 +52,8 @@ export default function Home() {
   const { data, error } = useSWR(
     URL +
       (isParams
-        ? `/search?page=${nowPage}&${[...createParams()].join("&")}`
-        : `/?page=${nowPage}`),
+        ? `/search?page=${nowMainPage}&${[...createParams()].join("&")}`
+        : `/?page=${nowMainPage}`),
     fetcher
   );
 
@@ -90,8 +95,8 @@ export default function Home() {
           <NoData />
         )}
         <Pagination
-          nowPage={nowPage}
-          setNowPage={setNowPage}
+          nowPage={nowMainPage}
+          setNowPage={setNowMainPage}
           empty={data?.empty}
           totalPages={data?.totalPages}
         />

@@ -9,6 +9,7 @@ import useSWR from "swr";
 import { COLOR, SHADOW } from "../../../constants/style";
 import { fetcher, URL } from "../../../api/MyInfoApi";
 import {
+  mainPagination,
   activeAlert,
   keyFilter,
   selectedFilter,
@@ -26,6 +27,7 @@ function Header() {
 
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
 
+  const [, setNowMainPage] = useAtom(mainPagination);
   const [, setKeyFilter] = useAtom(keyFilter);
   const [, setWageFilter] = useAtom(wageFilter);
   const [, setPrimarySelectedFilter] = useAtom(primarySelectedFilter);
@@ -34,12 +36,12 @@ function Header() {
   const { data: tokenCheck, error: tokenError } = useSWR(
     [`${URL}/check_token`, cookie],
     fetcher,
-    { revalidateOnFocus: false, refreshInterval: cookie ? 5000 : 0 }
+    { revalidateOnFocus: false, refreshInterval: cookie ? 100000 : 0 }
   );
   const path = router.pathname.split("/").slice(1);
 
   useEffect(() => {
-    if (cookie && tokenError?.status === 401) {
+    if (cookie && tokenError?.response.status === 401) {
       setAlertMessage("LOGOUT_EXPIRED");
       deleteCookie("accessToken");
     }
@@ -53,6 +55,7 @@ function Header() {
   };
 
   const handleResetValues = () => {
+    setNowMainPage(0);
     setKeyFilter({ keyword: "", industry: "" });
     setWageFilter(0);
     setPrimarySelectedFilter({ isCertified: false, inclusive: false });
