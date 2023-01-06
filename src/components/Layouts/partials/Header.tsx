@@ -32,14 +32,14 @@ function Header() {
   const [, setSelectedFilter] = useAtom(selectedFilter);
 
   const { data: tokenCheck, error: tokenError } = useSWR(
-    [`${URL}/favorite`, cookie],
+    [`${URL}/check_token`, cookie],
     fetcher,
-    { revalidateOnFocus: false, refreshInterval: cookie ? 3500 : 0 }
+    { revalidateOnFocus: false, refreshInterval: cookie ? 5000 : 0 }
   );
   const path = router.pathname.split("/").slice(1);
 
   useEffect(() => {
-    if (cookie && tokenError?.message === "유효하지 않은 토큰입니다.") {
+    if (cookie && tokenError?.status === 401) {
       setAlertMessage("LOGOUT_EXPIRED");
       deleteCookie("accessToken");
     }
