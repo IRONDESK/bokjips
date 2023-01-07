@@ -77,7 +77,11 @@ function Header() {
           {path[0] === "" ? <HeaderBar /> : null}
         </Wrap>
         <Wrap id="header-user">
-          <User onClick={() => setShowUser(!showUser)}></User>
+          <User
+            id="user-controller"
+            aria-label="사용자 설정"
+            onClick={() => setShowUser(!showUser)}
+          ></User>
           {showUser &&
             (cookie ? (
               <UserBox>

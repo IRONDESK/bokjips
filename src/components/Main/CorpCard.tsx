@@ -24,7 +24,7 @@ function CorpCard({
     <Container>
       <Title>
         <div>
-          <Logo src={logo} />
+          <Logo src={logo} alt={name} />
           {isCertified === "true" && <i></i>}
         </div>
         <Name>

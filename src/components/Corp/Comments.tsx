@@ -99,7 +99,12 @@ function Comments({ corpId }: ICommentPropsType) {
           disabled={cookie ? false : true}
           style={{ cursor: cookie ? "auto" : "not-allowed" }}
         />
-        <button type="submit" onClick={handleSubmitComment}></button>
+        <button
+          type="submit"
+          id="submit-comment-button"
+          aria-label="댓글 등록"
+          onClick={handleSubmitComment}
+        ></button>
       </form>
       <ul className="comment-list">
         {data && data?.length > 0 ? (
@@ -160,7 +165,7 @@ const Container = styled.section`
       font-size: 1rem;
     }
     button {
-      padding: 4px 8px;
+      padding: 8px 16px;
       border-radius: 12px;
       background-color: ${COLOR.lightgray};
       &:hover {
@@ -168,10 +173,8 @@ const Container = styled.section`
         color: #fff;
       }
       &::after {
-        content: "check";
-        font-family: "Material Symbols Outlined";
-        font-size: 1.35rem;
-        font-weight: bold;
+        content: "등록";
+        font-size: 0.9rem;
       }
     }
     &:hover,

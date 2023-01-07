@@ -72,7 +72,7 @@ function CorpId({ corpId }: ICorpPropsType) {
             <Banner>
               <div className="corp-identified">
                 <div>
-                  <img src={data?.logo} />
+                  <img src={data?.logo} alt={data?.name} />
                   {data?.isCertified === "true" && <i></i>}
                 </div>
                 <h2>{data?.name}</h2>
@@ -81,11 +81,14 @@ function CorpId({ corpId }: ICorpPropsType) {
               </div>
               <div className="corp-buttons">
                 <Button
+                  id="company-favorite-button"
+                  aria-label="회사 찜 등록 및 해제"
                   icon="heart"
                   isFavorite={!!data?.isFavorite}
                   onClick={handlerFavorite}
                 >
                   {data?.favorite?.toLocaleString() || 0}
+                  <span className="a11y-hidden">명이 찜한 회사입니다.</span>
                 </Button>
                 <Link href={data?.site || ""}>
                   <Button icon="site">사이트</Button>
@@ -115,6 +118,7 @@ function CorpId({ corpId }: ICorpPropsType) {
             <Vertical
               type="button"
               id="vertical-active"
+              aria-label="좌우 화면 분리 버튼"
               onClick={() => setIsSplited(!isSplited)}
             ></Vertical>
             <Comments corpId={corpId as string} />

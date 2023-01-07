@@ -4,9 +4,9 @@ import styled from "@emotion/styled";
 function Footer() {
   return (
     <Container>
-      <h3>
+      <p>
         <strong>복지</strong>편살
-      </h3>
+      </p>
       <div>
         기업의 채용공고 및 사이트에 공개된 내용을 기반으로 작성된 내용입니다.
         <br />
@@ -30,7 +30,7 @@ const Container = styled.footer`
   padding: 40px 36px;
   background-color: #d8d8d8;
   opacity: 0.7;
-  h3 {
+  p {
     display: inline-block;
     font-family: "GangwonEdu";
     font-size: 1.85rem;
