@@ -4,7 +4,7 @@ export const COMPANY_TYPES = [
   { name: "서비스", value: "service" },
   { name: "금융", value: "finance" },
   { name: "제조업", value: "product" },
-  { name: "미디어", value: "media" },
+  { name: "문화·미디어", value: "media" },
   { name: "공공", value: "public" },
 ];
 
@@ -14,7 +14,7 @@ export const COMPANY_TYPES_LITERAL: { [key: string]: string } = {
   service: "서비스",
   finance: "금융",
   product: "제조업",
-  media: "미디어",
+  media: "문화·미디어",
   public: "공공",
 };
 

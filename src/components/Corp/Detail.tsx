@@ -30,7 +30,7 @@ function Detail({
               <DetailCard
                 icon="payments"
                 title={`초봉 ${wage?.toLocaleString() || 0}만원`}
-                content="개발 직군 기준??직군별 상이"
+                content="직군별 상이"
               />
             )}
             {isInclusiveWage !== "NULL" && (

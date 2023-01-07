@@ -30,7 +30,7 @@ function CorpCard({
         <Name>
           <strong>{name}</strong>
           <p>
-            {isPublicStock ? "상장" : "비상장"} |{" "}
+            {isPublicStock ? "상장 | " : ""}
             {COMPANY_TYPES_LITERAL[classification]}
           </p>
         </Name>
@@ -119,13 +119,13 @@ const Logo = styled.img`
 `;
 const Name = styled.div`
   text-align: right;
-  line-height: 1.4rem;
+  line-height: 1.3rem;
   strong {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 600;
   }
   p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     opacity: 0.55;
   }
 `;

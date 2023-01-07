@@ -85,7 +85,7 @@ function CorpId({ corpId }: ICorpPropsType) {
                   aria-label={`${
                     data?.favorite || 0
                   }명이 찜한 회사. 찜 등록 및 해제 버튼.`}
-                  icon="heart"
+                  icon={!!data?.isFavorite ? "heart_white_fill" : "heart"}
                   isFavorite={!!data?.isFavorite}
                   onClick={handlerFavorite}
                 >
@@ -224,6 +224,8 @@ const Banner = styled.div`
     }
     span {
       white-space: nowrap;
+      font-size: 0.95rem;
+      opacity: 0.65;
     }
   }
   @media (max-width: 840px) {
@@ -293,7 +295,6 @@ const Button = styled.button<{ icon: string; isFavorite?: boolean }>`
     background-repeat: no-repeat;
     background-position: center;
     transform: translateY(-50%);
-    filter: invert(${(props) => (props.isFavorite ? "1" : "0")});
   }
   &:hover {
     box-shadow: ${SHADOW.hover};
