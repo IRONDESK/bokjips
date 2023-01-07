@@ -18,10 +18,12 @@ function Footer() {
         <article className="footer-contact-wrap">
           최성원 Back-end | 손수철 Front-end + Design
           <ul>
-            <Link href="mailto:bokjips@gmail.com">
-              <button className="material-symbols-outlined">email</button>
-            </Link>
-            {/* <button className="material-symbols-outlined">code</button> */}
+            <li>
+              <Link href="mailto:bokjips@gmail.com">
+                <button className="material-symbols-outlined">email</button>
+              </Link>
+            </li>
+            {/* <li><button className="material-symbols-outlined">code</button></li> */}
           </ul>
         </article>
       </div>
