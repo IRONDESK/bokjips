@@ -16,7 +16,9 @@ function DetailCard({ icon, title, content }: DetailCardPropsType) {
 
   return (
     <Container>
-      <Icon className="material-symbols-outlined">{icon}</Icon>
+      <Icon className="material-symbols-outlined" aria-hidden="true">
+        {icon}
+      </Icon>
       <Text>
         <strong>{title}</strong>
         <p>

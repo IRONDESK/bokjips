@@ -202,10 +202,9 @@ const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
     width: 100%;
     top: -20px;
     right: 0;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
-    opacity: 0.75;
+    opacity: 0.7;
   }
   .comment-content {
     position: relative;

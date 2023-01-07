@@ -82,13 +82,14 @@ function CorpId({ corpId }: ICorpPropsType) {
               <div className="corp-buttons">
                 <Button
                   id="company-favorite-button"
-                  aria-label="회사 찜 등록 및 해제"
+                  aria-label={`${
+                    data?.favorite || 0
+                  }명이 찜한 회사. 찜 등록 및 해제 버튼.`}
                   icon="heart"
                   isFavorite={!!data?.isFavorite}
                   onClick={handlerFavorite}
                 >
                   {data?.favorite?.toLocaleString() || 0}
-                  <span className="a11y-hidden">명이 찜한 회사입니다.</span>
                 </Button>
                 <Link href={data?.site || ""}>
                   <Button icon="site">사이트</Button>

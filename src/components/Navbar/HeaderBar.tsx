@@ -58,13 +58,13 @@ function HeaderBar() {
           icon="filtered"
           onClick={() => setShowFilter((prev) => !prev)}
         >
-          <p>
+          <button type="button">
             {nowFilter.length +
               (nowWageFilter > 0 ? 1 : 0) +
               (nowPrimaryFilter.inclusive ? 1 : 0) +
               (nowPrimaryFilter.isCertified ? 1 : 0)}
-            개
-          </p>
+            개<span className="a11y-hidden">의 필터</span>
+          </button>
         </Wrap>
       </Container>
       <FilterList />
@@ -127,12 +127,12 @@ const Wrap = styled.label<{ icon: string }>`
   }
 
   select,
-  p {
+  button {
     text-align: center;
   }
   input,
   select,
-  p {
+  button {
     width: calc(100% - 40px);
     margin: 0 0 0 40px;
     padding: 0 12px 0 0;

@@ -24,7 +24,7 @@ function CorpCard({
     <Container>
       <Title>
         <div>
-          <Logo src={logo} alt={name} />
+          <Logo src={logo} alt={name + " 로고"} aria-hidden="true" />
           {isCertified === "true" && <i></i>}
         </div>
         <Name>
@@ -35,22 +35,35 @@ function CorpCard({
           </p>
         </Name>
       </Title>
-      <WelfareList>
+      <WelfareList aria-hidden="true">
         {welfares?.map((value, idx) => (
           <span key={idx}>{value?.title}</span>
         ))}
         <p className="list-text-more">...</p>
       </WelfareList>
       <Option>
+        <span className="a11y-hidden">
+          {wage && wage > 0 ? `,초봉 ${wage}만원,` : ""}
+          {numberOfEmployee && numberOfEmployee > 0
+            ? `,직원 수 ${numberOfEmployee}명,`
+            : ""}
+          {`이 회사를 찜한 사람은 ${favorite}명입니다.`}
+        </span>
         <div>
           {wage && wage > 0 ? (
-            <Tag icon="money">초봉 {wage?.toLocaleString()}만</Tag>
+            <Tag icon="money" aria-hidden="true">
+              초봉 {wage?.toLocaleString()}만
+            </Tag>
           ) : null}
           {numberOfEmployee && numberOfEmployee > 0 ? (
-            <Tag icon="groups">{numberOfEmployee?.toLocaleString()}명</Tag>
+            <Tag icon="groups" aria-hidden="true">
+              {numberOfEmployee?.toLocaleString()}명
+            </Tag>
           ) : null}
         </div>
-        <Tag icon="heart">{favorite?.toLocaleString() || 0}</Tag>
+        <Tag icon="heart" aria-hidden="true">
+          {favorite?.toLocaleString() || 0}
+        </Tag>
       </Option>
     </Container>
   );
