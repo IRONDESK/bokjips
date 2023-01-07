@@ -45,7 +45,7 @@ function Detail({
         </Article>
       )}
       <Article>
-        <Title>근무 조건</Title>
+        {workingConditions.length > 0 && <Title>근무 조건</Title>}
         <DetailList>
           {workingConditions?.map((value: IWelfareDataTypes, idx: number) => (
             <DetailCard
@@ -58,7 +58,7 @@ function Detail({
         </DetailList>
       </Article>
       <Article>
-        <Title>근무 지원</Title>
+        {workSupport.length > 0 && <Title>근무 지원</Title>}
         <DetailList>
           {workSupport?.map((value: IWelfareDataTypes, idx: number) => (
             <DetailCard
@@ -71,7 +71,7 @@ function Detail({
         </DetailList>
       </Article>
       <Article>
-        <Title>근무 외 지원</Title>
+        {offDutySupport.length > 0 && <Title>근무 외 지원</Title>}
         <DetailList>
           {offDutySupport?.map((value: IWelfareDataTypes, idx: number) => (
             <DetailCard
@@ -84,7 +84,7 @@ function Detail({
         </DetailList>
       </Article>
       <Article>
-        <Title>사내 환경</Title>
+        {officeEnvironment.length > 0 && <Title>사내 환경</Title>}
         <DetailList>
           {officeEnvironment?.map((value: IWelfareDataTypes, idx: number) => (
             <DetailCard
