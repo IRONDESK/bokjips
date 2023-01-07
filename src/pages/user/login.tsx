@@ -22,6 +22,7 @@ function Login() {
     MemberLogin(data)
       .then((res) => {
         setCookie("accessToken", res.headers.authorization);
+        setCookie("tokenAt", Number(new Date()));
         router.push("/");
         setAlertMessage("LOGIN");
       })

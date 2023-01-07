@@ -11,9 +11,10 @@ function ServiceAlert() {
     LOGIN: ["main", "로그인되었습니다."],
     LOGOUT: ["main", "로그아웃되었습니다."],
     JOIN: ["main", "회원가입이 완료 되었습니다."],
-    LOGOUT_EXPIRED: [
+    LOGOUT_EXPIRED: ["report", "자동 로그아웃되었습니다."],
+    LOGOUT_EXPIRED_LESS: [
       "report",
-      "접속 시간이 오래되어 보안을 위해 로그아웃되었습니다.",
+      "개인정보 보호를 위해 1분 뒤 자동 로그아웃됩니다.",
     ],
     DEL_COMMENT: ["main", "댓글이 삭제되었습니다."],
     SHORT_COMMENT: ["report", "최소 5자 이상의 댓글을 작성해주세요."],
@@ -29,9 +30,12 @@ function ServiceAlert() {
   };
 
   if (alertMessage !== "") {
-    setTimeout(() => {
-      setAlertMessage("");
-    }, 2000);
+    setTimeout(
+      () => {
+        setAlertMessage("");
+      },
+      alertMessage === "LOGOUT_EXPIRED_LESS" ? 5000 : 2000
+    );
   }
 
   return (

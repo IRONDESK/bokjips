@@ -23,6 +23,7 @@ import ServiceAlert from "./ServiceAlert";
 function Header() {
   const router = useRouter();
   const cookie = getCookie("accessToken");
+  const tokenAt = getCookie("tokenAt");
   const [showUser, setShowUser] = useState(false);
 
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
@@ -36,22 +37,32 @@ function Header() {
   const { data: tokenCheck, error: tokenError } = useSWR(
     [`${URL}/check_token`, cookie],
     fetcher,
-    { revalidateOnFocus: false, refreshInterval: cookie ? 100000 : 0 }
+    {
+      revalidateOnFocus: false,
+      refreshInterval: cookie ? 100000 : 0,
+    }
   );
   const path = router.pathname.split("/").slice(1);
+
+  useEffect(() => {
+    if (Number(new Date()) - Number(tokenAt) > 1700000 && cookie) {
+      setAlertMessage("LOGOUT_EXPIRED_LESS");
+    }
+  }, [tokenCheck]);
 
   useEffect(() => {
     if (cookie && tokenError?.response.status === 401) {
       setAlertMessage("LOGOUT_EXPIRED");
       deleteCookie("accessToken");
+      deleteCookie("tokenAt");
     }
   }, [tokenError]);
 
   const handleLogout = () => {
     deleteCookie("accessToken");
+    deleteCookie("tokenAt");
     setShowUser(false);
     setAlertMessage("LOGOUT");
-    router.reload();
   };
 
   const handleResetValues = () => {
