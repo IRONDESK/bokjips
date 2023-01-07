@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
-import Link from "next/link";
 import { useAtom } from "jotai";
 
 import {
@@ -11,10 +10,9 @@ import {
   primarySelectedFilter,
   wageFilter,
 } from "../atoms/atoms";
-import { ICompanyDataTypes } from "../types/CompanyData";
 import { fetcher, URL } from "../api/CompanyApi";
 
-import CorpCard from "../components/Main/CorpCard";
+import CardList from "../components/Main/CardList";
 import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
@@ -35,10 +33,6 @@ export default function Home() {
     nowWageFilter > 0 ||
     nowFilter.length > 0;
 
-  useEffect(() => {
-    setNowMainPage(0);
-  }, [isParams]);
-
   function createParams() {
     let params = [`greaterThan=${nowWageFilter}`];
     if (!!nowKeyFilter.keyword) params.push(`name=${nowKeyFilter.keyword}`);
@@ -58,6 +52,10 @@ export default function Home() {
     fetcher
   );
 
+  useEffect(() => {
+    if (!!error) setNowMainPage(() => 0);
+  }, [error]);
+
   if (data && data.content.length > 0) {
     return (
       <Main>
@@ -70,36 +68,7 @@ export default function Home() {
             <i></i> 현직자 확인
           </p>
         </ListTop>
-        {data?.content.length > 0 ? (
-          <CardList>
-            {data?.content?.map((value: ICompanyDataTypes, idx: number) => (
-              <Link key={idx} href={`/corp/${value?.companyId}`}>
-                <CorpCard
-                  companyId={value?.companyId}
-                  name={value?.name}
-                  logo={value?.logo}
-                  classification={value?.classification}
-                  wage={value?.wage}
-                  isInclusiveWage={value?.isInclusiveWage}
-                  isPublicStock={value?.isPublicStock}
-                  numberOfEmployee={value?.numberOfEmployee}
-                  welfares={
-                    [
-                      ...(value?.workingConditions || []).slice(0, 3),
-                      ...(value?.officeEnvironment || []).slice(0, 3),
-                      ...(value?.workSupport || []).slice(0, 2),
-                      ...(value?.offDutySupport || []).slice(0, 5),
-                    ].slice(0, 7) || []
-                  }
-                  isCertified={value.isCertified}
-                  favorite={value?.favorite}
-                />
-              </Link>
-            ))}
-          </CardList>
-        ) : (
-          <NoData />
-        )}
+        {data?.content.length > 0 ? <CardList data={data} /> : <NoData />}
         <Pagination
           nowPage={nowMainPage}
           setNowPage={setNowMainPage}
@@ -145,19 +114,5 @@ const ListTop = styled.div`
         content: "✓";
       }
     }
-  }
-`;
-
-const CardList = styled.section`
-  display: grid;
-  padding: 0 0 32px;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  grid-column: 1/3;
-  @media (max-width: 960px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (max-width: 690px) {
-    grid-template-columns: repeat(1, 1fr);
   }
 `;
