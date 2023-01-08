@@ -34,13 +34,17 @@ function Pagination({
   return (
     <PageList>
       {nowPage > 4 && (
-        <PageButton onClick={() => setNowPage(totalPagesArr[0] - 1)}>
+        <PageButton
+          numbering={false}
+          onClick={() => setNowPage(totalPagesArr[0] - 1)}
+        >
           이전
         </PageButton>
       )}
       {totalPagesArr.map((v) => (
         <PageButton
           key={v}
+          numbering={true}
           onClick={() => setNowPage(v)}
           isNowPage={v === nowPage}
         >
@@ -48,7 +52,10 @@ function Pagination({
         </PageButton>
       ))}
       {totalPagesArr.length === 5 && totalPages > 5 ? (
-        <PageButton onClick={() => setNowPage(totalPagesArr[4] + 1)}>
+        <PageButton
+          numbering={false}
+          onClick={() => setNowPage(totalPagesArr[4] + 1)}
+        >
           다음
         </PageButton>
       ) : null}
@@ -58,31 +65,39 @@ function Pagination({
 
 const PageList = styled.ul`
   margin: 0 auto 20px;
-  max-width: 300px;
+  max-width: 320px;
   text-align: center;
   @media (max-width: 580px) {
     margin: 0 -24px;
     max-width: 100vw;
   }
 `;
-const PageButton = styled.li<{ isNowPage?: boolean }>`
+const PageButton = styled.li<{ numbering: boolean; isNowPage?: boolean }>`
   cursor: pointer;
   display: inline-block;
-  padding: 0 8px;
-  border-right: 1px solid #999;
-  font-size: 0.9rem;
+  margin: 0 10px 0 0;
+  padding: 0;
+  width: ${(props) => (props.numbering ? "32px" : "48px")};
+  height: 32px;
+  background-color: ${(props) =>
+    props.isNowPage ? COLOR.main : props.numbering ? "none" : "#fff"};
+  border: ${(props) =>
+    props.numbering ? "1px solid transparent" : "1px solid #DADDE0"};
+  border-radius: 4px;
+  color: ${(props) => (props.isNowPage ? "#fff" : "none")};
+  font-size: ${(props) => (props.numbering ? "0.9rem" : "0.85rem")};
   font-weight: ${(props) => (props.isNowPage ? 600 : "none")};
-  line-height: 1.65rem;
+  text-align: center;
+  line-height: 32px;
   &:hover {
-    background-color: ${COLOR.mainLight};
+    background-color: ${(props) =>
+      props.numbering ? COLOR.mainLight : "#F7F9FA"};
   }
   &:last-of-type {
-    border: none;
+    margin: 0;
   }
   @media (max-width: 580px) {
-    padding: 0 12px;
-    font-size: 1rem;
-    line-height: 1.6rem;
+    font-size: ${(props) => (props.numbering ? "1rem" : "0.85rem")};
   }
 `;
 
