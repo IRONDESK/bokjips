@@ -79,9 +79,7 @@ function Header() {
       <Container corp={path[0] === "corp"}>
         <Wrap id="header-logo">
           <Link href="/" onClick={handleResetValues}>
-            <Logo>
-              <strong>복지</strong>편살
-            </Logo>
+            <Logo corp={path[0] === "corp"} />
           </Link>
         </Wrap>
         <Wrap id="searchfilter-bar">
@@ -155,12 +153,20 @@ const Wrap = styled.div`
     text-align: right;
   }
 `;
-const Logo = styled.h1`
+const Logo = styled.h1<{ corp: boolean }>`
   display: inline-block;
-  font-family: "GangwonEdu";
-  font-size: 2rem;
-  strong {
-    color: ${COLOR.main};
+  width: 120px;
+  height: 50px;
+  background-image: ${(props) =>
+    props.corp
+      ? `url("/logo/bokjips_logotype.svg")`
+      : `url("/logo/bokjips_logotype_color.svg")`};
+  background-size: 120px;
+  background-repeat: no-repeat;
+  background-position: center;
+  ${(props) => props.corp && ` filter: invert(1);`}
+  @media (max-width: 840px) {
+    margin: 0 auto;
   }
 `;
 

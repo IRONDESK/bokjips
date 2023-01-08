@@ -1,12 +1,18 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
+import Image from "next/image";
 
 function Footer() {
   return (
     <Container>
       <p>
-        <strong>복지</strong>편살
+        <Image
+          src="/logo/bokjips_logotype.svg"
+          width={120}
+          height={40}
+          alt="복지편살"
+        />
       </p>
       <div>
         기업의 채용공고 및 사이트에 공개된 내용을 기반으로 작성된 내용입니다.
@@ -37,8 +43,6 @@ const Container = styled.footer`
   opacity: 0.7;
   p {
     display: inline-block;
-    font-family: "GangwonEdu";
-    font-size: 1.85rem;
   }
   div {
     margin: 12px 0 0;
