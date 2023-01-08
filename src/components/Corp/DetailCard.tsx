@@ -44,7 +44,7 @@ function DetailCard({ icon, title, content }: DetailCardPropsType) {
   );
 }
 
-const Container = styled.div`
+const Container = styled.li`
   display: flex;
   align-items: center;
   gap: 12px;

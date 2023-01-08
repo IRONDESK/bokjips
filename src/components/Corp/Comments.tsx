@@ -200,11 +200,14 @@ const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
     position: absolute;
     padding: 0 12px;
     width: 100%;
-    top: -20px;
+    top: -16px;
     right: 0;
     font-size: 0.8rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
     opacity: 0.7;
+    @media (max-width: 580px) {
+      font-size: 0.7rem;
+    }
   }
   .comment-content {
     position: relative;
@@ -215,17 +218,17 @@ const CommentItem = styled.li<{ isMyComment?: boolean | null }>`
     border-radius: 12px;
     font-size: 0.9rem;
     text-align: ${(props) => (props.isMyComment ? "right" : "none")};
-    line-height: 1.15rem;
     order: ${(props) => (props.isMyComment ? 2 : 1)};
   }
   .comment-body {
     word-wrap: break-word;
     white-space: normal;
+    line-height: 1.25rem;
   }
   .comment-time {
     display: block;
-    margin: 2px 0 0;
-    font-size: 0.8rem;
+    margin: 8px 0 0;
+    font-size: 0.7rem;
     letter-spacing: -0.3px;
     opacity: 0.45;
   }
