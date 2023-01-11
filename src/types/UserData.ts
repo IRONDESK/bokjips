@@ -11,6 +11,14 @@ export interface IUserSignUpDataTypes {
   job: string;
 }
 
+export interface IUserAccountSettingDataTypes {
+  username: string;
+  originPassword: string;
+  password?: string;
+  email: string;
+  job: string;
+}
+
 export interface IUserLoginDataTypes {
   username: string;
   password: string;

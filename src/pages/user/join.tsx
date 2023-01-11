@@ -107,7 +107,7 @@ function Join() {
             ))}
           </select>
         </Label>
-        <Button type="submit">로그인</Button>
+        <Button type="submit">가입등록</Button>
       </Form>
     </Container>
   );

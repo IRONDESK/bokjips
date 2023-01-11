@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
 
-import { activeAlert } from "../../atoms/atoms";
-import { fetcher, URL } from "../../api/MyInfoApi";
-import { HandlerCompanyFavorite } from "../../api/CompanyApi";
+import { activeAlert } from "../../../atoms/atoms";
+import { fetcher, URL } from "../../../api/MyInfoApi";
+import { HandlerCompanyFavorite } from "../../../api/CompanyApi";
 
-import { COMPANY_TYPES_LITERAL } from "../../constants/job";
-import { COLOR, SHADOW } from "../../constants/style";
-import { ICompanyDataTypes } from "../../types/CompanyData";
+import { COMPANY_TYPES_LITERAL } from "../../../constants/job";
+import { COLOR, SHADOW } from "../../../constants/style";
+import { ICompanyDataTypes } from "../../../types/CompanyData";
 
 interface IUserRolesType {
   username: string;
@@ -72,7 +72,9 @@ function Info() {
                   회사작성
                 </button>
               )}
-              <button onClick={() => alert(`준비 중입니다.`)}>정보수정</button>
+              <button onClick={() => router.push("/user/info/setting")}>
+                정보수정
+              </button>
               <button onClick={() => alert(`준비 중입니다.`)}>탈퇴</button>
             </li>
           </ul>
