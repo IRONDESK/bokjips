@@ -13,12 +13,13 @@ import { Title } from "../../components/Layouts/partials/Title";
 import Detail from "../../components/Corp/Detail";
 import Comments from "../../components/Corp/Comments";
 import NoData from "../../components/Layouts/NoData";
+import EditButtons from "../../components/Corp/EditButtons";
+import Loading from "../../components/Layouts/Loading";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
 import { HandlerCompanyFavorite, URL } from "../../api/CompanyApi";
 import { fetcher } from "../../api/MyInfoApi";
-import EditButtons from "../../components/Corp/EditButtons";
 
 interface ICorpPropsType {
   corpId?: string;
@@ -63,10 +64,10 @@ function CorpId({ corpId }: ICorpPropsType) {
       });
   };
 
-  if (!!(data && !error)) {
-    return (
-      <>
-        <Title title={data?.name} />
+  return (
+    <>
+      <Title title={data?.name} />
+      {!!(data && !error) ? (
         <Container isSplited={isSplited}>
           <SideOne>
             <Banner>
@@ -125,11 +126,13 @@ function CorpId({ corpId }: ICorpPropsType) {
             <Comments corpId={corpId as string} />
           </SideTwo>
         </Container>
-      </>
-    );
-  } else if (!!(!data && error)) {
-    return <NoData code={error?.response?.status} />;
-  }
+      ) : !!(!data && error) ? (
+        <NoData code={error?.response?.status} />
+      ) : (
+        <Loading />
+      )}
+    </>
+  );
 }
 
 const Container = styled.main<{ isSplited: boolean }>`
@@ -220,6 +223,7 @@ const Banner = styled.div`
       width: 42px;
       height: 42px;
       border-radius: 12px;
+      background-color: #fff;
       object-fit: cover;
     }
     span {
