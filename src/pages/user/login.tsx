@@ -15,7 +15,6 @@ import { activeAlert } from "../../atoms/atoms";
 function Login() {
   const router = useRouter();
   const { register, handleSubmit } = useForm<IUserLoginDataTypes>();
-  const [errorMsg, setErrorMsg] = useState("");
   const [, setAlertMessage] = useAtom(activeAlert);
 
   const onSubmitHandler: SubmitHandler<IUserLoginDataTypes> = (data) => {
@@ -28,7 +27,7 @@ function Login() {
       })
       .catch((res) => {
         if (res?.response?.data?.error === "Unauthorized") {
-          setErrorMsg("가입하지 않았거나 잘못된 정보를 입력했습니다.");
+          setAlertMessage("LOGIN_ERR");
         } else {
           setAlertMessage("SERVER");
         }
@@ -63,7 +62,6 @@ function Login() {
             required
           />
         </Label>
-        {errorMsg && <p className="login-error-msg">{errorMsg}</p>}
         <Button type="submit">로그인</Button>
       </Form>
     </Container>

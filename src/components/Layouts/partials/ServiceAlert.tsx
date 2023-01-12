@@ -10,6 +10,7 @@ function ServiceAlert() {
   const MESSAGE_VALUES: { [key: string]: string[] } = {
     LOGIN: ["main", "로그인되었습니다."],
     LOGOUT: ["main", "로그아웃되었습니다."],
+    LOGIN_ERR: ["report", "회원이 아니거나 잘못된 입력입니다."],
     JOIN: ["main", "회원가입이 완료 되었습니다."],
     LOGOUT_EXPIRED: ["report", "개인정보 보호를 위해 자동 로그아웃되었습니다."],
     LOGOUT_EXPIRED_LESS: [
