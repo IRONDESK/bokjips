@@ -72,13 +72,15 @@ function CorpId({ corpId }: ICorpPropsType) {
           <SideOne>
             <Banner>
               <div className="corp-identified">
-                <div>
-                  <img src={data?.logo} alt={data?.name} />
+                <img src={data?.logo} alt={data?.name} />
+                <h2>
+                  <span id="corp-name">{data?.name}</span>
                   {data?.isCertified === "true" && <i></i>}
-                </div>
-                <h2>{data?.name}</h2>
-                <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
-                <span>{COMPANY_TYPES_LITERAL[data?.classification]}</span>
+                </h2>
+                <span className="corp-category">
+                  <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
+                  <span>{COMPANY_TYPES_LITERAL[data?.classification]}</span>
+                </span>
               </div>
               <div className="corp-buttons">
                 <Button
@@ -185,62 +187,60 @@ const Banner = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 8px 0 20px;
+  margin: 20px 0;
   .corp-identified {
     display: flex;
     align-items: center;
-    margin: 0 -24px;
-    padding: 20px 32px;
-    gap: 12px;
-    h2 {
-      font-weight: 600;
-      font-size: 1.5rem;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    div {
-      position: relative;
-    }
-    i {
-      position: absolute;
-      top: -4px;
-      right: -8px;
-      width: 16px;
-      height: 16px;
-      background-color: ${COLOR.check};
-      border-radius: 100%;
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 500;
-      line-height: 16px;
-      text-align: center;
-      &::after {
-        content: "✓";
-      }
-    }
+    padding: 0 8px;
+    gap: 8px;
     img {
-      width: 42px;
-      height: 42px;
+      float: left;
+      width: 48px;
+      height: 48px;
+      border: 1px solid #e4e4e4;
       border-radius: 12px;
       background-color: #fff;
       object-fit: cover;
     }
-    span {
+    h2 {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      #corp-name {
+        font-weight: 600;
+        font-size: 1.5rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      i {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-image: url("/icons/verified.svg");
+        background-size: 20px;
+      }
+    }
+    .corp-category {
+      margin: 0 8px 0 0;
       white-space: nowrap;
       font-size: 0.95rem;
       opacity: 0.65;
+      span {
+        margin: 0 4px;
+      }
     }
   }
   @media (max-width: 840px) {
+    margin: 12px 0 20px;
     flex-direction: column;
     .corp-identified {
       width: 100%;
-      padding: 20px 12px;
+      padding: 12px;
       h2 {
         font-size: 1.35rem;
       }
-      span {
+      .corp-category {
         font-size: 0.9rem;
       }
     }
@@ -258,6 +258,10 @@ const Banner = styled.div`
     }
   }
   @media (max-width: 580px) {
+    .corp-identified {
+      padding: 8px 12px 20px;
+      flex-direction: column;
+    }
     .corp-buttons {
       button:nth-of-type(2),
       button:nth-of-type(3) {

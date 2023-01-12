@@ -64,9 +64,6 @@ export default function Home() {
             {data?.totalElements || 0}개
             {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
           </p>
-          <p className="corp-optional-legend">
-            <i></i> 현직자 확인
-          </p>
         </ListTop>
         {data?.content.length > 0 ? <CardList data={data} /> : <NoData />}
         <Pagination
@@ -95,24 +92,5 @@ const ListTop = styled.div`
   font-size: 0.85rem;
   .corp-length-count {
     opacity: 0.8;
-  }
-  .corp-optional-legend {
-    color: ${COLOR.check};
-    opacity: 0.6;
-    i {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background-color: ${COLOR.check};
-      border-radius: 100%;
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 500;
-      line-height: 14px;
-      text-align: center;
-      &::after {
-        content: "✓";
-      }
-    }
   }
 `;

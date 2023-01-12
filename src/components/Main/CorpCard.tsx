@@ -23,12 +23,12 @@ function CorpCard({
   return (
     <Container>
       <Title>
-        <div>
-          <Logo src={logo} alt={name + " 로고"} aria-hidden="true" />
-          {isCertified === "true" && <i></i>}
-        </div>
+        <Logo src={logo} alt={name + " 로고"} aria-hidden="true" />
         <Name>
-          <strong>{name}</strong>
+          <strong>
+            {isCertified === "true" && <i></i>}
+            {name}
+          </strong>
           <p>
             {isPublicStock ? "상장 | " : ""}
             {COMPANY_TYPES_LITERAL[classification]}
@@ -89,26 +89,6 @@ const Title = styled.div`
   padding: 0 0 12px;
   align-items: center;
   justify-content: space-between;
-  div {
-    position: relative;
-    i {
-      position: absolute;
-      top: -4px;
-      right: -8px;
-      width: 16px;
-      height: 16px;
-      background-color: ${COLOR.check};
-      border-radius: 100%;
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 500;
-      line-height: 16px;
-      text-align: center;
-      &::after {
-        content: "✓";
-      }
-    }
-  }
 `;
 const Logo = styled.img`
   width: 44px;
@@ -121,8 +101,18 @@ const Name = styled.div`
   text-align: right;
   line-height: 1.3rem;
   strong {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2px;
     font-size: 1.25rem;
     font-weight: 600;
+    i {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-image: url("/icons/verified.svg");
+      background-size: 20px;
+    }
   }
   p {
     font-size: 0.85rem;
