@@ -3,6 +3,7 @@ export const WELFARES_FILTER_LIST = [
   { value: "home", name: "재택근무" },
   { value: "pregnant_woman", name: "출산지원" },
   { value: "child_friendly", name: "육아지원" },
+  { value: "child_care", name: "사내어린이집" },
   { value: "school", name: "자녀학자금" },
   { value: "directions_bus_filled", name: "통근버스" },
   { value: "wallet", name: "대출지원" },
