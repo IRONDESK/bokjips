@@ -222,7 +222,6 @@ const Banner = styled.div`
       }
     }
     .corp-category {
-      margin: 0 8px 0 0;
       white-space: nowrap;
       font-size: 0.95rem;
       opacity: 0.65;
