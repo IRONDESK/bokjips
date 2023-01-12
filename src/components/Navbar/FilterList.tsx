@@ -167,13 +167,12 @@ const Wage = styled.div<{ wageValue: number }>`
 `;
 
 const Buttons = styled.div<{ showFilter: boolean }>`
-  padding: 0 28px 0 0;
   transition: all 0.3s;
+  button {
+    margin: 0 8px 0 0;
+  }
   .flicking-viewport {
     overflow: visible;
-  }
-  .flicking-camera {
-    gap: 8px;
   }
 `;
 
