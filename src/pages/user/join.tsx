@@ -79,7 +79,7 @@ function Join() {
             minLength={10}
             {...register("password", {
               pattern: {
-                value: /(?=.*[!@#$%~])[!@#$%~]/,
+                value: /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/,
                 message: "특수문자 포함 필수",
               },
               minLength: { value: 10, message: "10자 이상 필수" },
@@ -158,7 +158,6 @@ const Label = styled.label<{ job?: string }>`
   }
   .password-error-msg {
     position: absolute;
-    transition: opacity 0.3s;
     opacity: 0;
   }
   &:has(input:focus),
