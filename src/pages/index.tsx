@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 import { useAtom } from "jotai";
@@ -16,9 +16,10 @@ import CardList from "../components/Main/CardList";
 import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
-import { COLOR } from "../constants/style";
 
 export default function Home() {
+  const [sortParams, setSortParams] = useState("favorite");
+  const [sortType, setSortType] = useState(true);
   const [nowMainPage, setNowMainPage] = useAtom(mainPagination);
   const [nowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
@@ -31,7 +32,9 @@ export default function Home() {
     nowPrimaryFilter.inclusive ||
     nowPrimaryFilter.isCertified ||
     nowWageFilter > 0 ||
-    nowFilter.length > 0;
+    nowFilter.length > 0 ||
+    !sortType ||
+    sortParams === "name";
 
   function createParams() {
     let params = [`greaterThan=${nowWageFilter}`];
@@ -41,6 +44,8 @@ export default function Home() {
     if (nowPrimaryFilter.isCertified) params.push(`certified=true`);
     if (nowPrimaryFilter.inclusive) params.push(`inclusive=NO`);
     if (nowFilter.length > 0) params.push(`filter=${nowFilter.join(",")}`);
+    if (!sortType || sortParams === "name")
+      params.push(`sort=${sortParams},${sortType ? "ASC" : "DESC"}`);
     return params;
   }
 
@@ -64,6 +69,28 @@ export default function Home() {
             {data?.totalElements || 0}개
             {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
           </p>
+          <ul className="corp-sort-type">
+            <Sort
+              isSorted={sortParams === "name"}
+              onClick={() => {
+                if (sortParams != "name") setSortParams("name");
+                else {
+                  setSortType((prev) => !prev);
+                }
+              }}
+            >
+              이름순 {sortParams === "name" ? (sortType ? "↑" : "↓") : ""}
+            </Sort>
+            <Sort
+              isSorted={sortParams === "favorite"}
+              onClick={() => {
+                setSortParams("favorite");
+                setSortType(true);
+              }}
+            >
+              찜하기순
+            </Sort>
+          </ul>
         </ListTop>
         {data?.content.length > 0 ? <CardList data={data} /> : <NoData />}
         <Pagination
@@ -92,5 +119,16 @@ const ListTop = styled.div`
   font-size: 0.85rem;
   .corp-length-count {
     opacity: 0.8;
+  }
+`;
+
+const Sort = styled.li<{ isSorted: boolean }>`
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 12px 0 0;
+  opacity: ${(props) => (props.isSorted ? 1 : 0.6)};
+  font-weight: ${(props) => (props.isSorted ? 600 : "none")};
+  &:last-of-type {
+    margin: 0;
   }
 `;
