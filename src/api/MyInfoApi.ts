@@ -1,5 +1,8 @@
 import axios from "axios";
-import { IUserAccountSettingDataTypes } from "../types/UserData";
+import {
+  IFindAccountDtosType,
+  IUserAccountSettingDataTypes,
+} from "../types/UserData";
 
 export const fetcher = (url: string, token: string) =>
   axios
@@ -15,5 +18,11 @@ function AccountInfoEdit(data: IUserAccountSettingDataTypes, token: string) {
     headers: { Authorization: token },
   });
 }
+function FindIdAccount(data: IFindAccountDtosType) {
+  return axios.post(`${URL}/account/username`, data);
+}
+function ResetPasswordAccount(data: IFindAccountDtosType) {
+  return axios.post(`${URL}/account/password`, data);
+}
 
-export { AccountInfoEdit };
+export { AccountInfoEdit, FindIdAccount, ResetPasswordAccount };

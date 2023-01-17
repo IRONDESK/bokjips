@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import Link from "next/link";
 import styled from "@emotion/styled";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
@@ -63,6 +64,9 @@ function Login() {
           />
         </Label>
         <Button type="submit">로그인</Button>
+        <Find>
+          <Link href="/user/find">아이디 및 비밀번호 찾기</Link>
+        </Find>
       </Form>
     </Container>
   );
@@ -129,6 +133,17 @@ const Label = styled.label`
     box-shadow: ${SHADOW.hover};
   }
 `;
+
+const Find = styled.p`
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 const Button = styled.button`
   padding: 24px 0;
   width: 100%;

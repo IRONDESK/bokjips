@@ -23,3 +23,10 @@ export interface IUserLoginDataTypes {
   username: string;
   password: string;
 }
+
+export interface IFindAccountDtosType {
+  username?: string;
+  email: string;
+  job: string;
+  dateOfBirth: Date;
+}

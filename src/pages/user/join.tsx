@@ -152,6 +152,7 @@ const Label = styled.label<{ job?: string }>`
     opacity: 0;
     font-size: 1px;
     transition: all 0.3s;
+    color: #000;
     border: none;
     outline: none;
     appearance: none;
