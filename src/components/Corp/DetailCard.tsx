@@ -19,7 +19,7 @@ function DetailCard({ icon, title, content }: DetailCardPropsType) {
       <Icon className="material-symbols-outlined" aria-hidden="true">
         {icon}
       </Icon>
-      <Text>
+      <Text aria-label={title}>
         <strong>{title}</strong>
         <p>
           {contentFisrt}

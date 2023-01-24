@@ -21,15 +21,19 @@ function CorpCard({
   favorite,
 }: CorpCardPropsType) {
   return (
-    <Container>
+    <Container role="button">
       <Title>
-        <Logo src={logo} alt={name + " 로고"} aria-hidden="true" />
+        <Logo src={logo} alt="" />
         <Name>
           <strong>
             {isCertified === "true" && <i></i>}
             {name}
           </strong>
-          <p>
+          <p
+            aria-label={`, ${isPublicStock ? "상장사, " : ""} 기업분류 ${
+              COMPANY_TYPES_LITERAL[classification]
+            }`}
+          >
             {isPublicStock ? "상장 | " : ""}
             {COMPANY_TYPES_LITERAL[classification]}
           </p>
@@ -43,11 +47,11 @@ function CorpCard({
       </WelfareList>
       <Option>
         <span className="a11y-hidden">
-          {wage && wage > 0 ? `,초봉 ${wage}만원,` : ""}
+          {wage && wage > 0 ? `, 초봉 ${wage}만원,` : ","}
           {numberOfEmployee && numberOfEmployee > 0
-            ? `,직원 수 ${numberOfEmployee}명,`
+            ? `직원 수 ${numberOfEmployee}명,`
             : ""}
-          {`이 회사를 찜한 사람은 ${favorite}명입니다.`}
+          {`이 회사를 찜한 사람 ${favorite}명.`}
         </span>
         <div>
           {wage && wage > 0 ? (

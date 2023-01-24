@@ -10,6 +10,7 @@ import { activeAlert } from "../../../atoms/atoms";
 import { fetcher, URL } from "../../../api/MyInfoApi";
 import { HandlerCompanyFavorite } from "../../../api/CompanyApi";
 
+import { Title } from "../../../components/Layouts/partials/Title";
 import { COMPANY_TYPES_LITERAL } from "../../../constants/job";
 import { COLOR, SHADOW } from "../../../constants/style";
 import { ICompanyDataTypes } from "../../../types/CompanyData";
@@ -62,6 +63,7 @@ function Info() {
   if (roleData) {
     return (
       <Container>
+        <Title title="내 정보" />
         <Banner>
           <strong>안녕하세요, {roleData?.username} 님</strong>
           <ul>
@@ -86,14 +88,15 @@ function Info() {
               <li key={item.companyId}>
                 <Link href={`/corp/${item.companyId}`}>
                   <div className="fav-item-container">
-                    <img src={item.logo} alt={item.name} />
+                    <img aria-hidden={true} src={item.logo} alt={item.name} />
                     <strong>{item.name}</strong>
                     <span>{COMPANY_TYPES_LITERAL[item.classification]}</span>
                   </div>
                 </Link>
-                <button onClick={() => handlerFavorite(item.companyId)}>
-                  <span className="a11y-hidden">찜 해제</span>
-                </button>
+                <button
+                  aria-label={`${item.name} 찜 해제`}
+                  onClick={() => handlerFavorite(item.companyId)}
+                ></button>
               </li>
             ))}
           </FavList>

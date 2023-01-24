@@ -87,6 +87,7 @@ function Comments({ corpId }: ICommentPropsType) {
       <form>
         <input
           type="text"
+          aria-label="댓글 입력창."
           placeholder={
             cookie
               ? "최대 200자 입력할 수 있습니다."

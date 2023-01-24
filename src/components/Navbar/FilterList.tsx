@@ -104,6 +104,7 @@ const itemStyle = `
 `;
 
 const Container = styled.section<{ showFilter: boolean }>`
+  visibility: ${(props) => (props.showFilter ? "visible" : "hidden")};
   position: absolute;
   margin: 12px 0 0;
   padding: ${(props) => (props.showFilter ? "12px 16px" : "0")};

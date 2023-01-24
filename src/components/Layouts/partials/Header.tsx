@@ -51,10 +51,11 @@ function Header() {
   }, [tokenCheck]);
 
   useEffect(() => {
-    if (cookie && tokenError?.response.status === 401) {
+    if (cookie && [400, 401].includes(tokenError?.response.status)) {
       setAlertMessage("LOGOUT_EXPIRED");
       deleteCookie("accessToken");
       deleteCookie("tokenAt");
+      console.log("true");
     }
   }, [tokenError]);
 
@@ -80,6 +81,7 @@ function Header() {
         <Wrap id="header-logo">
           <Link
             href="/"
+            role="button"
             aria-label="복지편살 메인 페이지"
             onClick={handleResetValues}
           >
@@ -157,7 +159,7 @@ const Wrap = styled.div`
     text-align: right;
   }
 `;
-const Logo = styled.h1<{ corp: boolean }>`
+const Logo = styled.div<{ corp: boolean }>`
   display: inline-block;
   width: 120px;
   height: 50px;

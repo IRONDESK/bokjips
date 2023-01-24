@@ -43,7 +43,7 @@ function ServiceAlert() {
   }
 
   return (
-    <Container type={MESSAGE_VALUES[alertMessage][0]}>
+    <Container type={MESSAGE_VALUES[alertMessage][0]} role="alert">
       {MESSAGE_VALUES[alertMessage][1]}
     </Container>
   );

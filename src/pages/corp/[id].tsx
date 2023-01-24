@@ -5,6 +5,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { GetServerSideProps } from "next";
 import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
+import { useRouter } from "next/router";
 
 import { activeAlert, verticalSplited } from "../../atoms/atoms";
 
@@ -27,6 +28,7 @@ interface ICorpPropsType {
 }
 
 function CorpId({ corpId }: ICorpPropsType) {
+  const router = useRouter();
   const { mutate } = useSWRConfig();
   const cookie = getCookie("accessToken") as string;
   const [, setAlertMessage] = useAtom(activeAlert);
@@ -73,10 +75,14 @@ function CorpId({ corpId }: ICorpPropsType) {
             <Banner>
               <div className="corp-identified">
                 <img src={data?.logo} alt={data?.name} />
-                <h2>
-                  <span id="corp-name">{data?.name}</span>
-                  {data?.isCertified === "true" && <i></i>}
-                </h2>
+                <div>
+                  <h1 id="corp-name">{data?.name}</h1>
+                  {data?.isCertified === "true" && (
+                    <i>
+                      <span className="a11y-hidden">현직자 검증 정보</span>
+                    </i>
+                  )}
+                </div>
                 <span className="corp-category">
                   <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
                   <span>{COMPANY_TYPES_LITERAL[data?.classification]}</span>
@@ -85,21 +91,29 @@ function CorpId({ corpId }: ICorpPropsType) {
               <div className="corp-buttons">
                 <Button
                   id="company-favorite-button"
-                  aria-label={`${
+                  aria-label={`찜 등록 및 해제 버튼. ${
                     data?.favorite || 0
-                  }명이 찜한 회사. 찜 등록 및 해제 버튼.`}
+                  }명이 찜했습니다.`}
                   icon={!!data?.isFavorite ? "heart_white_fill" : "heart"}
                   isFavorite={!!data?.isFavorite}
                   onClick={handlerFavorite}
                 >
                   {data?.favorite?.toLocaleString() || 0}
                 </Button>
-                <Link href={data?.site || ""}>
-                  <Button icon="site">사이트</Button>
-                </Link>
-                <Link href={data?.recruitmentSite || ""}>
-                  <Button icon="recruit">채용정보</Button>
-                </Link>
+                <Button
+                  icon="site"
+                  aria-label="회사 사이트로 이동"
+                  onClick={() => router.push(data?.site || "")}
+                >
+                  사이트
+                </Button>
+                <Button
+                  icon="recruit"
+                  aria-label="회사 채용 페이지로 이동"
+                  onClick={() => router.push(data?.recruitmentSite || "")}
+                >
+                  채용정보
+                </Button>
               </div>
             </Banner>
             <Detail
@@ -202,7 +216,7 @@ const Banner = styled.div`
       background-color: #fff;
       object-fit: cover;
     }
-    h2 {
+    div {
       display: flex;
       gap: 2px;
       align-items: center;
@@ -236,7 +250,7 @@ const Banner = styled.div`
     .corp-identified {
       width: 100%;
       padding: 12px;
-      h2 {
+      div {
         font-size: 1.35rem;
       }
       .corp-category {
@@ -248,11 +262,9 @@ const Banner = styled.div`
       width: 100%;
       padding: 0 12px;
       gap: 8px;
-      a {
+      button:nth-of-type(2),
+      button:nth-of-type(3) {
         flex: 1;
-        button {
-          width: 100%;
-        }
       }
     }
   }
@@ -260,16 +272,6 @@ const Banner = styled.div`
     .corp-identified {
       padding: 8px 12px 20px;
       flex-direction: column;
-    }
-    .corp-buttons {
-      button:nth-of-type(2),
-      button:nth-of-type(3) {
-        padding: 12px 18px;
-        &::after {
-          width: 0;
-          left: 0;
-        }
-      }
     }
   }
 `;
@@ -334,6 +336,7 @@ const Vertical = styled.button`
     box-shadow: ${SHADOW.hover};
   }
   @media (max-width: 1125px) {
+    visibility: hidden;
     opacity: 0;
   }
 `;

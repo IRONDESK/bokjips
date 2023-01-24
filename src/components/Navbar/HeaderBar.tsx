@@ -26,6 +26,7 @@ function HeaderBar() {
           <input
             type="text"
             placeholder="회사명"
+            role="search"
             value={nowKeyFilter.keyword}
             onChange={(e) =>
               setNowKeyFilter((prev) => {
