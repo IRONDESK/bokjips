@@ -78,7 +78,11 @@ function Header() {
       {alertMessage !== "" && <ServiceAlert />}
       <Container corp={path[0] === "corp"}>
         <Wrap id="header-logo">
-          <Link href="/" onClick={handleResetValues}>
+          <Link
+            href="/"
+            aria-label="복지편살 메인 페이지"
+            onClick={handleResetValues}
+          >
             <Logo corp={path[0] === "corp"} />
           </Link>
         </Wrap>
