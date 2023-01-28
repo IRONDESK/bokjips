@@ -27,15 +27,22 @@ function CorpId({ corpId, companyName }: ICorpPropsType) {
   const cookie = getCookie("accessToken") as string;
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
 
-  const { data: companyData, error: companyError } = useSWR(
-    [`${URL}/${corpId}`, cookie],
-    swrFetcher
-  );
+  const {
+    data: companyData,
+    error: companyError,
+    isValidating,
+  } = useSWR([`${URL}/${corpId}`, cookie], swrFetcher, {
+    revalidateOnFocus: false,
+  });
+
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        if (error.status === 401) return;
+      },
     }
   );
 
@@ -49,7 +56,7 @@ function CorpId({ corpId, companyName }: ICorpPropsType) {
   return (
     <>
       <Title title={companyName} />
-      {!!(companyData && !companyError) ? (
+      {!isValidating && companyData ? (
         <Container isSplited={isSplited}>
           <SideOne>
             <Banner corpId={corpId as string} companyData={companyData} />
@@ -79,7 +86,7 @@ function CorpId({ corpId, companyName }: ICorpPropsType) {
             <Comments corpId={corpId as string} />
           </SideTwo>
         </Container>
-      ) : !!(!companyData && companyError) ? (
+      ) : !isValidating && companyError ? (
         <NoData code={companyError?.response?.status} />
       ) : (
         <Loading />
@@ -170,9 +177,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       corpId: id,
       companyName: companyData.name,
-      fallback: {
-        [`${URL}/${id}`]: companyData,
-      },
     },
   };
 };

@@ -40,6 +40,9 @@ function Header() {
     {
       revalidateOnFocus: false,
       refreshInterval: cookie ? 100000 : 0,
+      onErrorRetry: (error) => {
+        if (error.status === 400) return;
+      },
     }
   );
   const path = router.pathname.split("/").slice(1);
@@ -139,7 +142,7 @@ const Container = styled.header<{ corp: boolean }>`
     padding: 20px 32px 24px;
     height: auto;
     #header-logo {
-      margin: ${(props) => (props.corp ? 0 : " 4px 0 16px")};
+      margin: ${(props) => (props.corp ? 0 : " 0 0 16px")};
       width: 100%;
       text-align: center;
     }
