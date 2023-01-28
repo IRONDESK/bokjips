@@ -7,7 +7,7 @@ import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
 
 import { activeAlert } from "../../../atoms/atoms";
-import { fetcher, URL } from "../../../api/MyInfoApi";
+import { swrFetcher, URL } from "../../../api/MyInfoApi";
 import { HandlerCompanyFavorite } from "../../../api/CompanyApi";
 
 import { Title } from "../../../components/Layouts/partials/Title";
@@ -33,14 +33,14 @@ function Info() {
 
   const { data: roleData, error: roleError } = useSWR<IUserRolesType>(
     [`${URL}/userRole`, cookie],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }
   );
   const { data: favData, error: favError } = useSWR<ICompanyDataTypes[]>(
     [`${URL}/favorite`, cookie],
-    fetcher
+    swrFetcher
   );
 
   // 찜 해제

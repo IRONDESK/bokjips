@@ -11,7 +11,7 @@ import { Title } from "../../components/Layouts/partials/Title";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
 import { CreateCompanyData, URL } from "../../api/CompanyApi";
-import { fetcher } from "../../api/MyInfoApi";
+import { swrFetcher } from "../../api/MyInfoApi";
 
 function Create() {
   const router = useRouter();
@@ -20,7 +20,7 @@ function Create() {
 
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }

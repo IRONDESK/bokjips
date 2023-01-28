@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import { EditCompanyData, URL } from "../../../api/CompanyApi";
-import { fetcher } from "../../../api/MyInfoApi";
+import { swrFetcher } from "../../../api/MyInfoApi";
 import Banner from "../../../components/Admin/Banner";
 
 import { ICompanyDataTypes } from "../../../types/CompanyData";
@@ -23,12 +23,12 @@ function Edit({ corpId }: ICorpEditPropsType) {
   const router = useRouter();
   const cookie = getCookie("accessToken") as string;
 
-  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
+  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, swrFetcher, {
     revalidateOnFocus: false,
   });
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }

@@ -4,7 +4,7 @@ import {
   IUserAccountSettingDataTypes,
 } from "../types/UserData";
 
-export const fetcher = (url: string, token: string) =>
+export const swrFetcher = (url: string, token: string) =>
   axios
     .get(url, {
       headers: { Authorization: token },

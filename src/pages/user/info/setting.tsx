@@ -8,7 +8,7 @@ import { useAtom } from "jotai";
 
 import { JOB_TYPES } from "../../../constants/job";
 import { COLOR, SHADOW } from "../../../constants/style";
-import { AccountInfoEdit, fetcher, URL } from "../../../api/MyInfoApi";
+import { AccountInfoEdit, swrFetcher, URL } from "../../../api/MyInfoApi";
 import { IUserAccountSettingDataTypes } from "../../../types/UserData";
 import { Title } from "../../../components/Layouts/partials/Title";
 import { activeAlert } from "../../../atoms/atoms";
@@ -21,7 +21,7 @@ function Setting() {
   const [isChangePwd, setIsChangePwd] = useState<boolean>(false);
   const { data: accountData, error: accountError } = useSWR(
     [`${URL}/account/info`, token],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }

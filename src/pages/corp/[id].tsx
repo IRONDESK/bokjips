@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Link from "next/link";
 import useSWR, { useSWRConfig } from "swr";
 import { GetServerSideProps } from "next";
 import { getCookie } from "cookies-next";
@@ -17,27 +16,29 @@ import NoData from "../../components/Layouts/NoData";
 import EditButtons from "../../components/Corp/EditButtons";
 import Loading from "../../components/Layouts/Loading";
 
-import { ICompanyDataTypes } from "../../types/CompanyData";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
 import { HandlerCompanyFavorite, URL } from "../../api/CompanyApi";
-import { fetcher } from "../../api/MyInfoApi";
+import { swrFetcher } from "../../api/MyInfoApi";
 
 interface ICorpPropsType {
   corpId?: string;
-  corpData: ICompanyDataTypes;
+  companyName?: string;
 }
 
-function CorpId({ corpId }: ICorpPropsType) {
+function CorpId({ corpId, companyName }: ICorpPropsType) {
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const cookie = getCookie("accessToken") as string;
   const [, setAlertMessage] = useAtom(activeAlert);
 
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
-  const { data, error } = useSWR([`${URL}/${corpId}`, cookie], fetcher);
+  const { data: companyData, error: companyError } = useSWR(
+    [`${URL}/${corpId}`, cookie],
+    swrFetcher
+  );
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }
@@ -68,64 +69,70 @@ function CorpId({ corpId }: ICorpPropsType) {
 
   return (
     <>
-      <Title title={data?.name} />
-      {!!(data && !error) ? (
+      <Title title={companyName} />
+      {!!(companyData && !companyError) ? (
         <Container isSplited={isSplited}>
           <SideOne>
             <Banner>
               <div className="corp-identified">
-                <img src={data?.logo} alt={data?.name} />
+                <img src={companyData?.logo} alt={companyData?.name} />
                 <div>
-                  <h1 id="corp-name">{data?.name}</h1>
-                  {data?.isCertified === "true" && (
+                  <h1 id="corp-name">{companyData?.name}</h1>
+                  {companyData?.isCertified === "true" && (
                     <i>
                       <span className="a11y-hidden">현직자 검증 정보</span>
                     </i>
                   )}
                 </div>
                 <span className="corp-category">
-                  <span>{data?.isPublicStock ? "상장" : "비상장"}</span>
-                  <span>{COMPANY_TYPES_LITERAL[data?.classification]}</span>
+                  <span>{companyData?.isPublicStock ? "상장" : "비상장"}</span>
+                  <span>
+                    {COMPANY_TYPES_LITERAL[companyData?.classification]}
+                  </span>
                 </span>
               </div>
               <div className="corp-buttons">
                 <Button
                   id="company-favorite-button"
                   aria-label={`찜 등록 및 해제 버튼. ${
-                    data?.favorite || 0
+                    companyData?.favorite || 0
                   }명이 찜했습니다.`}
-                  icon={!!data?.isFavorite ? "heart_white_fill" : "heart"}
-                  isFavorite={!!data?.isFavorite}
+                  icon={
+                    !!companyData?.isFavorite ? "heart_white_fill" : "heart"
+                  }
+                  isFavorite={!!companyData?.isFavorite}
                   onClick={handlerFavorite}
                 >
-                  {data?.favorite?.toLocaleString() || 0}
+                  {companyData?.favorite?.toLocaleString() || 0}
                 </Button>
                 <Button
                   icon="site"
                   aria-label="회사 사이트로 이동"
-                  onClick={() => router.push(data?.site || "")}
+                  onClick={() => router.push(companyData?.site || "")}
                 >
                   사이트
                 </Button>
                 <Button
                   icon="recruit"
                   aria-label="회사 채용 페이지로 이동"
-                  onClick={() => router.push(data?.recruitmentSite || "")}
+                  onClick={() =>
+                    router.push(companyData?.recruitmentSite || "")
+                  }
                 >
                   채용정보
                 </Button>
               </div>
             </Banner>
             <Detail
-              wage={data?.wage}
-              isInclusiveWage={data?.isInclusiveWage}
-              workingConditions={data?.workingConditions}
-              workSupport={data?.workSupport}
-              offDutySupport={data?.offDutySupport}
-              officeEnvironment={data?.officeEnvironment}
+              wage={companyData?.wage}
+              isInclusiveWage={companyData?.isInclusiveWage}
+              workingConditions={companyData?.workingConditions}
+              workSupport={companyData?.workSupport}
+              offDutySupport={companyData?.offDutySupport}
+              officeEnvironment={companyData?.officeEnvironment}
             />
             <UpdateAtText>
-              이 회사의 복지 정보는 {dateConvert(data?.updateAt)}{" "}
+              이 회사의 복지 정보는 {dateConvert(companyData?.updateAt)}{" "}
               수정되었습니다.
             </UpdateAtText>
             {roleData?.roles === "ROLE_ADMIN" && (
@@ -142,8 +149,8 @@ function CorpId({ corpId }: ICorpPropsType) {
             <Comments corpId={corpId as string} />
           </SideTwo>
         </Container>
-      ) : !!(!data && error) ? (
-        <NoData code={error?.response?.status} />
+      ) : !!(!companyData && companyError) ? (
+        <NoData code={companyError?.response?.status} />
       ) : (
         <Loading />
       )}
@@ -343,9 +350,15 @@ const Vertical = styled.button`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
+  const [companyData] = await Promise.all([swrFetcher(`${URL}/${id}`, "")]);
+
   return {
     props: {
       corpId: id,
+      companyName: companyData.name,
+      fallback: {
+        [`${URL}/${id}`]: companyData,
+      },
     },
   };
 };

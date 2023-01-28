@@ -14,7 +14,7 @@ import { COLOR } from "../../constants/style";
 import WelfareList from "../../components/Admin/WelfareList";
 import { Title } from "../../components/Layouts/partials/Title";
 import { CreateWelfaresData, URL } from "../../api/CompanyApi";
-import { fetcher } from "../../api/MyInfoApi";
+import { swrFetcher } from "../../api/MyInfoApi";
 
 interface IWelfarePagePropsType {
   corpId: string;
@@ -25,12 +25,12 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
   const [, setAlertMessage] = useAtom(activeAlert);
   const cookie = getCookie("accessToken") as string;
   const router = useRouter();
-  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, fetcher, {
+  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, swrFetcher, {
     revalidateOnFocus: false,
   });
   const { data: roleData, error: roleError } = useSWR(
     [`${URL}/userRole`, cookie],
-    fetcher,
+    swrFetcher,
     {
       revalidateOnFocus: false,
     }
