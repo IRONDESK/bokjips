@@ -116,7 +116,7 @@ const Main = styled.main`
 
 const ListTop = styled.div`
   display: flex;
-  margin: -8px 8px 12px;
+  margin: 0 8px 12px;
   justify-content: space-between;
   font-size: 0.85rem;
   .corp-length-count {

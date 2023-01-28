@@ -136,20 +136,21 @@ const Container = styled.header<{ corp: boolean }>`
   }
   @media (max-width: 840px) {
     display: block;
+    padding: 20px 32px 24px;
     height: auto;
     #header-logo {
-      margin: 4px 0 16px;
+      margin: ${(props) => (props.corp ? 0 : " 4px 0 16px")};
       width: 100%;
       text-align: center;
     }
     #header-user {
       position: absolute;
-      top: 24px;
+      top: 34px;
       right: 32px;
     }
   }
   @media (max-width: 580px) {
-    padding: 24px 8px;
+    padding: 20px 8px 24px;
   }
 `;
 const Wrap = styled.div`
