@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useAtom } from "jotai";
 
-import { DeleteCompanyData, URL } from "../../api/CompanyApi";
+import { DeleteCompanyData } from "../../api/CompanyApi";
 import { activeAlert } from "../../atoms/atoms";
 
 function EditButtons({ companyId }: { companyId: string }) {

@@ -5,11 +5,11 @@ import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
 
 import { COLOR, SHADOW } from "../../constants/style";
+import { ServerURL } from "../../api/ServerURL";
 import {
   CreateCommentData,
   DeleteCommentData,
   fetcher,
-  URL,
 } from "../../api/CommentApi";
 import { ICommentDataTypes } from "../../types/CommentData";
 import { activeAlert } from "../../atoms/atoms";
@@ -26,7 +26,7 @@ function Comments({ corpId }: ICommentPropsType) {
   const cookie = getCookie("accessToken") as string;
 
   const { data, error } = useSWR<ICommentDataTypes[]>(
-    [`${URL}/comment/${corpId}`, cookie],
+    [`${ServerURL}/comment/${corpId}`, cookie],
     fetcher
   );
 
@@ -35,7 +35,7 @@ function Comments({ corpId }: ICommentPropsType) {
     if (commentInput.length > 4 && cookie) {
       CreateCommentData(corpId, commentInput, cookie)
         .then((res) => {
-          mutate([`${URL}/comment/${corpId}`, cookie]);
+          mutate([`${ServerURL}/comment/${corpId}`, cookie]);
           setCommentInput("");
         })
         .catch((res) => {
@@ -57,7 +57,7 @@ function Comments({ corpId }: ICommentPropsType) {
     if (deleteConfirm) {
       DeleteCommentData(commentId, cookie)
         .then((res) => {
-          mutate([`${URL}/comment/${corpId}`, cookie]);
+          mutate([`${ServerURL}/comment/${corpId}`, cookie]);
           setAlertMessage("DEL_COMMENT");
         })
         .catch((res) => {

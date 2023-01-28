@@ -1,24 +1,21 @@
 import axios from "axios";
+import { ServerURL } from "./ServerURL";
 import { ICompanyDataTypes, IWelfareDataTypes } from "../types/CompanyData";
 
 export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-export const URL =
-  "https://port-0-bokjips-api-fao2flc0olupf.gksl2.cloudtype.app";
 
 function CreateCompanyData(data: ICompanyDataTypes, token: string) {
-  return axios.post(`${URL}/admin/info`, data, {
-    // headers: { Authorization: `Bearer ${token}` },
+  return axios.post(`${ServerURL}/admin/info`, data, {
     headers: { Authorization: token },
   });
 }
 function EditCompanyData(data: ICompanyDataTypes, token: string) {
-  return axios.put(`${URL}/admin/info`, data, {
-    // headers: { Authorization: `Bearer ${token}` },
+  return axios.put(`${ServerURL}/admin/info`, data, {
     headers: { Authorization: token },
   });
 }
 function DeleteCompanyData(companyId: string, token: string) {
-  return axios.delete(`${URL}/admin/info/${companyId}`, {
+  return axios.delete(`${ServerURL}/admin/info/${companyId}`, {
     headers: { Authorization: token },
   });
 }
@@ -29,23 +26,20 @@ function CreateWelfaresData(
   type: "create" | "edit"
 ) {
   if (type === "create") {
-    return axios.post(`${URL}/admin/info/welfare/${companyId}`, data, {
-      // headers: { Authorization: `Bearer ${token}` },
+    return axios.post(`${ServerURL}/admin/info/welfare/${companyId}`, data, {
       headers: { Authorization: token },
     });
   } else {
-    return axios.put(`${URL}/admin/info/welfare/${companyId}`, data, {
-      // headers: { Authorization: `Bearer ${token}` },
+    return axios.put(`${ServerURL}/admin/info/welfare/${companyId}`, data, {
       headers: { Authorization: token },
     });
   }
 }
 function HandlerCompanyFavorite(companyId: string, token: string) {
   return axios.post(
-    `${URL}/favorite/${companyId}`,
+    `${ServerURL}/favorite/${companyId}`,
     {},
     {
-      // headers: { Authorization: `Bearer ${token}` },
       headers: { Authorization: token },
     }
   );

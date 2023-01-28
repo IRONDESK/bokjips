@@ -10,7 +10,8 @@ import Banner from "../../components/Admin/Banner";
 import { Title } from "../../components/Layouts/partials/Title";
 
 import { ICompanyDataTypes } from "../../types/CompanyData";
-import { CreateCompanyData, URL } from "../../api/CompanyApi";
+import { ServerURL } from "../../api/ServerURL";
+import { CreateCompanyData } from "../../api/CompanyApi";
 import { swrFetcher } from "../../api/MyInfoApi";
 
 function Create() {
@@ -19,7 +20,7 @@ function Create() {
   const cookie = getCookie("accessToken") as string;
 
   const { data: roleData, error: roleError } = useSWR(
-    [`${URL}/userRole`, cookie],
+    [`${ServerURL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,

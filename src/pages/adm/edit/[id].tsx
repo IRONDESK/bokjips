@@ -6,11 +6,12 @@ import { getCookie } from "cookies-next";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { EditCompanyData, URL } from "../../../api/CompanyApi";
+import { ServerURL } from "../../../api/ServerURL";
+import { EditCompanyData } from "../../../api/CompanyApi";
 import { swrFetcher } from "../../../api/MyInfoApi";
-import Banner from "../../../components/Admin/Banner";
 
 import { ICompanyDataTypes } from "../../../types/CompanyData";
+import Banner from "../../../components/Admin/Banner";
 import { COLOR } from "../../../constants/style";
 import { Title } from "../../../components/Layouts/partials/Title";
 import Loading from "../../../components/Layouts/Loading";
@@ -23,11 +24,15 @@ function Edit({ corpId }: ICorpEditPropsType) {
   const router = useRouter();
   const cookie = getCookie("accessToken") as string;
 
-  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, swrFetcher, {
-    revalidateOnFocus: false,
-  });
+  const { data: companyData, error } = useSWR(
+    `${ServerURL}/${corpId}`,
+    swrFetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
   const { data: roleData, error: roleError } = useSWR(
-    [`${URL}/userRole`, cookie],
+    [`${ServerURL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,

@@ -7,7 +7,8 @@ import { useAtom } from "jotai";
 import useSWR from "swr";
 
 import { COLOR, SHADOW } from "../../../constants/style";
-import { swrFetcher, URL } from "../../../api/MyInfoApi";
+import { ServerURL } from "../../../api/ServerURL";
+import { swrFetcher } from "../../../api/MyInfoApi";
 import {
   mainPagination,
   activeAlert,
@@ -35,7 +36,7 @@ function Header() {
   const [, setSelectedFilter] = useAtom(selectedFilter);
 
   const { data: tokenCheck, error: tokenError } = useSWR(
-    [`${URL}/check_token`, cookie],
+    [`${ServerURL}/check_token`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,

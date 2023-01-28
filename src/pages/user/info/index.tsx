@@ -7,7 +7,8 @@ import { getCookie } from "cookies-next";
 import { useAtom } from "jotai";
 
 import { activeAlert } from "../../../atoms/atoms";
-import { swrFetcher, URL } from "../../../api/MyInfoApi";
+import { ServerURL } from "../../../api/ServerURL";
+import { swrFetcher } from "../../../api/MyInfoApi";
 import { HandlerCompanyFavorite } from "../../../api/CompanyApi";
 
 import { Title } from "../../../components/Layouts/partials/Title";
@@ -32,14 +33,14 @@ function Info() {
   };
 
   const { data: roleData, error: roleError } = useSWR<IUserRolesType>(
-    [`${URL}/userRole`, cookie],
+    [`${ServerURL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,
     }
   );
   const { data: favData, error: favError } = useSWR<ICompanyDataTypes[]>(
-    [`${URL}/favorite`, cookie],
+    [`${ServerURL}/favorite`, cookie],
     swrFetcher
   );
 
@@ -47,7 +48,7 @@ function Info() {
   const handlerFavorite = (companyId: string) => {
     HandlerCompanyFavorite(companyId as string, cookie)
       .then((res) => {
-        mutate([`${URL}/favorite`, cookie]);
+        mutate([`${ServerURL}/favorite`, cookie]);
         // if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
         if (res.data.message === "취소") setAlertMessage("UNFAVORITE");
       })

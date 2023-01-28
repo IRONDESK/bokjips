@@ -8,10 +8,13 @@ import { useAtom } from "jotai";
 
 import { JOB_TYPES } from "../../../constants/job";
 import { COLOR, SHADOW } from "../../../constants/style";
-import { AccountInfoEdit, swrFetcher, URL } from "../../../api/MyInfoApi";
+
+import { activeAlert } from "../../../atoms/atoms";
+import { ServerURL } from "../../../api/ServerURL";
+import { AccountInfoEdit, swrFetcher } from "../../../api/MyInfoApi";
+
 import { IUserAccountSettingDataTypes } from "../../../types/UserData";
 import { Title } from "../../../components/Layouts/partials/Title";
-import { activeAlert } from "../../../atoms/atoms";
 
 function Setting() {
   const token = getCookie("accessToken") as string;
@@ -20,7 +23,7 @@ function Setting() {
   const [isVisiblePwd, setIsVisiblePwd] = useState<boolean>(false);
   const [isChangePwd, setIsChangePwd] = useState<boolean>(false);
   const { data: accountData, error: accountError } = useSWR(
-    [`${URL}/account/info`, token],
+    [`${ServerURL}/account/info`, token],
     swrFetcher,
     {
       revalidateOnFocus: false,

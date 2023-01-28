@@ -9,6 +9,7 @@ import { activeAlert } from "../../atoms/atoms";
 import { COLOR, SHADOW } from "../../constants/style";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
 
+import { ServerURL } from "../../api/ServerURL";
 import { HandlerCompanyFavorite } from "../../api/CompanyApi";
 import { ICompanyDataTypes } from "../../types/CompanyData";
 
@@ -27,7 +28,7 @@ function Banner({ corpId, companyData }: ICorpBannerPropsType) {
   const handlerFavorite = () => {
     HandlerCompanyFavorite(corpId as string, cookie)
       .then((res) => {
-        mutate([`${URL}/${corpId}`, cookie]);
+        mutate([`${ServerURL}/${corpId}`, cookie]);
         if (res.data.message === "성공") setAlertMessage("ADD_FAVORITE");
         if (res.data.message === "취소") setAlertMessage("UNFAVORITE");
       })

@@ -10,7 +10,8 @@ import {
   primarySelectedFilter,
   wageFilter,
 } from "../atoms/atoms";
-import { fetcher, URL } from "../api/CompanyApi";
+import { ServerURL } from "../api/ServerURL";
+import { fetcher } from "../api/CompanyApi";
 
 import CardList from "../components/Main/CardList";
 import NoData from "../components/Layouts/NoData";
@@ -51,7 +52,7 @@ export default function Home() {
   }
 
   const { data, error } = useSWR(
-    URL +
+    ServerURL +
       (isParams
         ? `/search?page=${nowMainPage}&${[...createParams()].join("&")}`
         : `/?page=${nowMainPage}`),

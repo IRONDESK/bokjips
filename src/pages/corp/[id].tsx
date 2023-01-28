@@ -16,7 +16,8 @@ import NoData from "../../components/Layouts/NoData";
 import EditButtons from "../../components/Corp/EditButtons";
 import Loading from "../../components/Layouts/Loading";
 
-import { URL, swrFetcher } from "../../api/MyInfoApi";
+import { ServerURL } from "../../api/ServerURL";
+import { swrFetcher } from "../../api/MyInfoApi";
 
 interface ICorpPropsType {
   corpId?: string;
@@ -31,12 +32,12 @@ function CorpId({ corpId, companyName }: ICorpPropsType) {
     data: companyData,
     error: companyError,
     isValidating,
-  } = useSWR([`${URL}/${corpId}`, cookie], swrFetcher, {
+  } = useSWR([`${ServerURL}/${corpId}`, cookie], swrFetcher, {
     revalidateOnFocus: false,
   });
 
   const { data: roleData, error: roleError } = useSWR(
-    [`${URL}/userRole`, cookie],
+    [`${ServerURL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,
@@ -171,7 +172,9 @@ const Vertical = styled.button`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const [companyData] = await Promise.all([swrFetcher(`${URL}/${id}`, "")]);
+  const [companyData] = await Promise.all([
+    swrFetcher(`${ServerURL}/${id}`, ""),
+  ]);
 
   return {
     props: {

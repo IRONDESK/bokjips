@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ServerURL } from "./ServerURL";
 import {
   IFindAccountDtosType,
   IUserAccountSettingDataTypes,
@@ -10,19 +11,17 @@ export const swrFetcher = (url: string, token: string) =>
       headers: { Authorization: token },
     })
     .then((res) => res.data);
-export const URL =
-  "https://port-0-bokjips-api-fao2flc0olupf.gksl2.cloudtype.app";
 
 function AccountInfoEdit(data: IUserAccountSettingDataTypes, token: string) {
-  return axios.put(`${URL}/account/info`, data, {
+  return axios.put(`${ServerURL}/account/info`, data, {
     headers: { Authorization: token },
   });
 }
 function FindIdAccount(data: IFindAccountDtosType) {
-  return axios.post(`${URL}/account/username`, data);
+  return axios.post(`${ServerURL}/account/username`, data);
 }
 function ResetPasswordAccount(data: IFindAccountDtosType) {
-  return axios.post(`${URL}/account/password`, data);
+  return axios.post(`${ServerURL}/account/password`, data);
 }
 
 export { AccountInfoEdit, FindIdAccount, ResetPasswordAccount };

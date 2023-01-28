@@ -9,12 +9,14 @@ import { useRouter } from "next/router";
 
 import { IWelfareDataTypes } from "../../types/CompanyData";
 
-import { activeAlert } from "../../atoms/atoms";
 import { COLOR } from "../../constants/style";
+import { activeAlert } from "../../atoms/atoms";
+import { ServerURL } from "../../api/ServerURL";
+import { CreateWelfaresData } from "../../api/CompanyApi";
+import { swrFetcher } from "../../api/MyInfoApi";
+
 import WelfareList from "../../components/Admin/WelfareList";
 import { Title } from "../../components/Layouts/partials/Title";
-import { CreateWelfaresData, URL } from "../../api/CompanyApi";
-import { swrFetcher } from "../../api/MyInfoApi";
 
 interface IWelfarePagePropsType {
   corpId: string;
@@ -29,7 +31,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
     revalidateOnFocus: false,
   });
   const { data: roleData, error: roleError } = useSWR(
-    [`${URL}/userRole`, cookie],
+    [`${ServerURL}/userRole`, cookie],
     swrFetcher,
     {
       revalidateOnFocus: false,
