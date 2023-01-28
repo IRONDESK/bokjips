@@ -6,7 +6,7 @@ export const Title = ({ title }: { title?: string }) => {
   return (
     <Head>
       <title>
-        {router.pathname === "/"
+        {router.pathname === "/" || !title
           ? "복지편살 ─ 복잡한 복지 정보, 편하게 살펴보자"
           : `${title ? `${title} | ` : ""}복지편살`}
       </title>
@@ -17,6 +17,10 @@ export const Title = ({ title }: { title?: string }) => {
         content="복잡한 기업의 복지 정보를 편하게 살펴볼 수 있는 서비스"
       />
       <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      <meta
+        property="og:image"
+        content="https://bokjips-qd9fu3wqb-irondesk.vercel.app/logo/bokjips_og_image.jpg"
+      />
       <meta property="og:type" content="website" />
       <meta
         property="og:site_name"
@@ -25,7 +29,7 @@ export const Title = ({ title }: { title?: string }) => {
       <meta
         property="og:title"
         content={
-          router.pathname === "/"
+          router.pathname === "/" || !title
             ? "복지편살 ─ 복잡한 복지 정보, 편하게 살펴보자"
             : `${title ? `${title} | ` : ""}복지편살`
         }
@@ -34,7 +38,6 @@ export const Title = ({ title }: { title?: string }) => {
         property="og:description"
         content="기업 복지 정보를 편하게 살펴보세요."
       />
-      <meta property="og:image" content="/logo/bokjips_og_image.jpg" />
     </Head>
   );
 };
