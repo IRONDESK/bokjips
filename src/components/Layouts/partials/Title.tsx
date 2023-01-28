@@ -12,16 +12,29 @@ export const Title = ({ title }: { title: string }) => {
       </title>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="Description" content="" />
+      <meta
+        name="description"
+        content="복잡한 기업의 복지 정보를 편하게 살펴볼 수 있는 서비스"
+      />
       <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-      <meta property="og:title" content="복지편살" />
       <meta property="og:type" content="website" />
       <meta
         property="og:site_name"
         content="복지편살 ─ 복잡한 복지 정보, 편하게 살펴보자"
       />
-      <meta property="og:description" content="" />
-      <meta property="og:image" content="./images/ogimage.jpg" />
+      <meta
+        property="og:title"
+        content={
+          router.pathname === "/"
+            ? "복지편살 ─ 복잡한 복지 정보, 편하게 살펴보자"
+            : `${title ? `${title} | ` : ""}복지편살`
+        }
+      />
+      <meta
+        property="og:description"
+        content="기업 복지 정보를 편하게 살펴보세요."
+      />
+      <meta property="og:image" content="./logo/bokjips_og_image.jpg" />
     </Head>
   );
 };
