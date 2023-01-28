@@ -16,6 +16,7 @@ import CardList from "../components/Main/CardList";
 import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
+import { Title } from "../components/Layouts/partials/Title";
 
 export default function Home() {
   const [sortParams, setSortParams] = useState("favorite");
@@ -64,6 +65,7 @@ export default function Home() {
   if (data && data.content.length > 0) {
     return (
       <Main>
+        <Title />
         <ListTop>
           <p className="corp-length-count">
             {data?.totalElements || 0}개
