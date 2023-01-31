@@ -27,9 +27,13 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
   const [, setAlertMessage] = useAtom(activeAlert);
   const cookie = getCookie("accessToken") as string;
   const router = useRouter();
-  const { data: companyData, error } = useSWR(`${URL}/${corpId}`, swrFetcher, {
-    revalidateOnFocus: false,
-  });
+  const { data: companyData, error } = useSWR(
+    `${ServerURL}/${corpId}`,
+    swrFetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
   const { data: roleData, error: roleError } = useSWR(
     [`${ServerURL}/userRole`, cookie],
     swrFetcher,
@@ -87,7 +91,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
           onKeyDown={(e) => checkKeyDown(e)}
         >
           <CorpName>
-            {companyData?.name} <span>{type.toUpperCase()}</span>
+            {companyData?.name} <span>{type.toUpperCase()} MODE</span>
           </CorpName>
 
           <WelfareList
@@ -129,12 +133,8 @@ const CorpName = styled.h2`
   font-size: 2rem;
   font-weight: 500;
   span {
-    padding: 2px 4px;
-    background-color: #000;
-    border-radius: 4px;
     vertical-align: middle;
-    color: #fff;
-    font-size: 0.85rem;
+    color: #999;
     opacity: 0.7;
   }
 `;
