@@ -20,8 +20,10 @@ import Pagination from "../components/Layouts/Pagination";
 import { Title } from "../components/Layouts/partials/Title";
 
 export default function Home() {
-  const [sortParams, setSortParams] = useState("favorite");
-  const [sortType, setSortType] = useState(true);
+  const [keywordTmp, setKeywordTmp] = useState<string>("");
+  const [sortParams, setSortParams] = useState<string>("favorite");
+  const [sortType, setSortType] = useState<boolean>(true);
+
   const [nowMainPage, setNowMainPage] = useAtom(mainPagination);
   const [nowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
@@ -40,7 +42,7 @@ export default function Home() {
 
   function createParams() {
     let params = [`greaterThan=${nowWageFilter}`];
-    if (!!nowKeyFilter.keyword) params.push(`name=${nowKeyFilter.keyword}`);
+    if (!!keywordTmp) params.push(`name=${keywordTmp}`);
     if (!!nowKeyFilter.industry)
       params.push(`classification=${nowKeyFilter.industry}`);
     if (nowPrimaryFilter.isCertified) params.push(`certified=true`);
@@ -62,6 +64,13 @@ export default function Home() {
   useEffect(() => {
     if (!!error) setNowMainPage(() => 0);
   }, [error]);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      return setKeywordTmp(nowKeyFilter.keyword);
+    }, 600);
+    return () => clearTimeout(debounce);
+  }, [nowKeyFilter]);
 
   if (data && data.content.length > 0) {
     return (
