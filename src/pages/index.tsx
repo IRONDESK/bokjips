@@ -64,7 +64,7 @@ export default function Home() {
 
   if (data && data.content.length > 0) {
     return (
-      <Main>
+      <Container>
         <Title />
         <ListTop>
           <p className="corp-length-count">{data?.totalElements || 0}개 기업의 복지 정보</p>
@@ -98,7 +98,7 @@ export default function Home() {
           empty={data?.empty}
           totalPages={data?.totalPages}
         />
-      </Main>
+      </Container>
     );
   } else if (!data && !error) {
     return <Loading />;
@@ -107,8 +107,8 @@ export default function Home() {
   }
 }
 
-const Main = styled.main`
-  padding: 12px 24px 20px;
+const Container = styled.main`
+  padding: 12px 20px 20px;
 `;
 
 const ListTop = styled.div`

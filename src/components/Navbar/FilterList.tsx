@@ -35,17 +35,15 @@ function FilterBar() {
         <div className="filter-list-top">
           <Wage wageValue={nowWageFilter}>
             <label htmlFor="header-basic-wage">
-              <div>
-                <input
-                  type="number"
-                  id="header-basic-wage"
-                  min={0}
-                  step={100}
-                  value={+nowWageFilter}
-                  onChange={setWageFiltered}
-                />
-                <span className="input-wage-unit">만원 이상</span>
-              </div>
+              <input
+                type="number"
+                id="header-basic-wage"
+                min={0}
+                step={100}
+                value={+nowWageFilter}
+                onChange={setWageFiltered}
+              />
+              <span className="input-wage-unit">만원↑</span>
             </label>
           </Wage>
           <Button
@@ -87,6 +85,7 @@ function FilterBar() {
 }
 
 const itemStyle = `
+min-width: 79px;
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   border-radius: 20px;
@@ -115,8 +114,7 @@ const Container = styled.section<{ showFilter: boolean }>`
     gap: 8px;
     transition: all 0.3s;
   }
-  button,
-  .filter-list-top > div {
+  button {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -134,7 +132,12 @@ const Wage = styled.div<{ wageValue: number }>`
   color: ${(props) => (props.wageValue > 0 ? "#000" : "#1f1f1f")};
   font-weight: ${(props) => (props.wageValue > 0 ? "600" : "none")};
   border: 1px solid ${(props) => (props.wageValue > 0 ? COLOR.main : "transparent")};
+  label {
+    display: inline-flex;
+    align-items: center;
+  }
   input {
+    width: 100%;
     background: transparent;
     font-size: 0.8rem;
     text-align: right;
@@ -145,12 +148,14 @@ const Wage = styled.div<{ wageValue: number }>`
   }
   .input-wage-unit {
     display: inline-block;
-    margin: 0 0 0 4px;
+    margin: 0 0 0 3px;
+    white-space: nowrap;
   }
   &::before {
     content: "초봉";
-    font-weight: 500;
     opacity: 0.85;
+    font-weight: 500;
+    white-space: nowrap;
   }
 `;
 
@@ -163,7 +168,7 @@ const Buttons = styled.div<{ showFilter: boolean }>`
 
 const Button = styled.button<{ isSelected: boolean }>`
   ${itemStyle};
-  padding: 8px 16px;
+  padding: 8px 12px;
   background-color: ${(props) => (props.isSelected ? COLOR.mainLight : "none")};
   color: ${(props) => (props.isSelected ? "#000" : "#1f1f1f")};
   font-weight: ${(props) => (props.isSelected ? "600" : "none")};
