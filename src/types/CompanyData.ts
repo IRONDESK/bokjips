@@ -52,7 +52,6 @@ export interface ICompanyWelfaresTypes {
 }
 
 export interface IWelfareDataTypes {
-  companyId?: string;
   type: string;
   title: string;
   content: string;

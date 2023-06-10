@@ -7,6 +7,6 @@ export const COLOR = {
 };
 
 export const SHADOW = {
-  basic: "0 0 12px 4px rgba(0, 0, 0, 0.05)",
-  hover: "0 0 16px 8px rgba(0, 0, 0, 0.075)",
+  basic: "0 0 12px 8px rgba(0, 0, 0, 0.04)",
+  hover: "0 0 20px 8px rgba(0, 0, 0, 0.055)",
 };
