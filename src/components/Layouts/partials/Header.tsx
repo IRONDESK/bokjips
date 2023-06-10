@@ -35,17 +35,13 @@ function Header() {
   const [, setPrimarySelectedFilter] = useAtom(primarySelectedFilter);
   const [, setSelectedFilter] = useAtom(selectedFilter);
 
-  const { data: tokenCheck, error: tokenError } = useSWR(
-    [`${ServerURL}/check_token`, cookie],
-    swrFetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: cookie ? 100000 : 0,
-      onErrorRetry: (error) => {
-        if (error.status === 400) return;
-      },
-    }
-  );
+  const { data: tokenCheck, error: tokenError } = useSWR([`${ServerURL}/check_token`, cookie], swrFetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: cookie ? 100000 : 0,
+    onErrorRetry: (error) => {
+      if (error.status === 400) return;
+    },
+  });
   const path = router.pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -83,24 +79,13 @@ function Header() {
       {alertMessage !== "" && <ServiceAlert />}
       <Container corp={path[0] === "corp"}>
         <Wrap id="header-logo">
-          <Link
-            href="/"
-            role="button"
-            aria-label="복지편살 메인 페이지"
-            onClick={handleResetValues}
-          >
+          <Link href="/" role="button" aria-label="복지편살 메인 페이지" onClick={handleResetValues}>
             <Logo corp={path[0] === "corp"} />
           </Link>
         </Wrap>
-        <Wrap id="searchfilter-bar">
-          {path[0] === "" ? <HeaderBar /> : null}
-        </Wrap>
+        <Wrap id="searchfilter-bar">{path[0] === "" ? <HeaderBar /> : null}</Wrap>
         <Wrap id="header-user">
-          <User
-            id="user-controller"
-            aria-label="사용자 설정"
-            onClick={() => setShowUser(!showUser)}
-          ></User>
+          <User id="user-controller" aria-label="사용자 설정" onClick={() => setShowUser(!showUser)}></User>
           {showUser &&
             (cookie ? (
               <UserBox>
@@ -169,9 +154,7 @@ const Logo = styled.div<{ corp: boolean }>`
   width: 120px;
   height: 50px;
   background-image: ${(props) =>
-    props.corp
-      ? `url("/logo/bokjips_logotype.svg")`
-      : `url("/logo/bokjips_logotype_color.svg")`};
+    props.corp ? `url("/logo/bokjips_logotype.svg")` : `url("/logo/bokjips_logotype_color.svg")`};
   background-size: 120px;
   background-repeat: no-repeat;
   background-position: center;
@@ -182,11 +165,12 @@ const Logo = styled.div<{ corp: boolean }>`
 `;
 
 const User = styled.button`
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background-image: url("/icons/face.svg");
-  background-size: 24px;
+  background-size: 28px;
   background-position: center;
+  background-repeat: no-repeat;
 `;
 const UserBox = styled.ul`
   position: absolute;

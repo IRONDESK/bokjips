@@ -35,14 +35,17 @@ function FilterBar() {
         <div className="filter-list-top">
           <Wage wageValue={nowWageFilter}>
             <label htmlFor="header-basic-wage">
-              <input
-                type="number"
-                id="header-basic-wage"
-                min={0}
-                step={100}
-                value={+nowWageFilter}
-                onChange={setWageFiltered}
-              />
+              <div>
+                <input
+                  type="number"
+                  id="header-basic-wage"
+                  min={0}
+                  step={100}
+                  value={+nowWageFilter}
+                  onChange={setWageFiltered}
+                />
+                <span className="input-wage-unit">만원 이상</span>
+              </div>
             </label>
           </Wage>
           <Button
@@ -96,7 +99,7 @@ const Container = styled.section<{ showFilter: boolean }>`
   margin: 12px 0 0;
   padding: ${(props) => (props.showFilter ? "16px" : "0")};
   left: 50%;
-  width: 100%;
+  width: 93%;
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   border-radius: 28px;
@@ -127,12 +130,12 @@ const Wage = styled.div<{ wageValue: number }>`
   padding: 12px 16px;
   grid-column: 1 / 3;
   ${itemStyle}
-  background-color: ${(props) => (props.wageValue > 0 ? COLOR.main : "none")};
-  color: ${(props) => (props.wageValue > 0 ? "#fff" : "none")};
-  font-weight: ${(props) => (props.wageValue > 0 ? "500" : "none")};
+  background-color: ${(props) => (props.wageValue > 0 ? COLOR.mainLight : "none")};
+  color: ${(props) => (props.wageValue > 0 ? "#000" : "#1f1f1f")};
+  font-weight: ${(props) => (props.wageValue > 0 ? "600" : "none")};
+  border: 1px solid ${(props) => (props.wageValue > 0 ? COLOR.main : "transparent")};
   input {
     background: transparent;
-    color: ${(props) => (props.wageValue > 0 ? "#fff" : "none")};
     font-size: 0.8rem;
     text-align: right;
     &::-webkit-inner-spin-button,
@@ -140,13 +143,14 @@ const Wage = styled.div<{ wageValue: number }>`
       display: none;
     }
   }
+  .input-wage-unit {
+    display: inline-block;
+    margin: 0 0 0 4px;
+  }
   &::before {
     content: "초봉";
     font-weight: 500;
-  }
-  &::after {
-    content: "만원 이상";
-    margin-left: 2px;
+    opacity: 0.85;
   }
 `;
 
