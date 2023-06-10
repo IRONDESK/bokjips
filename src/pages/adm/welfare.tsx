@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import useSWR from "swr";
 import { GetServerSideProps } from "next";
 import { getCookie } from "cookies-next";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 
@@ -27,24 +27,14 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
   const [, setAlertMessage] = useAtom(activeAlert);
   const cookie = getCookie("accessToken") as string;
   const router = useRouter();
-  const { data: companyData, error } = useSWR(
-    `${ServerURL}/${corpId}`,
-    swrFetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-  const { data: roleData, error: roleError } = useSWR(
-    [`${ServerURL}/userRole`, cookie],
-    swrFetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
+  const { data: companyData, error } = useSWR(`${ServerURL}/${corpId}`, swrFetcher, {
+    revalidateOnFocus: false,
+  });
+  const { data: roleData, error: roleError } = useSWR([`${ServerURL}/userRole`, cookie], swrFetcher, {
+    revalidateOnFocus: false,
+  });
 
-  const { register, handleSubmit, control, watch, reset, setValue } = useForm<{
-    value: IWelfareDataTypes[];
-  }>();
+  const { register, handleSubmit, control, watch, reset, setValue } = useForm<FieldValues>();
   useEffect(() => {
     // RHF은 최초 렌더링시에만 초기값을 설정하므로
     // 값을 받아온 이후에 다시 렌더링하도록 reset props를 사용
@@ -62,7 +52,7 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
     );
   }, [companyData]);
 
-  const onSubmit = (data: { value: IWelfareDataTypes[] }) => {
+  const onSubmit = (data: FieldValues) => {
     CreateWelfaresData(corpId, data.value, cookie, type)
       .then((res) => {
         router.push(`/corp/${corpId}`);
@@ -86,21 +76,12 @@ function Welfare({ corpId, type }: IWelfarePagePropsType) {
     return (
       <Container>
         <Title title={`복지 정보 작성`} />
-        <Form
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={(e) => checkKeyDown(e)}
-        >
+        <Form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)}>
           <CorpName>
             {companyData?.name} <span>{type.toUpperCase()} MODE</span>
           </CorpName>
 
-          <WelfareList
-            register={register}
-            control={control}
-            watch={watch}
-            setValue={setValue}
-            corpId={corpId}
-          />
+          <WelfareList register={register} control={control} watch={watch} setValue={setValue} corpId={corpId} />
 
           <Button type="submit">저장</Button>
         </Form>
