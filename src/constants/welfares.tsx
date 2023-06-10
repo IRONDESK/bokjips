@@ -5,14 +5,15 @@ export const WELFARES_FILTER_LIST = [
   { value: "child_friendly", name: "육아지원" },
   { value: "child_care", name: "사내어린이집" },
   { value: "school", name: "자녀학자금" },
-  { value: "directions_bus_filled", name: "통근버스" },
+  { value: "monitor_heart", name: "건강검진" },
   { value: "wallet", name: "대출지원" },
   { value: "restaurant", name: "사내식당" },
   { value: "local_cafe", name: "사내카페" },
-  { value: "important_devices", name: "최신형장비" },
+  { value: "redeem", name: "복지포인트" },
   { value: "menu_book", name: "도서비지원" },
   { value: "trending_up", name: "스톡옵션" },
-  { value: "redeem", name: "복지포인트" },
+  { value: "important_devices", name: "최신형장비" },
+  { value: "directions_bus_filled", name: "통근버스" },
 ];
 
 export const WELFARES_ICONS = [

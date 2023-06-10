@@ -3,13 +3,7 @@ import styled from "@emotion/styled";
 import { useAtom } from "jotai";
 
 import { SHADOW } from "../../constants/style";
-import {
-  keyFilter,
-  primarySelectedFilter,
-  selectedFilter,
-  selectedModal,
-  wageFilter,
-} from "../../atoms/atoms";
+import { keyFilter, primarySelectedFilter, selectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
 import FilterList from "./FilterList";
 import { COMPANY_TYPES } from "../../constants/job";
 
@@ -84,61 +78,47 @@ const Container = styled.section`
 
 const Wrap = styled.label<{ icon: string }>`
   ${(props) => props.icon === "filtered" && "cursor: pointer;"}
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 8px;
-  width: ${(props) =>
-    props.icon == "rocket"
-      ? "152px"
-      : props.icon == "filtered"
-      ? "108px"
-      : "60px"};
+  width: ${(props) => (props.icon == "rocket" ? "152px" : props.icon == "filtered" ? "108px" : "60px")};
   height: 55px;
   background-color: #fff;
   box-shadow: ${SHADOW.basic};
   border-radius: 28px;
   transition: all 0.3s;
+  overflow: hidden;
   &:has(input:focus),
   &:has(input:focus:not(:placeholder-shown)),
   &:has(input:not(:placeholder-shown)),
   &:hover {
-    width: ${(props) =>
-      props.icon == "rocket"
-        ? "152px"
-        : props.icon == "filtered"
-        ? "108px"
-        : "216px"};
+    width: ${(props) => (props.icon == "rocket" ? "152px" : props.icon == "filtered" ? "108px" : "216px")};
   }
-  &:has(input:not(:placeholder-shown)) {
-    position: relative;
-    width: 168px;
-  }
-  &::after {
+
+  &::before {
+    display: inline-block;
     content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    left: 18px;
-    top: 16px;
+    min-width: 60px;
+    width: 60px;
+    height: 55px;
     background-image: url(${(props) => `/icons/${props.icon}.svg`});
     background-size: 24px;
+    background-repeat: no-repeat;
     background-position: center;
   }
 
   select,
   button {
+    cursor: pointer;
+    flex: 1;
+    margin-left: -60px;
+    padding-left: 44px;
+    padding-right: 16px;
     text-align: center;
   }
   input,
   select,
   button {
-    width: calc(100% - 40px);
-    margin: 0 0 0 40px;
-    padding: 0 12px 0 0;
     background: none;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     line-height: 55px;
     z-index: 1;
     border: none;
@@ -169,6 +149,7 @@ const Wrap = styled.label<{ icon: string }>`
     filter: invert(1);
   }
   @media (max-width: 580px) {
+    padding: 0 4px;
     &[id="header-keyword"] {
       &,
       &:has(input:focus),
