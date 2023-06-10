@@ -34,9 +34,7 @@ function Find() {
         });
     } else {
       ResetPasswordAccount(data)
-        .then((res) =>
-          router.push(`/user/find/success?id=${data.email}&type=PWD`)
-        )
+        .then((res) => router.push(`/user/find/success?id=${data.email}&type=PWD`))
         .catch((res) => {
           if (res?.response?.status === 400) {
             setAlertMessage("FIND_NODATA");
@@ -58,18 +56,10 @@ function Find() {
         <Message>
           잃어버린 정보를 선택하세요
           <br />
-          <Toggle
-            type="button"
-            nowPlace={toggleToFind}
-            onClick={() => setToggleToFind(true)}
-          >
+          <Toggle type="button" nowPlace={toggleToFind} onClick={() => setToggleToFind(true)}>
             {toggleToFind && "✓ "}아이디
           </Toggle>
-          <Toggle
-            type="button"
-            nowPlace={!toggleToFind}
-            onClick={() => setToggleToFind(false)}
-          >
+          <Toggle type="button" nowPlace={!toggleToFind} onClick={() => setToggleToFind(false)}>
             {!toggleToFind && "✓ "}비밀번호
           </Toggle>
         </Message>

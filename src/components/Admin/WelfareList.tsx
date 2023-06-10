@@ -1,46 +1,27 @@
-import styled from "@emotion/styled";
 import React from "react";
-import {
-  Control,
-  useFieldArray,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import styled from "@emotion/styled";
+import { Control, FieldValues, useFieldArray, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import Flicking from "@egjs/react-flicking";
 
-import { COLOR } from "../../constants/style";
 import "@egjs/react-flicking/dist/flicking.css";
+import { COLOR } from "../../constants/style";
 import { WELFARES_ICONS } from "../../constants/welfares";
-import { IWelfareDataTypes } from "../../types/CompanyData";
 
-interface WelfareValuesType {
-  value: IWelfareDataTypes[];
-}
 interface WelfareCardPropsType {
-  register: UseFormRegister<WelfareValuesType>;
-  control: Control<WelfareValuesType>;
-  watch: UseFormWatch<WelfareValuesType>;
-  setValue: UseFormSetValue<WelfareValuesType>;
+  register: UseFormRegister<FieldValues>;
+  control: Control<FieldValues>;
+  watch: UseFormWatch<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
   corpId: string;
 }
 
-function WelfareList({
-  register,
-  control,
-  watch,
-  setValue,
-  corpId,
-}: WelfareCardPropsType) {
+function WelfareList({ register, control, watch, setValue, corpId }: WelfareCardPropsType) {
   const { fields, append, prepend, remove } = useFieldArray({
     control,
     name: "value",
   });
 
-  const setIconName = (
-    e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>,
-    index: number
-  ) => {
+  const setIconName = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>, index: number) => {
     let target = (e.target as HTMLButtonElement).value;
     if (target) setValue(`value.${index}.icon`, target);
   };
@@ -50,56 +31,29 @@ function WelfareList({
       {fields.map((item, index) => (
         <Card key={item.id}>
           <label>
-            <input
-              type="text"
-              {...register(`value.${index}.companyId`)}
-              disabled={true}
-              style={{ display: "none" }}
-            />
+            <input type="text" {...register(`value.${index}.companyId`)} disabled={true} style={{ display: "none" }} />
           </label>
           <WorkingRadios>
             <label>
               조건
-              <input
-                {...register(`value.${index}.type`)}
-                type="radio"
-                value="근무 조건"
-              />
+              <input {...register(`value.${index}.type`)} type="radio" value="근무 조건" />
             </label>
             <label>
               지원
-              <input
-                {...register(`value.${index}.type`)}
-                type="radio"
-                value="근무 지원"
-              />
+              <input {...register(`value.${index}.type`)} type="radio" value="근무 지원" />
             </label>
             <label>
               근무외
-              <input
-                {...register(`value.${index}.type`)}
-                type="radio"
-                value="근무 외 지원"
-              />
+              <input {...register(`value.${index}.type`)} type="radio" value="근무 외 지원" />
             </label>
             <label>
               환경
-              <input
-                {...register(`value.${index}.type`)}
-                type="radio"
-                value="사내 환경"
-              />
+              <input {...register(`value.${index}.type`)} type="radio" value="사내 환경" />
             </label>
           </WorkingRadios>
 
-          <IconWrap className="material-symbols-outlined">
-            {watch(`value.${index}.icon`)}
-          </IconWrap>
-          <input
-            type="text"
-            {...register(`value.${index}.icon`)}
-            placeholder="아이콘"
-          />
+          <IconWrap className="material-symbols-outlined">{watch(`value.${index}.icon`)}</IconWrap>
+          <input type="text" {...register(`value.${index}.icon`)} placeholder="아이콘" />
           <IconList onClick={(e) => setIconName(e, index)}>
             <Flicking align="prev" bound={true} inputType={["touch", "mouse"]}>
               <span>아이콘 모음</span>
@@ -110,16 +64,8 @@ function WelfareList({
               ))}
             </Flicking>
           </IconList>
-          <input
-            type="text"
-            {...register(`value.${index}.title`)}
-            placeholder="제목"
-          />
-          <input
-            type="text"
-            {...register(`value.${index}.content`)}
-            placeholder="내용"
-          />
+          <input type="text" {...register(`value.${index}.title`)} placeholder="제목" />
+          <input type="text" {...register(`value.${index}.content`)} placeholder="내용" />
           <div>
             <Delete
               type="button"

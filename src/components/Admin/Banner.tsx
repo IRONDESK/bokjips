@@ -19,25 +19,13 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
     <Container>
       <div className="form-banner-top">
         <LogoInsert>
-          <ImgModal
-            isShowImgModal={isShowImgModal}
-            setIsShowImgModal={setIsShowImgModal}
-          >
+          <ImgModal isShowImgModal={isShowImgModal} setIsShowImgModal={setIsShowImgModal}>
             <input type="text" placeholder="URL" {...register("logo")} />
             <p>로고 이미지의 URL을 입력해주세요.</p>
           </ImgModal>
-          <img
-            onClick={() => setIsShowImgModal((prev) => !prev)}
-            src={watch("logo") || "/icons/add_image.svg"}
-          />
+          <img onClick={() => setIsShowImgModal((prev) => !prev)} src={watch("logo") || "/icons/add_image.svg"} />
         </LogoInsert>
-        <input
-          type="text"
-          placeholder="회사명"
-          autoFocus={true}
-          required
-          {...register("name")}
-        />
+        <input type="text" placeholder="회사명" autoFocus={true} required {...register("name")} />
         <select {...register("classification")}>
           <option value="">전체산업</option>
           {COMPANY_TYPES.map((el) => (
@@ -49,11 +37,7 @@ function Banner({ companyData, watch, register }: BannerPropsType) {
         <div className="form-banner-top-mobile">
           <label>
             <span>상장여부</span>
-            <input
-              type="checkbox"
-              defaultChecked={companyData?.isPublicStock}
-              {...register("isPublicStock")}
-            />
+            <input type="checkbox" defaultChecked={companyData?.isPublicStock} {...register("isPublicStock")} />
           </label>
           <label>
             <span>현직인증</span>

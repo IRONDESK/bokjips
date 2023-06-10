@@ -19,21 +19,15 @@ function Create() {
   const { register, handleSubmit, watch } = useForm<ICompanyDataTypes>();
   const cookie = getCookie("accessToken") as string;
 
-  const { data: roleData, error: roleError } = useSWR(
-    [`${ServerURL}/userRole`, cookie],
-    swrFetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
+  const { data: roleData, error: roleError } = useSWR([`${ServerURL}/userRole`, cookie], swrFetcher, {
+    revalidateOnFocus: false,
+  });
 
   const onSubmit = (data: ICompanyDataTypes) => {
     CreateCompanyData(data, cookie)
       .then((res) => {
         console.log(res.data);
-        alert(
-          `회사 정보가 등록되었습니다.\n상세 복지 정보 입력 페이지로 이동합니다.`
-        );
+        alert(`회사 정보가 등록되었습니다.\n상세 복지 정보 입력 페이지로 이동합니다.`);
         router.push(`/adm/welfare?id=${res.data.companyId}&type=create`);
       })
       .catch((res) => {

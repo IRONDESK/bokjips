@@ -1,11 +1,14 @@
-import styled from "@emotion/styled";
 import React from "react";
+import styled from "@emotion/styled";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
+
 import { JOB_TYPES } from "../../constants/job";
 import { COLOR, SHADOW } from "../../constants/style";
+import { IFindAccountDtosType } from "../../types/UserData";
 
 interface IFindPasswordPropsType {
-  register: any;
-  watch: any;
+  register: UseFormRegister<IFindAccountDtosType>;
+  watch: UseFormWatch<IFindAccountDtosType>;
 }
 
 function FindPassword({ register, watch }: IFindPasswordPropsType) {
@@ -14,13 +17,7 @@ function FindPassword({ register, watch }: IFindPasswordPropsType) {
     <>
       <Label>
         <p>아이디</p>
-        <input
-          type="text"
-          placeholder=" "
-          autoFocus={true}
-          {...register("username")}
-          required
-        />
+        <input type="text" placeholder=" " autoFocus={true} {...register("username")} required />
       </Label>
       <Label>
         <p>이메일</p>
@@ -40,12 +37,7 @@ function FindPassword({ register, watch }: IFindPasswordPropsType) {
 
       <Label>
         <p>생년월일</p>
-        <input
-          type="date"
-          placeholder=" "
-          {...register("dateOfBirth")}
-          required
-        />
+        <input type="date" placeholder=" " {...register("dateOfBirth")} required />
       </Label>
     </>
   );
@@ -85,8 +77,7 @@ const Label = styled.label<{ job?: string }>`
   }
   &:has(input:focus),
   &:has(input:not(:placeholder-shown)),
-  &:has(select:focus)
-    ${(props) => (props.job === "" || !props.job ? "" : ", &:has(select)")} {
+  &:has(select:focus) ${(props) => (props.job === "" || !props.job ? "" : ", &:has(select)")} {
     box-shadow: ${SHADOW.basic};
     p {
       font-size: 0.85rem;
