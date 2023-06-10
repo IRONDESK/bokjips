@@ -3,13 +3,7 @@ import styled from "@emotion/styled";
 import useSWR from "swr";
 import { useAtom } from "jotai";
 
-import {
-  mainPagination,
-  keyFilter,
-  selectedFilter,
-  primarySelectedFilter,
-  wageFilter,
-} from "../atoms/atoms";
+import { mainPagination, keyFilter, selectedFilter, primarySelectedFilter, wageFilter } from "../atoms/atoms";
 import { ServerURL } from "../api/ServerURL";
 import { fetcher } from "../api/CompanyApi";
 
@@ -18,6 +12,7 @@ import NoData from "../components/Layouts/NoData";
 import Loading from "../components/Layouts/Loading";
 import Pagination from "../components/Layouts/Pagination";
 import { Title } from "../components/Layouts/partials/Title";
+import { COLOR } from "../constants/style";
 
 export default function Home() {
   const [keywordTmp, setKeywordTmp] = useState<string>("");
@@ -43,21 +38,16 @@ export default function Home() {
   function createParams() {
     let params = [`greaterThan=${nowWageFilter}`];
     if (!!keywordTmp) params.push(`name=${keywordTmp}`);
-    if (!!nowKeyFilter.industry)
-      params.push(`classification=${nowKeyFilter.industry}`);
+    if (!!nowKeyFilter.industry) params.push(`classification=${nowKeyFilter.industry}`);
     if (nowPrimaryFilter.isCertified) params.push(`certified=true`);
     if (nowPrimaryFilter.inclusive) params.push(`inclusive=NO`);
     if (nowFilter.length > 0) params.push(`filter=${nowFilter.join(",")}`);
-    if (!sortType || sortParams === "name")
-      params.push(`sort=${sortParams},${sortType ? "ASC" : "DESC"}`);
+    if (!sortType || sortParams === "name") params.push(`sort=${sortParams},${sortType ? "ASC" : "DESC"}`);
     return params;
   }
 
   const { data, error } = useSWR(
-    ServerURL +
-      (isParams
-        ? `/search?page=${nowMainPage}&${[...createParams()].join("&")}`
-        : `/?page=${nowMainPage}`),
+    ServerURL + (isParams ? `/search?page=${nowMainPage}&${[...createParams()].join("&")}` : `/?page=${nowMainPage}`),
     fetcher
   );
 
@@ -77,10 +67,7 @@ export default function Home() {
       <Main>
         <Title />
         <ListTop>
-          <p className="corp-length-count">
-            {data?.totalElements || 0}개
-            {isParams ? "의 검색 결과" : " 기업의 복지를 확인하세요"}
-          </p>
+          <p className="corp-length-count">{data?.totalElements || 0}개 기업의 복지 정보</p>
           <ul className="corp-sort-type">
             <Sort
               isSorted={sortParams === "name"}
@@ -91,7 +78,7 @@ export default function Home() {
                 }
               }}
             >
-              이름순 {sortParams === "name" ? (sortType ? "↑" : "↓") : ""}
+              회사명순 {sortParams === "name" ? (sortType ? "▲" : "▼") : ""}
             </Sort>
             <Sort
               isSorted={sortParams === "favorite"}
@@ -100,7 +87,7 @@ export default function Home() {
                 setSortType(true);
               }}
             >
-              찜하기순
+              찜많은순
             </Sort>
           </ul>
         </ListTop>
@@ -128,19 +115,26 @@ const ListTop = styled.div`
   display: flex;
   margin: 0 8px 12px;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   .corp-length-count {
+    display: inline-flex;
+    align-items: center;
     opacity: 0.8;
+  }
+  .corp-sort-type {
+    display: flex;
+    gap: 8px;
   }
 `;
 
 const Sort = styled.li<{ isSorted: boolean }>`
   cursor: pointer;
   display: inline-block;
-  margin: 0 12px 0 0;
-  opacity: ${(props) => (props.isSorted ? 1 : 0.6)};
-  font-weight: ${(props) => (props.isSorted ? 600 : "none")};
-  &:last-of-type {
-    margin: 0;
-  }
+  padding: 6px 10px;
+  background-color: ${(props) => (props.isSorted ? COLOR.main : "#696969")};
+  opacity: ${(props) => (props.isSorted ? 1 : 0.45)};
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
 `;
