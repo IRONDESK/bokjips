@@ -1,24 +1,18 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import Image from "next/image";
+import { BokjipsLogotypeMono } from "../../../svg/BokjipsLogotype";
 
 function Footer() {
   return (
     <Container>
       <p>
-        <Image
-          src="/logo/bokjips_logotype.svg"
-          width={120}
-          height={40}
-          alt="복지편살"
-        />
+        <BokjipsLogotypeMono />
       </p>
       <div>
         기업의 채용공고 및 사이트에 공개된 내용을 기반으로 작성된 내용입니다.
         <br />
-        기업 및 기업의 복지 정보는 실제와 다르거나, 기업 내부 사정에 의해
-        변경되었을 수 있습니다.
+        기업 및 기업의 복지 정보는 실제와 다르거나, 기업 내부 사정에 의해 변경되었을 수 있습니다.
         <br />
         <br />
         <article className="footer-contact-wrap">

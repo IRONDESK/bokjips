@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 
-import { SHADOW } from "../../constants/style";
+import { COLOR, SHADOW } from "../../constants/style";
 import { COMPANY_TYPES_LITERAL } from "../../constants/job";
 import { ICompanyDataTypes, IWelfareDataTypes } from "../../types/CompanyData";
+import { VerifiedIcon } from "../../svg/CardIcons";
 
 interface CorpCardPropsType extends ICompanyDataTypes {
   welfares: IWelfareDataTypes[];
@@ -46,7 +47,7 @@ function CorpCard({
         <Logo src={viewCard ? logo : ""} alt="" />
         <Name>
           <strong className="corp-name">
-            {name} {isCertified === "true" && <i></i>}
+            {name} {isCertified === "true" && <VerifiedIcon width={20} fill={COLOR.main} />}
           </strong>
           <p>
             <span aria-label={`기업분류 ${COMPANY_TYPES_LITERAL[classification]}`}>
@@ -128,13 +129,6 @@ const Name = styled.div`
     gap: 2px;
     font-size: 1.1rem;
     font-weight: 600;
-    i {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      background-image: url("/icons/verified.svg");
-      background-size: 20px;
-    }
   }
   span {
     display: inline-block;
