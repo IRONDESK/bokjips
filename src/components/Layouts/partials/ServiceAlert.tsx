@@ -4,6 +4,8 @@ import { COLOR } from "../../../constants/style";
 import { useAtom } from "jotai";
 
 import { activeAlert } from "../../../atoms/atoms";
+import { ServiceAlertErrorIcon, ServiceAlertSpeakerIcon } from "../../../svg/ServiceAlertIcon";
+import { keyframes } from "@emotion/react";
 
 function ServiceAlert() {
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
@@ -14,10 +16,7 @@ function ServiceAlert() {
     JOIN: ["main", "회원가입이 완료 되었습니다."],
     FIND_NODATA: ["report", "입력된 정보와 일치하는 회원이 없습니다."],
     LOGOUT_EXPIRED: ["report", "개인정보 보호를 위해 자동 로그아웃되었습니다."],
-    LOGOUT_EXPIRED_LESS: [
-      "report",
-      "개인정보 보호를 위해 1분 뒤 자동 로그아웃됩니다.",
-    ],
+    LOGOUT_EXPIRED_LESS: ["report", "개인정보 보호를 위해 1분 뒤 자동 로그아웃됩니다."],
     BAD_ACCOUNT_INFO: ["report", "잘못된 비밀번호가 입력되었습니다."],
     EDIT_ACCOUNT_INFO: ["main", "회원 정보가 수정되었습니다."],
     DEL_COMMENT: ["main", "댓글이 삭제되었습니다."],
@@ -43,21 +42,44 @@ function ServiceAlert() {
   }
 
   return (
-    <Container type={MESSAGE_VALUES[alertMessage][0]} role="alert">
+    <Container type={MESSAGE_VALUES[alertMessage][0]} longTerm={alertMessage === "LOGOUT_EXPIRED_LESS"} role="alert">
+      {MESSAGE_VALUES[alertMessage][0] === "report" && <ServiceAlertErrorIcon width={22} />}
+      {MESSAGE_VALUES[alertMessage][0] !== "report" && <ServiceAlertSpeakerIcon width={22} />}
       {MESSAGE_VALUES[alertMessage][1]}
     </Container>
   );
 }
 
-const Container = styled.div<{ type: string }>`
-  position: sticky;
-  top: 0;
-  padding: 20px 32px;
-  background-color: ${(props) =>
-    props.type === "main" ? COLOR.check : COLOR.report};
+const HideAnimation = keyframes`
+  from {
+    top: 32px;
+  }
+  to {
+    top:-15%;
+    opacity: 0;
+  }
+`;
+
+const Container = styled.div<{ type: string; longTerm: boolean }>`
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  top: 32px;
+  left: 50%;
+  width: max-content;
+  background-color: ${({ type }) => (type === "main" ? COLOR.check : COLOR.report)};
   color: #fff;
-  font-weight: 600;
-  z-index: 9;
+  font-weight: 500;
+  z-index: 11;
+  border-radius: 28px;
+  gap: 12px;
+  transform: translateX(-50%);
+  animation: ${HideAnimation} 0.7s;
+  animation-delay: ${({ longTerm }) => (longTerm ? "4.6s" : "1.6s")};
+  svg {
+    fill: #fff;
+  }
   @media (max-width: 840px) {
     padding: 20px;
   }
