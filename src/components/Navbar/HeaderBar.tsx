@@ -7,6 +7,7 @@ import { keyFilter, primarySelectedFilter, selectedFilter, selectedModal, wageFi
 import FilterList from "./FilterList";
 import { COMPANY_TYPES } from "../../constants/job";
 import { FilterIcon512, RocketIcon512, SearchIcon512 } from "../../svg/HeaderIcons";
+import { ArrowDownOutlineIcon } from "../../svg/ArrowIcons";
 
 function HeaderBar() {
   const [, setShowFilter] = useAtom(selectedModal);
@@ -56,6 +57,7 @@ function HeaderBar() {
             </option>
           ))}
         </select>
+        <ArrowDownOutlineIcon className="dropdown-arrow" width={20} />
       </Wrap>
       <FilterWrap isValid={FILTER_COUNT > 0} onClick={() => setShowFilter((prev) => !prev)}>
         <FilterIcon512 width={22} />
@@ -101,6 +103,11 @@ const Wrap = styled.div<{ isValid: boolean }>`
     fill: ${({ isValid }) => (isValid ? COLOR.main : COLOR.gray1)};
   }
 
+  .dropdown-arrow {
+    margin-left: -6px;
+    fill: ${COLOR.gray} !important;
+  }
+
   &:hover,
   &:has(input:focus) {
     svg {
@@ -124,17 +131,17 @@ const Wrap = styled.div<{ isValid: boolean }>`
     transition: width 0.3s;
   }
 
-  input,
-  button {
-    padding: 8px 0px 8px 5px;
-  }
   select {
-    padding: 8px 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
   }
 
   input,
   select,
   button {
+    padding: 8px 2px;
     color: ${({ isValid }) => (isValid ? "#000" : COLOR.gray)};
     font-size: 0.95rem;
     font-weight: ${({ isValid }) => (isValid ? 600 : 400)};
