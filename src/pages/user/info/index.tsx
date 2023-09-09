@@ -32,17 +32,10 @@ function Info() {
     ROLE_ADMIN: "관리자",
   };
 
-  const { data: roleData, error: roleError } = useSWR<IUserRolesType>(
-    [`${ServerURL}/userRole`, cookie],
-    swrFetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-  const { data: favData, error: favError } = useSWR<ICompanyDataTypes[]>(
-    [`${ServerURL}/favorite`, cookie],
-    swrFetcher
-  );
+  const { data: roleData, error: roleError } = useSWR<IUserRolesType>([`${ServerURL}/userRole`, cookie], swrFetcher, {
+    revalidateOnFocus: false,
+  });
+  const { data: favData, error: favError } = useSWR<ICompanyDataTypes[]>([`${ServerURL}/favorite`, cookie], swrFetcher);
 
   // 찜 해제
   const handlerFavorite = (companyId: string) => {
@@ -70,14 +63,8 @@ function Info() {
           <ul>
             <li>{USER_TYPE[roleData?.roles]}</li>
             <li>
-              {roleData?.roles === "ROLE_ADMIN" && (
-                <button onClick={() => router.push("/adm/create")}>
-                  회사작성
-                </button>
-              )}
-              <button onClick={() => router.push("/user/info/setting")}>
-                정보수정
-              </button>
+              {roleData?.roles === "ROLE_ADMIN" && <button onClick={() => router.push("/adm/create")}>회사작성</button>}
+              <button onClick={() => router.push("/user/info/setting")}>정보수정</button>
               <button onClick={() => alert(`준비 중입니다.`)}>탈퇴</button>
             </li>
           </ul>
@@ -94,10 +81,7 @@ function Info() {
                     <span>{COMPANY_TYPES_LITERAL[item.classification]}</span>
                   </div>
                 </Link>
-                <button
-                  aria-label={`${item.name} 찜 해제`}
-                  onClick={() => handlerFavorite(item.companyId)}
-                ></button>
+                <button aria-label={`${item.name} 찜 해제`} onClick={() => handlerFavorite(item.companyId)}></button>
               </li>
             ))}
           </FavList>
@@ -114,7 +98,7 @@ function Info() {
 }
 
 const Container = styled.main`
-  padding: 0 24px;
+  padding: 24px;
   h2 {
     margin: 24px 8px 12px;
     font-size: 1.15rem;
@@ -172,7 +156,6 @@ const FavList = styled.ul`
     border-radius: 12px;
     gap: 12px;
     transition: all 0.3s;
-    box-shadow: ${SHADOW.basic};
     img {
       width: 40px;
       height: 40px;
