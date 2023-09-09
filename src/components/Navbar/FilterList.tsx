@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Flicking from "@egjs/react-flicking";
-import "@egjs/react-flicking/dist/flicking.css";
 import { useAtom } from "jotai";
 
 import { selectedFilter, primarySelectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
 import { WELFARES_FILTER_LIST } from "../../constants/welfares";
-import { COLOR, SHADOW } from "../../constants/style";
+import { COLOR } from "../../constants/style";
+import CheckIcon from "../../svg/CheckIcon";
+import { MoneyIcon } from "../../svg/CardIcons";
+import { ArrowUpIcon } from "../../svg/ArrowIcons";
 
 function FilterBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
@@ -14,14 +15,11 @@ function FilterBar() {
   const [nowPrimaryFilter, setPrimaryNowFilter] = useAtom(primarySelectedFilter);
   const [nowFilter, setNowFilter] = useAtom(selectedFilter);
 
-  const addFiltered = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>) => {
-    let target = (e.target as HTMLButtonElement).value;
-    if (target) {
-      if (!nowFilter.some((arr) => arr == target)) {
-        setNowFilter((prev) => [...prev, target]);
-      } else {
-        setNowFilter((prev) => prev.filter((value) => value !== target));
-      }
+  const addFiltered = (target: string) => {
+    if (!nowFilter.some((arr) => arr == target)) {
+      setNowFilter((prev) => [...prev, target]);
+    } else {
+      setNowFilter((prev) => prev.filter((value) => value !== target));
     }
   };
 
@@ -32,88 +30,77 @@ function FilterBar() {
   return (
     <>
       <Container showFilter={showFilter}>
-        <div className="filter-list-top">
-          <Wage wageValue={nowWageFilter}>
-            <label htmlFor="header-basic-wage">
-              <input
-                type="number"
-                id="header-basic-wage"
-                min={0}
-                step={100}
-                value={+nowWageFilter}
-                onChange={setWageFiltered}
-              />
-              <span className="input-wage-unit">만원↑</span>
-            </label>
-          </Wage>
+        <Wage as="div" isSelected={nowWageFilter > 0}>
+          <MoneyIcon className="filter-money-icon" width={20} />
+          <input
+            type="number"
+            id="header-basic-wage"
+            min={0}
+            step={100}
+            value={+nowWageFilter}
+            onChange={setWageFiltered}
+          />
+          <span className="input-wage-unit">만원↑</span>
+        </Wage>
+        <Button
+          isSelected={nowPrimaryFilter?.isCertified}
+          onClick={() =>
+            setPrimaryNowFilter((prev) => {
+              return { ...prev, isCertified: !prev.isCertified };
+            })
+          }
+          value="isCertified"
+        >
+          <CheckIcon width={16} />
+          현직인증
+        </Button>
+        <Button
+          isSelected={nowPrimaryFilter?.inclusive}
+          onClick={() =>
+            setPrimaryNowFilter((prev) => {
+              return { ...prev, inclusive: !prev.inclusive };
+            })
+          }
+          value="inclusive"
+        >
+          <CheckIcon width={16} />
+          비포괄임금
+        </Button>
+        {WELFARES_FILTER_LIST.map((el, idx) => (
           <Button
-            isSelected={nowPrimaryFilter?.isCertified}
-            onClick={() =>
-              setPrimaryNowFilter((prev) => {
-                return { ...prev, isCertified: !prev.isCertified };
-              })
-            }
-            value="isCertified"
+            key={idx}
+            onClick={() => addFiltered(el.value)}
+            isSelected={nowFilter.some((arr) => arr === el.value)}
           >
-            현직인증
+            <CheckIcon width={16} />
+            {el.name}
           </Button>
-          <Button
-            isSelected={nowPrimaryFilter?.inclusive}
-            onClick={() =>
-              setPrimaryNowFilter((prev) => {
-                return { ...prev, inclusive: !prev.inclusive };
-              })
-            }
-            value="inclusive"
-          >
-            비포괄
-          </Button>
-        </div>
-        <Buttons showFilter={showFilter} onClick={addFiltered}>
-          {/* <Flicking align="prev" bound={true} inputType={["touch", "mouse"]}> */}
-          {WELFARES_FILTER_LIST.map((el, idx) => (
-            <Button key={idx} value={el.value} isSelected={nowFilter.some((arr) => arr === el.value)}>
-              {el.name}
-            </Button>
-          ))}
-          {/* </Flicking> */}
-        </Buttons>
+        ))}
       </Container>
-      {showFilter && <BackDrop onClick={() => setShowFilter(false)} />}
+      {showFilter && (
+        <CloseButton type="button" onClick={() => setShowFilter((prev) => !prev)}>
+          <ArrowUpIcon width={22} />
+        </CloseButton>
+      )}
     </>
   );
 }
 
-const itemStyle = `
-min-width: 79px;
-  background-color: #fff;
-  box-shadow: ${SHADOW.basic};
-  border-radius: 20px;
-  font-size: 0.8rem;
-`;
-
 const Container = styled.section<{ showFilter: boolean }>`
-  visibility: ${(props) => (props.showFilter ? "visible" : "hidden")};
-  position: absolute;
-  margin: 12px 0 0;
-  padding: ${(props) => (props.showFilter ? "16px" : "0")};
-  left: 50%;
-  width: 93%;
-  background-color: #fff;
-  box-shadow: ${SHADOW.basic};
-  border-radius: 28px;
-  z-index: 3;
-  opacity: ${(props) => (props.showFilter ? 1 : 0)};
+  display: flex;
+  flex-wrap: wrap;
+  visibility: ${({ showFilter }) => (showFilter ? "visible" : "hidden")};
+  width: 100%;
+  margin: ${({ showFilter }) => (showFilter ? "16px 0 0" : "0")};
+  padding: ${({ showFilter }) => (showFilter ? "16px 0 6px" : "0")};
+  height: ${({ showFilter }) => (showFilter ? "auto" : "0")};
+  opacity: ${({ showFilter }) => (showFilter ? 1 : 0)};
+  border-top: 1px solid ${COLOR.lightgray};
   transition: all 0.3s;
-  transform: translateX(-50%);
   overflow: hidden;
-  .filter-list-top {
-    display: grid;
-    margin: 0 0 16px;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    transition: all 0.3s;
-  }
+  gap: 8px;
+  transition: all 0.3s;
+
   button {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -121,25 +108,41 @@ const Container = styled.section<{ showFilter: boolean }>`
   }
 `;
 
-const Wage = styled.div<{ wageValue: number }>`
+const Button = styled.button<{ isSelected: boolean }>`
+  display: inline-flex;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ isSelected }) => (isSelected ? COLOR.mainLight1 : COLOR.lightgray1)};
+  border: 1px solid ${({ isSelected }) => (isSelected ? COLOR.mainLight : "transparent")};
+  border-radius: 24px;
+  color: ${({ isSelected }) => (isSelected ? COLOR.mainDark : COLOR.gray)};
+  font-size: 0.85rem;
+  font-weight: ${({ isSelected }) => (isSelected ? "600" : "none")};
+
+  svg {
+    margin: -2px 2px -2px -2px;
+    display: ${({ isSelected }) => (isSelected ? "inline-block" : "none")};
+    fill: ${COLOR.mainDark};
+  }
+  .filter-money-icon {
+    display: inline-block;
+    fill: ${({ isSelected }) => (isSelected ? COLOR.main : COLOR.gray)};
+  }
+`;
+
+const Wage = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  grid-column: 1 / 3;
-  ${itemStyle}
-  background-color: ${(props) => (props.wageValue > 0 ? COLOR.mainLight : "none")};
-  color: ${(props) => (props.wageValue > 0 ? "#000" : "#1f1f1f")};
-  font-weight: ${(props) => (props.wageValue > 0 ? "600" : "none")};
-  border: 1px solid ${(props) => (props.wageValue > 0 ? COLOR.main : "transparent")};
   label {
     display: inline-flex;
     align-items: center;
   }
   input {
-    width: 100%;
+    width: 70px;
     background: transparent;
-    font-size: 0.8rem;
+    color: ${({ isSelected }) => (isSelected ? COLOR.mainDark : COLOR.gray)};
     text-align: right;
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
@@ -151,39 +154,14 @@ const Wage = styled.div<{ wageValue: number }>`
     margin: 0 0 0 3px;
     white-space: nowrap;
   }
-  &::before {
-    content: "초봉";
-    opacity: 0.85;
-    font-weight: 500;
-    white-space: nowrap;
+`;
+
+const CloseButton = styled.button`
+  margin: 0 auto -12px;
+  width: 90px;
+  svg {
+    fill: ${COLOR.gray1};
   }
-`;
-
-const Buttons = styled.div<{ showFilter: boolean }>`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  transition: all 0.3s;
-`;
-
-const Button = styled.button<{ isSelected: boolean }>`
-  ${itemStyle};
-  padding: 8px 12px;
-  background-color: ${(props) => (props.isSelected ? COLOR.mainLight : "none")};
-  color: ${(props) => (props.isSelected ? "#000" : "#1f1f1f")};
-  font-weight: ${(props) => (props.isSelected ? "600" : "none")};
-  border: 1px solid ${(props) => (props.isSelected ? COLOR.main : "transparent")};
-`;
-
-const BackDrop = styled.div`
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.05);
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  user-select: none;
-  z-index: 2;
 `;
 
 export default FilterBar;

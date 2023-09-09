@@ -2,173 +2,148 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useAtom } from "jotai";
 
-import { SHADOW } from "../../constants/style";
+import { COLOR, SHADOW } from "../../constants/style";
 import { keyFilter, primarySelectedFilter, selectedFilter, selectedModal, wageFilter } from "../../atoms/atoms";
 import FilterList from "./FilterList";
 import { COMPANY_TYPES } from "../../constants/job";
+import { FilterIcon512, RocketIcon512, SearchIcon512 } from "../../svg/HeaderIcons";
 
 function HeaderBar() {
-  const [showFilter, setShowFilter] = useAtom(selectedModal);
+  const [, setShowFilter] = useAtom(selectedModal);
   const [nowKeyFilter, setNowKeyFilter] = useAtom(keyFilter);
   const [nowWageFilter] = useAtom(wageFilter);
   const [nowPrimaryFilter] = useAtom(primarySelectedFilter);
   const [nowFilter] = useAtom(selectedFilter);
+
+  const FILTER_COUNT =
+    nowFilter.length +
+    (nowWageFilter > 0 ? 1 : 0) +
+    (nowPrimaryFilter.inclusive ? 1 : 0) +
+    (nowPrimaryFilter.isCertified ? 1 : 0);
+
   return (
-    <>
-      <Container>
-        <Wrap id="header-keyword" icon="search">
-          <input
-            type="text"
-            placeholder="회사명"
-            role="search"
-            value={nowKeyFilter.keyword}
-            onChange={(e) =>
-              setNowKeyFilter((prev) => {
-                return { ...prev, keyword: e.target.value };
-              })
-            }
-          />
-        </Wrap>
-        <Wrap htmlFor="header-industry" icon="rocket">
-          <select
-            id="header-industry"
-            value={nowKeyFilter.industry}
-            onChange={(e) =>
-              setNowKeyFilter((prev) => {
-                return { ...prev, industry: e.target.value };
-              })
-            }
-          >
-            <option value="">전체산업</option>
-            {COMPANY_TYPES.map((el) => (
-              <option key={el.value} value={el.value}>
-                {el.name}
-              </option>
-            ))}
-          </select>
-        </Wrap>
-        <Wrap
-          id="header-filter"
-          style={{ filter: showFilter ? "invert(1)" : "none" }}
-          icon="filtered"
-          onClick={() => setShowFilter((prev) => !prev)}
+    <Container>
+      <Wrap as="label" isValid={nowKeyFilter.keyword !== ""}>
+        <SearchIcon512 width={20} />
+        <input
+          id="header-keyword"
+          type="text"
+          placeholder="회사명으로 찾기"
+          role="search"
+          value={nowKeyFilter.keyword}
+          onChange={(e) =>
+            setNowKeyFilter((prev) => {
+              return { ...prev, keyword: e.target.value };
+            })
+          }
+        />
+      </Wrap>
+      <Wrap isValid={nowKeyFilter.industry !== ""}>
+        <RocketIcon512 width={20} />
+        <select
+          id="header-industry"
+          value={nowKeyFilter.industry}
+          onChange={(e) =>
+            setNowKeyFilter((prev) => {
+              return { ...prev, industry: e.target.value };
+            })
+          }
         >
-          <button type="button">
-            {nowFilter.length +
-              (nowWageFilter > 0 ? 1 : 0) +
-              (nowPrimaryFilter.inclusive ? 1 : 0) +
-              (nowPrimaryFilter.isCertified ? 1 : 0)}
-            개<span className="a11y-hidden">의 필터</span>
-          </button>
-        </Wrap>
-      </Container>
-      <FilterList />
-    </>
+          <option value="">전체산업</option>
+          {COMPANY_TYPES.map((el) => (
+            <option key={el.value} value={el.value}>
+              {el.name}
+            </option>
+          ))}
+        </select>
+      </Wrap>
+      <FilterWrap isValid={FILTER_COUNT > 0} onClick={() => setShowFilter((prev) => !prev)}>
+        <FilterIcon512 width={22} />
+        <button type="button">
+          {FILTER_COUNT}개<span className="a11y-hidden">의 필터</span>
+        </button>
+      </FilterWrap>
+    </Container>
   );
 }
 
 const Container = styled.section`
   display: flex;
   justify-content: center;
-  gap: 12px;
-  @media (max-width: 580px) {
+  @media (max-width: 690px) {
+    margin: 0 -8px;
+    padding: 0 0 8px;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 12px 8px;
+    label {
+      margin: 0;
+      width: 100%;
+    }
   }
 `;
 
-const Wrap = styled.label<{ icon: string }>`
-  ${(props) => props.icon === "filtered" && "cursor: pointer;"}
+const Wrap = styled.div<{ isValid: boolean }>`
+  cursor: pointer;
   display: flex;
-  width: ${(props) => (props.icon == "rocket" ? "152px" : props.icon == "filtered" ? "108px" : "60px")};
-  height: 55px;
-  background-color: #fff;
-  box-shadow: ${SHADOW.basic};
-  border-radius: 28px;
-  transition: all 0.3s;
-  overflow: hidden;
-  &:has(input:focus),
-  &:has(input:focus:not(:placeholder-shown)),
-  &:has(input:not(:placeholder-shown)),
-  &:hover {
-    width: ${(props) => (props.icon == "rocket" ? "152px" : props.icon == "filtered" ? "108px" : "216px")};
+  gap: 8px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid ${COLOR.gray1};
+  @media (max-width: 690px) {
+    padding: 0px 8px;
+    border-right: none;
   }
 
-  &::before {
-    display: inline-block;
-    content: "";
-    min-width: 60px;
-    width: 60px;
-    height: 55px;
-    background-image: url(${(props) => `/icons/${props.icon}.svg`});
-    background-size: 24px;
-    background-repeat: no-repeat;
-    background-position: center;
+  svg {
+    fill: ${({ isValid }) => (isValid ? COLOR.main : COLOR.gray1)};
   }
 
-  select,
+  &:hover,
+  &:has(input:focus) {
+    svg {
+      fill: ${({ isValid }) => (isValid ? COLOR.main : COLOR.gray)};
+    }
+  }
+
+  input {
+    width: 0;
+    @media (max-width: 690px) {
+      width: 100%;
+      transition: none;
+    }
+    &:focus,
+    &:not(:placeholder-shown) {
+      width: 132px;
+      @media (max-width: 690px) {
+        width: 100%;
+      }
+    }
+    transition: width 0.3s;
+  }
+
+  input,
   button {
-    cursor: pointer;
-    flex: 1;
-    margin-left: -60px;
-    padding-left: 44px;
-    padding-right: 16px;
-    text-align: center;
+    padding: 8px 0px 8px 5px;
   }
+  select {
+    padding: 8px 0;
+  }
+
   input,
   select,
   button {
-    background: none;
-    font-size: 1.05rem;
-    line-height: 55px;
-    z-index: 1;
-    border: none;
-    outline: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    color: #000;
-    &::placeholder {
-      opacity: 0;
-      transition: all 0.3s;
-    }
-    &:hover::placeholder,
-    &:focus::placeholder {
-      opacity: 1;
-    }
+    color: ${({ isValid }) => (isValid ? "#000" : COLOR.gray)};
+    font-size: 0.95rem;
+    font-weight: ${({ isValid }) => (isValid ? 600 : 400)};
   }
-  &:hover {
-    box-shadow: ${SHADOW.hover};
-    input::placeholder {
-      opacity: 1;
-    }
-  }
-  &:has(input:focus),
-  &:has(select:focus) {
-    filter: invert(1);
-  }
-  @media (max-width: 580px) {
-    padding: 0 4px;
-    &[id="header-keyword"] {
-      &,
-      &:has(input:focus),
-      &:has(input:focus:not(:placeholder-shown)),
-      &:has(input:not(:placeholder-shown)) {
-        margin: 0 40px;
-        width: 100%;
-        input {
-          width: 100%;
-          &::placeholder {
-            opacity: 1;
-          }
-        }
-      }
-    }
-    &[for="header-industry"] {
-      width: 152px;
-    }
-  }
+`;
+
+const FilterWrap = styled(Wrap)`
+  margin-right: 0;
+  border-right: none;
 `;
 
 export default HeaderBar;

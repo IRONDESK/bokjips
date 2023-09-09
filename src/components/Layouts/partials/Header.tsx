@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import useSWR from "swr";
 
-import { COLOR, SHADOW } from "../../../constants/style";
 import { ServerURL } from "../../../api/ServerURL";
 import { swrFetcher } from "../../../api/MyInfoApi";
 import {
@@ -18,14 +17,16 @@ import {
   wageFilter,
 } from "../../../atoms/atoms";
 
-import HeaderBar from "../../Navbar/HeaderBar";
 import ServiceAlert from "./ServiceAlert";
+import HeaderBar from "../../Navbar/HeaderBar";
+import FilterBar from "../../Navbar/FilterList";
+import UserControl from "./UserControl";
+import { BokjipsLogotype } from "../../../svg/BokjipsLogotype";
 
 function Header() {
   const router = useRouter();
   const cookie = getCookie("accessToken");
   const tokenAt = getCookie("tokenAt");
-  const [showUser, setShowUser] = useState(false);
 
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
 
@@ -59,13 +60,6 @@ function Header() {
     }
   }, [tokenError]);
 
-  const handleLogout = () => {
-    deleteCookie("accessToken");
-    deleteCookie("tokenAt");
-    setShowUser(false);
-    setAlertMessage("LOGOUT");
-  };
-
   const handleResetValues = () => {
     setNowMainPage(0);
     setKeyFilter({ keyword: "", industry: "" });
@@ -77,117 +71,79 @@ function Header() {
   return (
     <>
       {alertMessage !== "" && <ServiceAlert />}
-      <Container corp={path[0] === "corp"}>
-        <Wrap id="header-logo">
-          <Link href="/" role="button" aria-label="복지편살 메인 페이지" onClick={handleResetValues}>
-            <Logo corp={path[0] === "corp"} />
-          </Link>
-        </Wrap>
-        <Wrap id="searchfilter-bar">{path[0] === "" ? <HeaderBar /> : null}</Wrap>
-        <Wrap id="header-user">
-          <User id="user-controller" aria-label="사용자 설정" onClick={() => setShowUser(!showUser)}></User>
-          {showUser &&
-            (cookie ? (
-              <UserBox>
-                <li onClick={() => setShowUser(false)}>
-                  <Link href="/user/info">내정보</Link>
-                </li>
-                <li onClick={handleLogout}>로그아웃</li>
-              </UserBox>
-            ) : (
-              <UserBox>
-                <li onClick={() => setShowUser(false)}>
-                  <Link href="/user/login">로그인</Link>
-                </li>
-                <li onClick={() => setShowUser(false)}>
-                  <Link href="/user/join">회원가입</Link>
-                </li>
-              </UserBox>
-            ))}
-        </Wrap>
-      </Container>
+      <Wrapper>
+        <MenuItem>
+          <div className="header-logo">
+            <Link href="/" role="button" aria-label="복지편살 메인 페이지" onClick={handleResetValues}>
+              <BokjipsLogotype width={100} height={32} />
+            </Link>
+          </div>
+          {path[0] === "" && (
+            <div className="header-filter">
+              <HeaderBar />
+            </div>
+          )}
+          <div className="header-user">
+            <UserControl />
+          </div>
+        </MenuItem>
+        {path[0] === "" && <FilterBar />}
+      </Wrapper>
     </>
   );
 }
 
-const Container = styled.header<{ corp: boolean }>`
-  position: relative;
+const Wrapper = styled.header`
+  position: sticky;
   display: flex;
-  height: 101.5px;
-  padding: 24px 32px;
-  justify-content: space-between;
-  align-items: center;
-  ${(props) => props.corp && `background-color:${COLOR.main};`}
-  ${(props) => props.corp && `& h1 strong {color: #fff};`}
-  ${(props) => props.corp && `& h1 {color: #fff};`}
-  #searchfilter-bar {
-    flex: 2.2;
-  }
-  @media (max-width: 840px) {
-    display: block;
-    padding: 20px 32px 24px;
-    height: auto;
-    #header-logo {
-      margin: ${(props) => (props.corp ? 0 : " 0 0 16px")};
-      width: 100%;
-      text-align: center;
-    }
-    #header-user {
-      position: absolute;
-      top: 34px;
-      right: 32px;
-    }
-  }
-  @media (max-width: 580px) {
-    padding: 20px 8px 24px;
-  }
-`;
-const Wrap = styled.div`
-  position: relative;
-  flex: 1;
-  &:last-of-type {
-    text-align: right;
-  }
-`;
-const Logo = styled.div<{ corp: boolean }>`
-  display: inline-block;
-  width: 120px;
-  height: 50px;
-  background-image: ${(props) =>
-    props.corp ? `url("/logo/bokjips_logotype.svg")` : `url("/logo/bokjips_logotype_color.svg")`};
-  background-size: 120px;
-  background-repeat: no-repeat;
-  background-position: center;
-  ${(props) => props.corp && ` filter: invert(1);`}
-  @media (max-width: 840px) {
-    margin: 0 auto;
+  flex-direction: column;
+  top: 0;
+  padding: 12px 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(107, 119, 172, 0.2);
+  z-index: 10;
+  @media (max-width: 690px) {
+    padding: 20px 24px 12px;
   }
 `;
 
-const User = styled.button`
-  width: 28px;
-  height: 28px;
-  background-image: url("/icons/face.svg");
-  background-size: 28px;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-const UserBox = styled.ul`
-  position: absolute;
+const MenuItem = styled.div`
   display: flex;
-  justify-content: center;
-  padding: 12px 16px;
-  min-width: 148px;
-  top: 50%;
-  right: 36px;
-  gap: 12px;
-  transform: translateY(-50%);
-  border-radius: 20px;
-  background-color: #fff;
-  box-shadow: ${SHADOW.basic};
-  font-size: 0.95rem;
-  li {
-    cursor: pointer;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+
+  .header-filter {
+    flex: 3;
+  }
+  .header-logo {
+    flex: 1;
+  }
+  .header-user {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  @media (max-width: 690px) {
+    min-height: 35px;
+    gap: 16px 0;
+    flex-wrap: wrap;
+    .header-logo {
+      flex: none;
+    }
+    .header-user {
+      flex: none;
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .header-filter {
+      flex: none;
+      width: 100%;
+      order: 3;
+    }
   }
 `;
 
