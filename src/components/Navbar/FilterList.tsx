@@ -34,6 +34,8 @@ function FilterBar() {
           <MoneyIcon className="filter-money-icon" width={20} />
           <input
             type="number"
+            pattern="[0–9]*"
+            inputMode="decimal"
             id="header-basic-wage"
             min={0}
             step={100}
@@ -140,10 +142,11 @@ const Wage = styled(Button)`
     align-items: center;
   }
   input {
-    width: 70px;
+    width: 56px;
     background: transparent;
     color: ${({ isSelected }) => (isSelected ? COLOR.mainDark : COLOR.gray)};
     text-align: right;
+    font-size: 0.8rem;
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       display: none;
