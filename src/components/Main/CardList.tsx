@@ -7,22 +7,23 @@ import { ICompanyDataPageListTypes, ICompanyDataTypes } from "../../types/Compan
 function CardList({ data }: { data: ICompanyDataPageListTypes }) {
   return (
     <Container>
-      {data?.content?.map((value: ICompanyDataTypes, idx: number) => (
+      {data?.content?.map((value: ICompanyDataTypes) => (
         <CorpCard
-          companyId={value?.companyId}
-          name={value?.name}
-          logo={value?.logo}
-          classification={value?.classification}
-          wage={value?.wage}
-          isInclusiveWage={value?.isInclusiveWage}
-          isPublicStock={value?.isPublicStock}
-          numberOfEmployee={value?.numberOfEmployee}
+          key={value.companyId}
+          companyId={value.companyId}
+          name={value.name}
+          logo={value.logo}
+          classification={value.classification}
+          wage={value.wage}
+          isInclusiveWage={value.isInclusiveWage}
+          isPublicStock={value.isPublicStock}
+          numberOfEmployee={value.numberOfEmployee}
           welfares={
             [
-              ...(value?.workingConditions || []).slice(0, 3),
-              ...(value?.officeEnvironment || []).slice(0, 3),
-              ...(value?.workSupport || []).slice(0, 2),
-              ...(value?.offDutySupport || []).slice(0, 5),
+              ...(value.workingConditions || []).slice(0, 3),
+              ...(value.officeEnvironment || []).slice(0, 3),
+              ...(value.workSupport || []).slice(0, 2),
+              ...(value.offDutySupport || []).slice(0, 5),
             ].slice(0, 7) || []
           }
           isCertified={value.isCertified}
@@ -33,7 +34,7 @@ function CardList({ data }: { data: ICompanyDataPageListTypes }) {
   );
 }
 
-const Container = styled.section`
+const Container = styled.article`
   display: grid;
   padding: 0 0 32px;
   grid-template-columns: repeat(3, 1fr);
