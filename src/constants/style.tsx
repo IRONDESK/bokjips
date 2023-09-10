@@ -1,6 +1,7 @@
 export const COLOR = {
   mainDark: "#21b993",
   main: "#22d0a4",
+  mainRGB: "34, 208, 164",
   mainLight: "#b4ecde",
   mainLight1: "#e4fff8",
   report: "#ff3d00",
