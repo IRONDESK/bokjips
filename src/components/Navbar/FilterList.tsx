@@ -7,7 +7,7 @@ import { WELFARES_FILTER_LIST } from "../../constants/welfares";
 import { COLOR } from "../../constants/style";
 import CheckIcon from "../../svg/CheckIcon";
 import { MoneyIcon } from "../../svg/CardIcons";
-import { ArrowUpIcon } from "../../svg/ArrowIcons";
+import { ArrowUpIcon, ArrowUpLineIcon } from "../../svg/ArrowIcons";
 
 function FilterBar() {
   const [showFilter, setShowFilter] = useAtom(selectedModal);
@@ -39,10 +39,14 @@ function FilterBar() {
             id="header-basic-wage"
             min={0}
             step={100}
-            value={+nowWageFilter}
+            value={nowWageFilter === 0 ? "" : nowWageFilter}
             onChange={setWageFiltered}
+            placeholder="초봉"
           />
-          <span className="input-wage-unit">만원↑</span>
+          <span className="input-wage-unit">
+            만원
+            <ArrowUpLineIcon className="filter-wage-up-icon" width={16} />
+          </span>
         </Wage>
         <Button
           isSelected={nowPrimaryFilter?.isCertified}
@@ -147,15 +151,22 @@ const Wage = styled(Button)`
     color: ${({ isSelected }) => (isSelected ? COLOR.mainDark : COLOR.gray)};
     text-align: right;
     font-size: 0.8rem;
+    font-weight: ${({ isSelected }) => (isSelected ? "600" : "auto")};
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       display: none;
     }
   }
   .input-wage-unit {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin: 0 0 0 3px;
     white-space: nowrap;
+  }
+  .filter-wage-up-icon {
+    display: inline-block;
+    margin-right: -4px;
+    fill: ${({ isSelected }) => (isSelected ? COLOR.mainDark : COLOR.gray)};
   }
 `;
 

@@ -86,7 +86,7 @@ const Container = styled.section`
 `;
 
 const Wrap = styled.div<{ isValid: boolean }>`
-  cursor: pointer;
+  position: relative;
   display: flex;
   gap: 8px;
   padding: 4px 8px;
@@ -104,8 +104,11 @@ const Wrap = styled.div<{ isValid: boolean }>`
   }
 
   .dropdown-arrow {
-    margin-left: -6px;
+    position: absolute;
+    margin: 0 6px 0 0;
+    right: 0;
     fill: ${COLOR.gray} !important;
+    z-index: -1;
   }
 
   &:hover,
@@ -136,6 +139,7 @@ const Wrap = styled.div<{ isValid: boolean }>`
     -moz-appearance: none;
     appearance: none;
     background-color: transparent;
+    width: 96px;
   }
 
   input,
