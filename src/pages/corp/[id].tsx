@@ -56,7 +56,7 @@ function CorpId({ corpId, companyName }: ICorpPropsType) {
 
   return (
     <>
-      <Title title={companyName} />
+      <Title title={companyName} description={`${companyName}의 복지 정보를 여기서 바로 확인해보세요.`} />
       {!isValidating && companyData ? (
         <Container isSplited={isSplited}>
           <SideOne>
