@@ -10,7 +10,7 @@ interface NoDataPropsType {
 function NoData({ code }: NoDataPropsType) {
   return (
     <Container isErrorCode={!!code}>
-      <ServiceAlertSpeakerIcon width={72} />
+      <ServiceAlertSpeakerIcon width={68} height={68} />
       <strong>발견된 회사가 없습니다</strong>
       {code && <p>Server Error: ${code}</p>}
     </Container>
