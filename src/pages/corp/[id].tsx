@@ -18,17 +18,14 @@ import Loading from "../../components/Layouts/Loading";
 
 import { ServerURL } from "../../api/ServerURL";
 import { swrFetcher } from "../../api/MyInfoApi";
+import { useRouter } from "next/router";
 
-interface ICorpPropsType {
+type Props = {
   corpId?: string;
   companyName?: string;
-}
+};
 
-function CorpId({ corpId, companyName }: ICorpPropsType) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+function CorpId({ corpId, companyName }: Props) {
   const cookie = getCookie("accessToken") as string;
   const [isSplited, setIsSplited] = useAtom(verticalSplited);
 
