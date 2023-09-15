@@ -53,7 +53,7 @@ function CorpCard({
             <span aria-label={`기업분류 ${COMPANY_TYPES_LITERAL[classification]}`}>
               {COMPANY_TYPES_LITERAL[classification]}
             </span>
-            {isPublicStock && <span aria-label="상장사">상장</span>}
+            {isPublicStock && <span aria-label="상장기업">상장</span>}
           </p>
         </Name>
       </Title>
@@ -63,13 +63,13 @@ function CorpCard({
         ))}
         <p className="list-text-more">...</p>
       </WelfareList>
-      <Option>
+      <MoreInfo>
         <span className="a11y-hidden">
           {wage && wage > 0 ? `, 초봉 ${wage}만원,` : ","}
           {numberOfEmployee && numberOfEmployee > 0 ? `직원 수 ${numberOfEmployee}명,` : ""}
           {`이 회사를 찜한 사람 ${favorite}명.`}
         </span>
-        <div>
+        <div className="more-left">
           {wage && wage > 0 ? (
             <Tag icon="money" aria-hidden="true">
               초봉 {wage?.toLocaleString()}만
@@ -84,7 +84,7 @@ function CorpCard({
         <Tag icon="heart" aria-hidden="true">
           {favorite?.toLocaleString() || 0}
         </Tag>
-      </Option>
+      </MoreInfo>
     </Container>
   );
 }
@@ -127,8 +127,8 @@ const Name = styled.div`
     display: inline-flex;
     align-items: center;
     gap: 2px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.15rem;
+    font-weight: 700;
   }
   span {
     display: inline-block;
@@ -137,8 +137,8 @@ const Name = styled.div`
     border-radius: 20px;
     border: 1px solid #707070;
     color: #707070;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 600;
     opacity: 0.85;
   }
 `;
@@ -158,7 +158,7 @@ const WelfareList = styled.div`
     border-radius: 12px;
     background-color: #f3f3f3;
     color: #4a4a4a;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: -0.1px;
   }
   .list-text-more {
@@ -167,31 +167,31 @@ const WelfareList = styled.div`
   }
 `;
 
-const Option = styled.div`
+const MoreInfo = styled.div`
   display: flex;
   margin: 16px 0 0;
   padding: 0 4px;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   opacity: 0.8;
-  div {
+  .more-left {
     display: flex;
+    align-items: center;
     gap: 8px;
   }
 `;
 
-const Tag = styled.i<{ icon: string }>`
+const Tag = styled.div<{ icon: string }>`
   display: flex;
   align-items: center;
   gap: 4px;
-  opacity: 0.7;
-  font-weight: ${(props) => props.icon === "heart" && 600};
+  font-weight: ${({ icon }) => icon === "heart" && 700};
   &::before {
     content: "";
     display: inline-block;
     width: 14px;
     height: 14px;
-    background-image: url(${(props) => `/icons/${props.icon}.svg`});
+    background-image: url(${({ icon }) => `/icons/${icon}.svg`});
     background-size: 14px;
     background-position: center;
     background-repeat: no-repeat;
