@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { COLOR } from "../../constants/style";
+import { useRouter } from "next/router";
+import { ArrowRightOutlineIcon } from "../../svg/ArrowIcons";
 
-interface IPaginationType {
+type Props = {
   nowPage: number;
-  setNowPage: any;
+  setNowPage?: () => void;
   empty: boolean;
   totalPages: number;
-}
+};
 
-function Pagination({
-  nowPage,
-  setNowPage,
-  empty,
-  totalPages,
-}: IPaginationType) {
+function Pagination({ nowPage, setNowPage, empty, totalPages }: Props) {
+  const router = useRouter();
   const totalPagesArr = Array.from(
     {
       length:
@@ -28,16 +26,13 @@ function Pagination({
   );
 
   useEffect(() => {
-    if (empty) setNowPage(0);
+    if (empty) router.push({ query: { page: 1 } });
   }, [empty]);
 
   return (
     <PageList>
       {nowPage > 4 && (
-        <PageButton
-          numbering={false}
-          onClick={() => setNowPage(totalPagesArr[0] - 1)}
-        >
+        <PageButton numbering={false} onClick={() => router.push({ query: { page: totalPagesArr[0] } })}>
           이전
         </PageButton>
       )}
@@ -45,18 +40,15 @@ function Pagination({
         <PageButton
           key={v}
           numbering={true}
-          onClick={() => setNowPage(v)}
+          onClick={() => router.push({ query: { page: v + 1 } })}
           isNowPage={v === nowPage}
         >
           {v + 1}
         </PageButton>
       ))}
       {totalPagesArr.length === 5 && totalPages > 5 ? (
-        <PageButton
-          numbering={false}
-          onClick={() => setNowPage(totalPagesArr[4] + 1)}
-        >
-          다음
+        <PageButton numbering={false} onClick={() => router.push({ query: { page: totalPagesArr[4] + 2 } })}>
+          <ArrowRightOutlineIcon width={20} />
         </PageButton>
       ) : null}
     </PageList>
@@ -64,40 +56,36 @@ function Pagination({
 }
 
 const PageList = styled.ul`
-  margin: 0 auto 20px;
-  max-width: 320px;
-  text-align: center;
-  @media (max-width: 580px) {
-    margin: 0 -24px;
-    max-width: 100vw;
-  }
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 32px;
+  gap: 10px;
 `;
 const PageButton = styled.li<{ numbering: boolean; isNowPage?: boolean }>`
   cursor: pointer;
-  display: inline-block;
-  margin: 0 10px 0 0;
+  display: inline-flex;
   padding: 0;
-  width: ${(props) => (props.numbering ? "32px" : "48px")};
+  width: 32px;
   height: 32px;
-  background-color: ${(props) =>
-    props.isNowPage ? COLOR.main : props.numbering ? "none" : "#fff"};
-  border: ${(props) =>
-    props.numbering ? "1px solid transparent" : "1px solid #DADDE0"};
-  border-radius: 4px;
-  color: ${(props) => (props.isNowPage ? "#fff" : "none")};
-  font-size: ${(props) => (props.numbering ? "0.9rem" : "0.85rem")};
-  font-weight: ${(props) => (props.isNowPage ? 600 : "none")};
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ isNowPage }) => (isNowPage ? COLOR.main : "transparent")};
+  color: ${({ isNowPage }) => (isNowPage ? "#fff" : "none")};
+  font-size: 1rem;
+  font-weight: ${({ isNowPage }) => (isNowPage ? 800 : "none")};
   text-align: center;
-  line-height: 32px;
+
   &:hover {
-    background-color: ${(props) =>
-      props.numbering ? COLOR.mainLight : "#F7F9FA"};
+    background-color: ${({ numbering }) => (numbering ? COLOR.mainLight : "transparent")};
+    svg {
+      fill: ${COLOR.main};
+    }
   }
-  &:last-of-type {
-    margin: 0;
-  }
+
   @media (max-width: 580px) {
-    font-size: ${(props) => (props.numbering ? "1rem" : "0.85rem")};
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 `;
 

@@ -8,14 +8,7 @@ import useSWR from "swr";
 
 import { ServerURL } from "../../../api/ServerURL";
 import { swrFetcher } from "../../../api/MyInfoApi";
-import {
-  mainPagination,
-  activeAlert,
-  keyFilter,
-  selectedFilter,
-  primarySelectedFilter,
-  wageFilter,
-} from "../../../atoms/atoms";
+import { activeAlert, keyFilter, selectedFilter, primarySelectedFilter, wageFilter } from "../../../atoms/atoms";
 
 import ServiceAlert from "./ServiceAlert";
 import HeaderBar from "../../Navbar/HeaderBar";
@@ -30,7 +23,6 @@ function Header() {
 
   const [alertMessage, setAlertMessage] = useAtom(activeAlert);
 
-  const [, setNowMainPage] = useAtom(mainPagination);
   const [, setKeyFilter] = useAtom(keyFilter);
   const [, setWageFilter] = useAtom(wageFilter);
   const [, setPrimarySelectedFilter] = useAtom(primarySelectedFilter);
@@ -61,7 +53,6 @@ function Header() {
   }, [tokenError]);
 
   const handleResetValues = () => {
-    setNowMainPage(0);
     setKeyFilter({ keyword: "", industry: "" });
     setWageFilter(0);
     setPrimarySelectedFilter({ isCertified: false, inclusive: false });
